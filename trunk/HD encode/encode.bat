@@ -1,0 +1,1 @@
+x264 --qp 10 -b 16 --keyint infinite --subme 10 --me umh --merange 32 --fullrange on --output video.mp4 hd.avs
