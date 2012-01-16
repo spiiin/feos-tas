@@ -4,7 +4,7 @@
 * Takes damage to save time
 * Uses death to save time
 * Uses password
-* Manages HP, lifes and items
+* Manages HP, lives and items
 * Features new format .fm3
 * Contains detailed comments via marker notes (watch in TASEditor!)
 
