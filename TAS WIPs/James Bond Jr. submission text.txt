@@ -1,3 +1,110 @@
+<<<<<<< .mine
+!! Movie objectives
+
+* Emulator used: FCEUX 2.1.6 with TASEditor
+* Takes damage to save time
+* Uses death to save time
+* Uses password
+* HP, lifes and items management
+* Features new format .fm3
+
+!! History
+
+After finishing Battletoads and Double Dragon, I was looking for a good game that I'm familiar with and that can produce an interesting TAS (to make). James Bond Jr. matches it all - it has nice graphics and music, suggests variable gameplay and insane item management, and I played it in my childhood (solving color puzzles on black and white TV-set).
+
+To handle the items better, I ripped [http://vgmaps.com/Atlas/NES/index.htm#JamesBondJr|complete maps] of the game with all enemies and items. It allowed to plan the basic route. But the game still required tons of tests, that scared me when I realized the amount of necessary work. As always, this wouldn't ever be possible without TASEditor, as I'd have to run different parts of levels over and over from scratch, not having the ground to edit the previous attempt percisely.
+
+This run was made several times over. The first was just a test, the second was already submittable, but we needed to time this submission to new FCEUX release, and I had time to fix some flaws (that looked minor before I dived into them, as always). So, I started the third edition and had more success than was expected. I saved about 600 frames up to the moment of entrance the third hostage room of Level 4.
+
+Then I got some OS glitches right at the time of TASing. I saved the project, rebooted the computer and CheckDisc automatically ran, confirming that something went wrong. I opened my project to resume work and found it filled with nils. He-he-he-he-he. No backup copy was done due to bad luck.
+
+I actually had even more time to TAS it for the 4th time, as I had an extra vacation right after the New Year holidays. And I finished watching all Jim Carrey's movies, so I said to miself: "What else can I do during the whole week?" And the result is here now.
+
+!! Movie format
+
+FM3 is a new format developed for a TASEditor and allowing to keep a huge amount of stuff in your project.
+
+In this movie you can see many comments to every tiny feature used in the run. It's done via markers to cirtain frames and notes, written in a special field. First you can watch the run itself, and then navigate through marker notes by pressing ">>" button.
+
+You also can use branches (they present savestate logic within TASEditor): leftclick on the left half to jump (or run) to a saved place, on the right half to load the state (if you use rightclick, the branch will be saved). Branches 1-4 send you to the level starts, branch 5 is set on the end of the movie, branch 0 contains the jet pack glitch (explained below) and the rest slots keep the states left from my actual work. Branches contin preview screenshots.
+
+I'd like to mention some TASEditor features, used in making of this run.
+* Autorestore cursor position (you keep cursor on a cirtain frame and keep editing the place above; each time you change input, cursor restores it's position showing your success)
+* History (backtrack any wrong action til rather long ago)
+* Markers and bookmarks (jump to a cirtain place and compare strategies)
+* Jump to Playback/Selection (navigate between the place you edit and the place you keep FCEUX on, watching the result via Autorestore function)
+* Lag display (fatastic improvement, now you have the exact idea of what's going on)
+* Greenzone (allows to navigate through the whole movie freely)
+* Rewind button (yep, you can set it to a hotkey and use along with Frame Advance!)
+* Copy/paste
+
+!! About the game
+
+This is a 'metroidvania' with some additional gameplay features and various finite items. Enemies use global timer to behave, so you can improve one part, but lose time in another, that makes this game almost impossible to make absolutely perfect (at least now), because you can't test all possibilities accounting all enemies, obstacles and lag frames. But the game provides almost no glitches, and is not popular, so it doesn't motivate many people to TAS it, as Mario, Metroid or Castlevania do. And here I come to try my best!
+
+Normally the game needs to be beaten twice, second time it lacks continues and big hamburgers (refilling the whole energy). I use the password to start the second loop.
+
+__Level 1__ is the most boring level, few enemies and obstacles, big empty rooms. The main goal is to disarm the missles by solving some puzzles. At first I thought they would be easy to bruteforce, but was wrong (ask Bobo the King), so now no bruteforce is used. X2poet appeared to be kind of a champion in solving the Rubik's Cube and he came up with good solutions, thanks bro.
+
+Bullets damage 2 HP, Bombs - 8. The unique item is scuba, it allows to swim and shoot bubbles (damage 2 HP). If you keep it in air, it will slowly increase. While swimming you shall push Down to dive faster, or tap A every 30th frame to swim up. You need to be careful when you swim up over the ceiling corner - don't allow James to lose height.
+
+At the end of the level we meet such feature as blue buttons, that need to be blown to spawn necessary objects (elevators, exits, items). These 2 spawn the exit teleport. But one button is near the exit, while another is on the opposite side of the level (even though it's on the same screen). I use the nuke bomb to blow both at once.
+
+__Level 2__ is where some action starts. I need to go through the 2-storey house and pick papers from saves (some of them contain bombs). Each safe has a code lock, and though the method is quite simple (all numbers are encoded by anothers accordingly, 0-6 1-0 2-9 3-1 4-5 5-8(or 0) 6-7 7-2 8-4 9-3), entering the safe at different frames may affect the pattern. The funny thing here is when you test the entrance, the patterns sometimes change so that you exit the safe always at the same time.
+
+Before the mid-floor elevator there is a moving platform that spawns only if you shot the cannons at the different side of the level. Again, I blow them with nuke bomb.
+
+__Level 3__ offers tons of action. Here I need to shoot strange machines with one eye and 2 cannons each. Their bullets can be very, very DTUHHH-DTUHHH...DEADLY![http://www.youtube.com/watch?v=0DMizdcIKJo#t=143s|(c)] After you beat the machine room the cutscene starts. But it can be cancelled by keeping in air, jumping.
+
+Here we see another unique item, jet pack. It's almost uncontrollable in real time, because players just hold the A button to fly and go up at high speed, losing fuel fast. It's charges are twice as weak as bombs, so normally jet pack is rarely used. But I found that it doesn't require to hold A, just to push it at cirtain frames:
+* Every 8th frame to boost up. After you gained some speed, only each 15th frame is required.
+* Every 9th frame to hover at one height. Presses may be delayed a bit to save the fuel, and you still would hover.
+
+Huge sections of this level were TASed about 10 times over, because faults kept appearing here and there. The same can be said about Level 4.
+
+In __Level 4__ you need to rescue scientists by killing their jailers. After they are beaten, you shall stay in the room until the items drop, oherwise the victory wouldn't count. But no too long, the cutscene here starts by time, not detecting your position. The final elevator spawns only if you kill the red monster, and I use the blue button for that.
+
+New item here is a werewolf potion. Allows to jump higher and run faster (twice faster than normally). The 'User manual' says you can attack enemies by running into them, but I found no situation for that method. Potion is used rarely due to long morphing animation.
+
+__The Final Boss__ is all planning. I collect as many nuke bombs as needed to kill him instantly - six. I don't pick up needless lives or HP. But I need some HP to survive the agony of Scumlord: after he's dead, he still keeps flying up to fight me and only then he finds no HP in his ship and falls down. The problem here is that he __keeps shooting__ all that time. I tried to go right to get less bullets, tried to jump, and only drinking the potion changed the behaviour of the boss (or maybe it changed my vulnerability?) and I didn't die. This ending even looks better and kinda weird.
+
+!! Tricks
+
+! Ladder glitch
+
+When you are at the top of the ladder, press Down for 1 frame and hold Up. James would climb through the air. This only works in sections where the screen can't scroll down. The speed during this glitch is full (1 ppf) instead of 0,5 on ladders.
+
+! Corner boost
+
+Most corners can boost me forward increasing the speed twice for 1-3 frames. There are 1-block-size wholes that boost me with both corners when I jump onto them properly.
+
+! Damage boost
+
+Some enemies bump me onto the desired platforms. But not all of them. Acid and electric obstacles also bump me when I have no time to wait for an elevator. Press A at correct frame to be bumped hither.
+
+! Item switch
+
+In real time, player sits down, than taps the Select button to switch a single weapon. Actually you need just to stop moving for a frame, push D+S and resume walking. No sitting animation occurs. But you can switch several weapons at once if you press Down right before Select, and then D + S for a frame. It forces James to sit down, so I mostly use this method when I'm close to the enemy and switch bullets to bombs, throwing them instantly from the lower position.
+
+! Death/fall animation
+
+If you fall from big height, you sit down and find stars spinning around your head. That lasts extremely long and shall not be allowed. But in some places you can plan you route and __die__ from this very fall, overlaping fall animation by death delay. Death restart refills some weapons you carry at the moment.
+
+Another cool trick is to enter a missle riddle and die at once (by getting a shot). This cancels death delay totally. Though was used only once.
+
+! Strange jet pack glitch
+
+If you have just turned the jet pack off and jumped on a high platform, you may hang in midair if you match the necessary position. I coudn't think where to use it, so it wasn't studied. Load the last (zero) branch to see this glitch in action.
+
+!! Special thanks
+
+* AnS for developing that germ TASEdit to a divine instrument, a true TAS Machine! No one knows how insanely much it helped improving the run (because I can't describe all the experience)
+* X2poet for solving the puzzles in the first level
+* Lapogne36 for showing the level of optimization I haven't expected
+* Evilchen and Daltone for posting WIPs
+* Sting20031959 for testing weapons for me and providing the movie that I used to map all items
+* Spolan and Bobo the King for bruteforce attempts (fruitless though)
+=======
 !! Movie objectives
 
 * Emulator used: FCEUX 2.1.6 with TASEditor
@@ -86,4 +193,5 @@ If you have just turned the jet pack off and jumped on a high platform, you may 
 * Evilchen and Daltone for posting WIPs
 * Sting20031959 for testing weapons for me and providing the movie that I used to map all items
 * Spolan and Bobo the King for bruteforce attempts (fruitless though)
+>>>>>>> .r27
 * Fire Marshal Bill Burns for providing that awesome phrase to quote
