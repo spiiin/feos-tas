@@ -95,6 +95,13 @@ Another cool trick is to enter a missle riddle and die at once (by getting a sho
 
 If you have just turned the jet pack off and jumped on a high platform, you may hang in midair if you match the necessary position. I coudn't think where to use it, so it wasn't studied. Load the last (zero) branch to see this glitch in action.
 
+!! Possible improvements
+
+* Using every ingame corner to boost
+* Working out how to use glitches (especially jet pack one)
+* Better handling with timers
+* More items/HP testing
+
 !! Special thanks
 
 * AnS for developing that germ TASEdit to a divine instrument, a true TAS Machine! No one knows how insanely much it helped improving the run (because I can't describe all the experience)
