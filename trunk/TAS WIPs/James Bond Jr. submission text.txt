@@ -97,10 +97,12 @@ If you have just turned the jet pack off and jumped on a high platform, you may 
 
 !! Possible improvements
 
-* Using every ingame corner to boost
+* Using corners I missed to boost
+* Bumping ceilings I missed
 * Working out how to use glitches (especially jet pack one)
 * Better handling with timers
 * More items/HP testing
+* Better lag management
 
 !! Special thanks
 
