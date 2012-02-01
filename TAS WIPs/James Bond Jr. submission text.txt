@@ -23,14 +23,14 @@ I actually had even more time to TAS it for the 4th time, as I had an extra vaca
 
 FM3 is a new format developed for a TASEditor and allowing to keep a huge amount of stuff in your project.
 
-In this movie you can see many comments to every tiny feature used in the run. It's done via markers to cirtain frames and notes, written in a special field. First you can watch the run itself, and then navigate through marker notes by pressing ">>" button.
+In this movie you can see many comments to every tiny feature used in the run. It's done via markers to certain frames and notes, written in a special field. First you can watch the run itself, and then navigate through marker notes by pressing ">>" button.
 
-You also can use branches (they present savestate logic within TASEditor): leftclick on the left half to jump (or run) to a saved place, on the right half to load the state (if you use rightclick, the branch will be saved). Branches 1-4 send you to the level starts, branch 5 is set on the end of the movie, branch 0 contains the jet pack glitch (explained below) and the rest slots keep the states left from my actual work. Branches contin preview screenshots.
+You also can use branches (they present savestate logic within TASEditor): leftclick on the left half to jump (or run) to a saved place, on the right half to load the state (if you use rightclick, the branch will be saved, don't use it). Branches 1-4 send you to the level starts, branch 5 is set on the end of the movie, branch 0 contains the jet pack glitch (explained below) and the rest slots keep the states left from my actual work. Branches contin preview screenshots.
 
 I'd like to mention some TASEditor features, used in making of this run.
-* Autorestore cursor position (you keep cursor on a cirtain frame and keep editing the place above; each time you change input, cursor restores it's position showing your success)
+* Autorestore cursor position (you keep cursor on a certain frame and keep editing the place above; each time you change input, cursor restores it's position showing your success)
 * History (backtrack any wrong action til rather long ago)
-* Markers and bookmarks (jump to a cirtain place and compare strategies)
+* Markers and bookmarks (jump to a certain place and compare strategies)
 * Jump to Playback/Selection (navigate between the place you edit and the place you keep FCEUX on, watching the result via Autorestore function)
 * Lag display (fatastic improvement, now you have the exact idea of what's going on)
 * Greenzone (allows to navigate through the whole movie freely)
@@ -55,7 +55,7 @@ Before the mid-floor elevator there is a moving platform that spawns only if you
 
 __Level 3__ offers tons of action. Here I need to shoot strange machines with one eye and 2 cannons each. Their bullets can be very, very DTUHHH-DTUHHH...DEADLY![http://www.youtube.com/watch?v=0DMizdcIKJo#t=143s|(c)] After you beat the machine room the cutscene starts. But it can be cancelled by keeping in air, jumping.
 
-Here we see another unique item, jet pack. It's almost uncontrollable in real time, because players just hold the A button to fly and go up at high speed, losing fuel fast. It's charges are twice as weak as bombs, so normally jet pack is rarely used. But I found that it doesn't require to hold A, just to push it at cirtain frames:
+Here we see another unique item, jet pack. It's almost uncontrollable in real time, because players just hold the A button to fly and go up at high speed, losing fuel fast. It's charges are twice as weak as bombs, so normally jet pack is rarely used. But I found that it doesn't require to hold A, just to push it at certain frames:
 * Every 8th frame to boost up. After you gained some speed, only each 15th frame is required.
 * Every 9th frame to hover at one height. Presses may be delayed a bit to save the fuel, and you still would hover.
 
