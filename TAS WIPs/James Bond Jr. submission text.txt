@@ -65,7 +65,7 @@ In __Level 4__ you need to rescue scientists by killing their jailers. After the
 
 New item here is a werewolf potion. Allows to jump higher and run faster (twice faster than normally). The 'User manual' says you can attack enemies by running into them, but I found no situation for that method. Potion is used rarely due to long morphing animation.
 
-__The Final Boss__ is all planning. I collect as many nuke bombs as needed to kill him instantly - six. I don't pick up needless lives or HP. But I need some HP to survive the agony of Scumlord: after he's dead, he still keeps flying up to fight me and only then he finds no HP in his ship and falls down. The problem here is that he __keeps shooting__ all that time. I tried to go right to get less bullets, tried to jump, and only drinking the potion changed the behaviour of the boss (or maybe it changed my vulnerability?) and I didn't die. This ending even looks better and kinda weird.
+__The Final Boss__ is all planning. I collect as many nuke bombs as needed to kill him instantly - six. I don't pick up needless lives or HP. But I need some HP to survive the agony of Scumlord: after he's dead, he still keeps flying up to fight me and only then he finds no HP in his ship and falls down. The problem here is that he __keeps shooting__ all that time. I tried to go right to get less bullets, tried to jump, and only drinking the potion changed the behaviour of the boss (or maybe it changed my vulnerability or hitbox size?) and I didn't die. This ending even looks better and kinda weird.
 
 !! Tricks
 
