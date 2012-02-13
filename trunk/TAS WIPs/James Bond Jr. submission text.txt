@@ -32,7 +32,7 @@ I'd like to mention some TASEditor features, used in making of this run.
 * History (backtrack any wrong action til rather long ago)
 * Markers and bookmarks (jump to a certain place and compare strategies)
 * Jump to Playback/Selection (navigate between the place you edit and the place you keep FCEUX on, watching the result via Autorestore function)
-* Lag display (fatastic improvement, now you have the exact idea of what's going on)
+* Lag display (fantastic improvement, now you have the exact idea of what's going on)
 * Greenzone (allows to navigate through the whole movie freely)
 * Rewind button (yep, you can set it to a hotkey and use along with Frame Advance!)
 * Copy/paste
