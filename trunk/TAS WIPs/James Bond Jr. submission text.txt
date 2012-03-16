@@ -103,6 +103,7 @@ If you have just turned the jet pack off and jumped on a high platform, you may 
 * Better handling with timers
 * More items/HP testing
 * Better lag management
+* __Some__ entertainment
 
 !! Special thanks
 
