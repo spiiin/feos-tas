@@ -1,4 +1,51 @@
-AVISource("movie.avi").Trim(0,-0)
+a = AVISource("movie.avi").Trim(0,-0).ConvertToRGB32().deblink4.selecteven
+
+handheld = false
+
+(handheld) ? Eval("""
+factor = (a.height > 540) ? 2 : \
+         (a.height > 270) ? 4 : \
+         (a.height > 180) ? 6 : 8
+width = a.width * factor
+height = a.height * factor
+
+""") : Eval("""
+w1 = a.height * 4
+h1 = a.width * 3
+thegcd = gcd(w1, h1)
+w1 = w1 / thegcd
+h1 = h1 / thegcd
+
+width  = a.width  * w1
+height = a.height * h1
+""")
+
+g = a.PointResize(width, height)
+
+handheld ? Eval("""
+d = ImageSource(file="gen.png", start=0, end=60, fps=a.FrameRate).ConvertToRGB32()
+""") : Eval("""
+d = ImageSource(file="nes.png", start=0, end=60, fps=a.FrameRate).ConvertToRGB32()
+""")
+e = BlankClip(d, audio_rate=a.AudioRate, channels=a.AudioChannels)
+f = AudioDub(d, e).Lanczos4Resize(g.width, g.height).AssumeFPS(a.FrameRateNumerator, a.FrameRateDenominator)
+
+subff = 1096        
+height = 0
+s = 90
+al = 8
+textcolor = $00ffffff
+halocolor = $00000000
+
+last = f + g
+
+Subtitle("NES Strider\nin 03:42.18", align=al, y=height, first_frame=subff, last_frame=subff+80, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+Subtitle("Played by Kyman\nRerecord count: 18104", align=al, y=height, first_frame=subff+80+1, last_frame=subff+160+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+Subtitle("This is a tool-assisted\nemulator recording", align=al, y=height, first_frame=subff+170, last_frame=subff+250, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+Subtitle("For details, visit\nhttp://TASVideos.org/", align=al, y=height, first_frame=subff+250+1, last_frame=subff+330+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+
+ConvertToYV24(matrix="Rec709", chromaresample="point")
+ConvertToYV12(matrix="Rec709", chromaresample="point")
 
 function deblink4(clip clp, float "ratio", int "level")  {
     ratio = default(ratio, 2.0 /3)
@@ -10,40 +57,23 @@ function deblink4(clip clp, float "ratio", int "level")  {
     \      "[deblink4] 257 >= level >= 0, it was " + string(level))
 
     blink=clp.ng_blinkmask_new
-    m01=mt_logic(blink.selectevery(4,0),
-\                blink.selectevery(4,1),
-\                mode="or").converttorgb32
-    m23=mt_logic(blink.selectevery(4,2),
-\                blink.selectevery(4,3),
-\                mode="or").converttorgb32
+    m01=mt_logic(blink.selectevery(4,0),blink.selectevery(4,1),mode="or").converttorgb32
+    m23=mt_logic(blink.selectevery(4,2),blink.selectevery(4,3),mode="or").converttorgb32
 
-    f0=layer(clp.selectevery(4,0),
-\            clp.selectevery(4,1).mask(m01),
-\            level=level)
-    f1=layer(clp.selectevery(4,1),
-\            clp.selectevery(4,0).mask(m01),
-\            level=level)
-    f2=layer(clp.selectevery(4,2),
-\            clp.selectevery(4,3).mask(m23),
-\            level=(257-level) )
-    f3=layer(clp.selectevery(4,3),
-\            clp.selectevery(4,2).mask(m23),
-\            level=(257-level) )
+    f0=layer(clp.selectevery(4,0),clp.selectevery(4,1).mask(m01),level=level)
+    f1=layer(clp.selectevery(4,1),clp.selectevery(4,0).mask(m01),level=level)
+    f2=layer(clp.selectevery(4,2),clp.selectevery(4,3).mask(m23),level=(257-level) )
+    f3=layer(clp.selectevery(4,3),clp.selectevery(4,2).mask(m23),level=(257-level) )
 
     interleave(f0,f1,f2,f3)
 }
 
 function deblink3(clip clp){
     blink=clp.ng_blinkmask_new
-    m01=mt_logic(blink.selectevery(4,0),
-\                blink.selectevery(4,1),
-\                mode="or").converttorgb32
-    f0=layer(clp.selectevery(4,0),
-\            clp.selectevery(4,1).mask(m01))
-    f1=layer(clp.selectevery(4,1),
-\            clp.selectevery(4,0).mask(m01))
-    interleave(f0,f1,
-\              clp.selectevery(4,2),clp.selectevery(4,3))
+    m01=mt_logic(blink.selectevery(4,0),blink.selectevery(4,1),mode="or").converttorgb32
+    f0=layer(clp.selectevery(4,0),clp.selectevery(4,1).mask(m01))
+    f1=layer(clp.selectevery(4,1),clp.selectevery(4,0).mask(m01))
+    interleave(f0,f1,clp.selectevery(4,2),clp.selectevery(4,3))
 }
 
 function ng_blinkmask_new(clip c,int "ml"){
@@ -94,11 +124,6 @@ function ng_blinkmask_new(clip c,int "ml"){
     interleave(even_blink, odd_blink).selectevery(1,-1)
 }
 
-a = last.ConvertToRGB32().deblink4.selecteven
-
-# Set this to true if this is a handheld console to disable aspect correction
-handheld = false
-
 function gcd(int x, int y)
 {
   t = x % y
@@ -106,49 +131,3 @@ function gcd(int x, int y)
   y = t
   return (y > 0) ? gcd(x, y) : x
 }
-
-(handheld) ? Eval("""
-factor = (a.height > 540) ? 2 : \
-         (a.height > 270) ? 4 : \
-         (a.height > 180) ? 6 : 8
-width = a.width * factor
-height = a.height * factor
-
-""") : Eval("""
-w1 = a.height * 4
-h1 = a.width * 3
-thegcd = gcd(w1, h1)
-w1 = w1 / thegcd
-h1 = h1 / thegcd
-
-width  = a.width  * w1
-height = a.height * h1
-""")
-
-g = a.PointResize(width, height)
-
-#Logo stuffs
-handheld ? Eval("""
-d = ImageSource(file="gen2.png", start=0, end=60, fps=a.FrameRate).ConvertToRGB32()
-""") : Eval("""
-d = ImageSource(file="nes.png", start=0, end=60, fps=a.FrameRate).ConvertToRGB32()
-""")
-e = BlankClip(d, audio_rate=a.AudioRate, channels=a.AudioChannels)
-f = AudioDub(d, e).Lanczos4Resize(g.width, g.height).AssumeFPS(a.FrameRateNumerator, a.FrameRateDenominator)
-
-subff = 249     
-height = 1106
-s = 90
-al = 8
-textcolor = $00ffff00
-halocolor = $00000000
-
-last = f + g
-
-Subtitle("Chip 'n Dale 2\nin 15:48.17", align=al, y=height, first_frame=subff, last_frame=subff+80, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
-Subtitle("Played by feos\nRerecord count: 41526", align=al, y=height, first_frame=subff+80+1, last_frame=subff+160+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
-Subtitle("This is a tool-assisted\nemulator recording", align=al, y=height, first_frame=subff+170, last_frame=subff+250, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
-Subtitle("For details, visit\nhttp://TASVideos.org/", align=al, y=height, first_frame=subff+250+1, last_frame=subff+330+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
-
-ConvertToYV24(matrix="Rec709", chromaresample="point")
-ConvertToYV12(matrix="Rec709", chromaresample="point")
