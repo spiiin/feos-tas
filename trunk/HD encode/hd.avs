@@ -1,36 +1,10 @@
 a = AVISource("movie.avi").Trim(0,-0).ConvertToRGB32().deblink4.selecteven
-
-handheld = false
-
-(handheld) ? Eval("""
-factor = (a.height > 540) ? 2 : \
-         (a.height > 270) ? 4 : \
-         (a.height > 180) ? 6 : 8
-width = a.width * factor
-height = a.height * factor
-
-""") : Eval("""
-w1 = a.height * 4
-h1 = a.width * 3
-thegcd = gcd(w1, h1)
-w1 = w1 / thegcd
-h1 = h1 / thegcd
-
-width  = a.width  * w1
-height = a.height * h1
-""")
-
-g = a.PointResize(width, height)
-
-handheld ? Eval("""
-d = ImageSource(file="gen.png", start=0, end=60, fps=a.FrameRate).ConvertToRGB32()
-""") : Eval("""
+g = a.PointResize(a.width*8, a.height*8)
 d = ImageSource(file="nes.png", start=0, end=60, fps=a.FrameRate).ConvertToRGB32()
-""")
 e = BlankClip(d, audio_rate=a.AudioRate, channels=a.AudioChannels)
 f = AudioDub(d, e).Lanczos4Resize(g.width, g.height).AssumeFPS(a.FrameRateNumerator, a.FrameRateDenominator)
 
-subff = 1096        
+subff = 249        
 height = 0
 s = 90
 al = 8
@@ -39,8 +13,8 @@ halocolor = $00000000
 
 last = f + g
 
-Subtitle("NES Strider\nin 03:42.18", align=al, y=height, first_frame=subff, last_frame=subff+80, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
-Subtitle("Played by Kyman\nRerecord count: 18104", align=al, y=height, first_frame=subff+80+1, last_frame=subff+160+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+Subtitle("NES Chip 'n Dale 2\n'1 player' in 15:13.79", align=al, y=height, first_frame=subff, last_frame=subff+80, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+Subtitle("Played by feos\nRerecord count: 64394", align=al, y=height, first_frame=subff+80+1, last_frame=subff+160+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
 Subtitle("This is a tool-assisted\nemulator recording", align=al, y=height, first_frame=subff+170, last_frame=subff+250, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
 Subtitle("For details, visit\nhttp://TASVideos.org/", align=al, y=height, first_frame=subff+250+1, last_frame=subff+330+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
 
