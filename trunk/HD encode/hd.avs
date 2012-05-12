@@ -1,10 +1,10 @@
 a = AVISource("movie.avi").Trim(0,-0).ConvertToRGB32().deblink4.selecteven
 g = a.PointResize(a.width*8, a.height*8)
-d = ImageSource(file="nes.png", start=0, end=60, fps=a.FrameRate).ConvertToRGB32()
+d = ImageSource(file="logo.png", start=0, end=60, fps=a.FrameRate).ConvertToRGB32()
 e = BlankClip(d, audio_rate=a.AudioRate, channels=a.AudioChannels)
 f = AudioDub(d, e).Lanczos4Resize(g.width, g.height).AssumeFPS(a.FrameRateNumerator, a.FrameRateDenominator)
 
-subff = 249        
+subff = 648           
 height = 0
 s = 90
 al = 8
@@ -13,10 +13,10 @@ halocolor = $00000000
 
 last = f + g
 
-Subtitle("NES Chip 'n Dale 2\n'1 player' in 15:13.79", align=al, y=height, first_frame=subff, last_frame=subff+80, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
-Subtitle("Played by feos\nRerecord count: 64394", align=al, y=height, first_frame=subff+80+1, last_frame=subff+160+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
-Subtitle("This is a tool-assisted\nemulator recording", align=al, y=height, first_frame=subff+170, last_frame=subff+250, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
-Subtitle("For details, visit\nhttp://TASVideos.org/", align=al, y=height, first_frame=subff+250+1, last_frame=subff+330+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+ng_bighalo("SNES Mega Man & Bass (JPN)\n'100 CDs' in 38:07.68", align=al, y=height, first_frame=subff, last_frame=subff+80, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+ng_bighalo("Played by sparky, parrot14green, woabclf\nRerecord count: 307450", align=al, y=height, first_frame=subff+80+1, last_frame=subff+160+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+ng_bighalo("This is a tool-assisted\nemulator recording", align=al, y=height, first_frame=subff+170, last_frame=subff+250, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+ng_bighalo("For details, visit\nhttp://TASVideos.org/", align=al, y=height, first_frame=subff+250+1, last_frame=subff+330+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
 
 ConvertToYV24(matrix="Rec709", chromaresample="point")
 ConvertToYV12(matrix="Rec709", chromaresample="point")
@@ -98,10 +98,55 @@ function ng_blinkmask_new(clip c,int "ml"){
     interleave(even_blink, odd_blink).selectevery(1,-1)
 }
 
-function gcd(int x, int y)
-{
-  t = x % y
-  x = y
-  y = t
-  return (y > 0) ? gcd(x, y) : x
+function ng_bighalo(
+\ clip clp,
+\ string text,
+\ float "x",
+\ float "y",
+\ int "first_frame",
+\ int "last_frame",
+\ string "font",
+\ float "size",
+\ int "text_color",
+\ int "halo_color",
+\ int "align",
+\ int "spc",
+\ int "lsp",
+\ float "font_width",
+\ float "font_angle",
+\ int "halo_radius"
+\){
+    x           = default(          x, -1)
+    first_frame = default(first_frame, 0)
+    last_frame  = default( last_frame, first_frame + 299)
+    font        = default(       font, "Ariel")
+    size        = default(       size, 18)
+    y           = default(          y, size)
+    text_color  = default( text_color, $20FFFFFF)
+    halo_color  = default( halo_color, $20000000)
+    align       = default(      align, 5)
+    spc         = default(        spc, 0)
+    lsp         = default(        lsp, 1)
+    font_width  = default( font_width, 0)
+    font_angle  = default( font_angle, 0)
+    halo_radius = default(halo_radius, 8)
+
+    invis=blankclip(clp, length=1, pixel_type="YV12")
+    text_mask=subtitle(invis, text, x, y, 0, 0, font, size, $00FFFFFF,
+\                      $80808080, align, spc, lsp, font_width, font_angle)
+    halo_mask=mt_logic(text_mask,
+\                      text_mask.mt_expand(mode=mt_circle(halo_radius)),
+\                      mode="xor")
+
+    h_alpha=(halo_color >= 0) ? 255 - halo_color/$01000000
+\                             :  -(halo_color+1)/$01000000
+    hc=blankclip(clp, length=1, color=halo_color)
+    mm=hc.mask(mt_lut(halo_mask, string(h_alpha)+" x * 255 /").converttorgb32)
+    clp2=clp.applyrange(first_frame, last_frame, "Layer", mm)
+
+    t_alpha=(text_color >= 0) ? 255 - text_color/$01000000
+\                             :  -(text_color+1)/$01000000
+    tc=blankclip(clp, length=1, color=text_color)
+    mm2=tc.mask(mt_lut(text_mask, string(t_alpha)+" x * 255 /").converttorgb32)
+    clp2.applyrange(first_frame, last_frame, "Layer", mm2)
 }
