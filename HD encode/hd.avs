@@ -1,6 +1,6 @@
-a = AVISource("movie.avi").Trim(0,-0).ConvertToRGB32().deblink4.selecteven
+a = AVISource("movie.avi").Trim(0,145054).ConvertToRGB32().deblink4.selecteven
 g = a.PointResize(a.width*8, a.height*8)
-d = ImageSource(file="logo.png", start=0, end=60, fps=a.FrameRate).ConvertToRGB32()
+d = ImageSource(file="nes.png", start=0, end=60, fps=a.FrameRate).ConvertToRGB32()
 e = BlankClip(d, audio_rate=a.AudioRate, channels=a.AudioChannels)
 f = AudioDub(d, e).Lanczos4Resize(g.width, g.height).AssumeFPS(a.FrameRateNumerator, a.FrameRateDenominator)
 
@@ -13,10 +13,15 @@ halocolor = $00000000
 
 last = f + g
 
-ng_bighalo("SNES Mega Man & Bass (JPN)\n'100 CDs' in 38:07.68", align=al, y=height, first_frame=subff, last_frame=subff+80, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
-ng_bighalo("Played by sparky, parrot14green, woabclf\nRerecord count: 307450", align=al, y=height, first_frame=subff+80+1, last_frame=subff+160+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
-ng_bighalo("This is a tool-assisted\nemulator recording", align=al, y=height, first_frame=subff+170, last_frame=subff+250, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
-ng_bighalo("For details, visit\nhttp://TASVideos.org/", align=al, y=height, first_frame=subff+250+1, last_frame=subff+330+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+ng_bighalo("SNES Mega Man & Bass (JPN)\n'100 CDs' in 38:07.68", align=al, y=height, \
+	first_frame=subff, last_frame=subff+80, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+ng_bighalo("Played by sparky, parrot14green, woabclf\nRerecord count: 307450", align=al, \
+	y=height, first_frame=subff+80+1, last_frame=subff+160+1, size=s, text_color=textcolor, \
+	halo_color=halocolor, lsp=1)
+ng_bighalo("This is a tool-assisted\nemulator recording", align=al, y=height, first_frame=subff+170, \
+	last_frame=subff+250, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
+ng_bighalo("For details, visit\nhttp://TASVideos.org/", align=al, y=height, first_frame=subff+250+1, \
+	last_frame=subff+330+1, size=s, text_color=textcolor, halo_color=halocolor, lsp=1)
 
 ConvertToYV24(matrix="Rec709", chromaresample="point")
 ConvertToYV12(matrix="Rec709", chromaresample="point")
