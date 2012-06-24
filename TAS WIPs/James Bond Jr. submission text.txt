@@ -1,3 +1,7 @@
+[module:youtube|v=86jMpoAvGuQ]
+
+If the original palette looks too dark for you, here's [http://www.youtube.com/watch?v=-OmLbVlbGzc|the bright encode].
+
 !! Movie objectives
 
 * Emulator used: FCEUX 2.1.6 with TASEditor
@@ -30,7 +34,7 @@ You also can use branches (they present savestate logic within TASEditor): leftc
 I'd like to mention some TASEditor features, used in making of this run.
 * Autorestore cursor position (you keep cursor on a certain frame and keep editing the place above; each time you change input, cursor restores it's position showing your success)
 * History (backtrack any wrong action til rather long ago)
-* Markers and bookmarks (jump to a certain place and compare strategies)
+* Markers and bookmarks (jump to a certain place and compare strategies, comment the movie)
 * Jump to Playback/Selection (navigate between the place you edit and the place you keep FCEUX on, watching the result via Autorestore function)
 * Lag display (fantastic improvement, now you have the exact idea of what's going on)
 * Greenzone (allows to navigate through the whole movie freely)
@@ -53,7 +57,7 @@ __Level 2__ is where some action starts. I need to go through the 2-storey house
 
 Before the mid-floor elevator there is a moving platform that spawns only if you shot the cannons at the different side of the level. Again, I blow them with nuke bomb.
 
-__Level 3__ offers tons of action. Here I need to shoot strange machines with one eye and 2 cannons each. Their bullets can be very, very DTUHHH-DTUHHH...DEADLY![http://www.youtube.com/watch?v=0DMizdcIKJo#t=143s|(c)] After you beat the machine room the cutscene starts. But it can be cancelled by keeping in air, jumping.
+__Level 3__ offers tons of action. Here I need to shoot strange machines with one eye and 2 cannons each. Their bullets can be very, very DTUHHH-DTUHHH... DEADLY![http://www.youtube.com/watch?v=0DMizdcIKJo#t=143s|(c)] After you beat the machine room the cutscene starts. But it can be cancelled by keeping in air, jumping.
 
 Here we see another unique item, jet pack. It's almost uncontrollable in real time, because players just hold the A button to fly and go up at high speed, losing fuel fast. It's charges are twice as weak as bombs, so normally jet pack is rarely used. But I found that it doesn't require to hold A, just to push it at certain frames:
 * Every 8th frame to boost up. After you gained some speed, only each 15th frame is required.
@@ -83,7 +87,7 @@ Some enemies bump me onto the desired platforms. But not all of them. Acid and e
 
 ! Item switch
 
-In real time, player sits down, than taps the Select button to switch a single weapon. Actually you need just to stop moving for a frame, push D+S and resume walking. No sitting animation occurs. But you can switch several weapons at once if you press Down right before Select, and then D + S for a frame. It forces James to sit down, so I mostly use this method when I'm close to the enemy and switch bullets to bombs, throwing them instantly from the lower position.
+In real time, player sits down, than taps the Select button to switch a single weapon. Actually you need just to stop moving for a frame, push D + S and resume walking. No sitting animation occurs. But you can switch several weapons at once if you press Down right before Select, and then D + S for a frame. It forces James to sit down, so I mostly use this method when I'm close to the enemy and switch bullets to bombs, throwing them instantly from the lower position.
 
 ! Death/fall animation
 
@@ -113,3 +117,7 @@ If you have just turned the jet pack off and jumped on a high platform, you may 
 * Evilchen and Daltone for posting WIPs
 * Sting20031959 for testing weapons for me and providing the movie that I used to map all items
 * Spolan and Bobo the King for bruteforce attempts (fruitless though)
+
+!! Screenshots
+
+[http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%2001.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%2002.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%2003.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%2004.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%2005.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%2006.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%2007.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%2008.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%2009.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%20010.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%20011.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%20012.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%20013.png][http://feos-tas.googlecode.com/svn/trunk/TAS%20WIPs/James%20Bond%20Jr.%20screenshots/James%20Bond%20Jr%20014.png]
