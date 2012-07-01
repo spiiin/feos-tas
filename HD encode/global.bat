@@ -2,9 +2,10 @@
 :: Global batch to use along with Hybride Encode Script:
 :: http://tasvideos.org/EncodingGuide/HybridEncodeScript.html
 :: Uses MKV instead of MP4
-:: Uses replacetext to allow user put SAR each time and applies it to all 3 encodes:
+:: Uses replacetext to edit the script directly and create all 3 encodes:
 :: http://pastebin.com/bjpGndKv
-:: See SARs at http://tasvideos.org/EncodingGuide/Encoding.html
+:: Asks to specify SAR according to the platform:
+:: http://tasvideos.org/EncodingGuide/Encoding.html
 
 :: ::::::::::: ::
 :: :: AUDIO :: ::
