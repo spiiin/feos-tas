@@ -7,6 +7,10 @@
 :: Asks to specify SAR according to the platform:
 :: http://tasvideos.org/EncodingGuide/Encoding.html
 
+:: Restore AVS default ::
+replacetext.vbs "encode.avs" "pass = 1" "pass = 0"
+replacetext.vbs "encode.avs" "pass = 2" "pass = 0"
+
 :: ::::::::::: ::
 :: :: AUDIO :: ::
 :: ::::::::::: ::
@@ -34,10 +38,14 @@ replacetext.vbs "encode.avs" "pass = 1" "pass = 2"
 replacetext.vbs "encode.avs" "i444 = false" "i444 = true"
 x264-10 --threads auto --sar "%INPUT%" --crf 20 --keyint 600 --ref 16 --no-fast-pskip --bframes 16 --b-adapt 2 --direct auto --me umh --merange 64 --subme 10 --trellis 2 --partitions all --rc-lookahead 250 --no-dct-decimate --input-range pc --range pc --tcfile-in times.txt -o video_10bit444.mkv --colormatrix smpte170m --output-csp i444 encode.avs
 
+timeout /t 3
+
 :: 512kb ::
 replacetext.vbs "encode.avs" "pass = 2" "pass = 0"
 replacetext.vbs "encode.avs" "i444 = true" "i444 = false"
 x264.exe --threads auto --crf 20 --keyint 600 --ref 16 --no-fast-pskip --bframes 16 --b-adapt 2 --direct auto --me umh --merange 64 --subme 10 --trellis 2 --partitions all --rc-lookahead 250 --no-dct-decimate --range tv --input-range tv --colormatrix smpte170m -o video_512kb.mp4 encode.avs
+
+timeout /t 3
 
 :: Primary downloadable ::
 replacetext.vbs "encode.avs" "pass = 0" "pass = 2"
