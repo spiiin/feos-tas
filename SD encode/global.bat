@@ -1,4 +1,4 @@
-:: feos, 1012 (cheers to Guga and Velitha)
+:: feos, 2012 (cheers to Guga and Velitha)
 :: Global batch to use along with Hybride Encode Script:
 :: http://tasvideos.org/EncodingGuide/HybridEncodeScript.html
 :: Uses replacetext to edit the script directly and create all 3 encodes:
