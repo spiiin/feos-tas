@@ -1,66 +1,54 @@
 # The downloadable / HD encoding script. For more information, see:
 # http://tasvideos.org/EncodingGuide/HybridEncodeScript.html
 
-# Set this to true for HD encode resolutions.
-# After uploading to YouTube, add "yt:stretch=4:3" tag to resulting video
-# to correct the aspect ratio for TV consoles (not for handhelds)
-hd = false
+#################
+# USER SETTINGS #
+#################
 
-# Set this to true if this is a handheld console to disable aspect correction.
-# If you are encoding in HD, you can ignore this.
-handheld = false
+# Replace "-0" with a framenumber to trim the source video after
+AVISource("movie.avi").Trim(0, -0).ConvertToRGB32()
 
-# If you are sure, there's no frame altering flickering in the movie,
-# or the game runs at half normal framerate, you can set this to false.
-# Has no effect if hd = false.
-blend = true
+# The below filename is the filename of your logo, be sure to keep the "" tags.
+# Several methods prevent the logo distortion:
+# 1) Separate logo for each aspect ratio the console has, except if it's TV based.
+# 2) 4:3 aspect ratio for TV based consoles.
+# 3) Logo resolution above 720.
+# file = "logo.png"
 
-# Set this to true to use the new advanced ng_deblink instead of TasBlend.
-# Generally better.  Has no effect if blend = false or hd = false.
-ngdb = true
+# Edit the below items to adjust the subtitles text.
+# All the required information will be on the movie's submission page.
+# Be sure to keep the quotes everywhere, even when branch is blank ("").
+game = "Metroid Fusion"
+branch = "100%"
+author = "BioSpark"
+time = "1:35:19.3"
+rerecords = "143141"
 
-# Set this to true for 10 bit 444 encodes. You additionally have to:
-# 1) Use 10-bit version of x264.
-# 2) Use command line option '--output-csp i444'.
-i444 = false
+# This sets the start time for the subtitles to start displaying.
+# A good choise is the beginning of the first level.
+# This is set as a frame number.
+subff = 400
 
-# Passes for downloadable/streaming encodes:
-# 0: audio extraction / streaming (archive.org 512kb; AR correction);
-# 1: DupMC (no AR correction);
-# 2: DeDup (no AR correction).
-pass = 0
+# This sets the y position for the subtitles,
+# basically, how high or low they are up on the screen.
+# The higher the number, the lower the subtitles.
+# Make sure the subtitles don't obstruct any important action
+ypos = 2
 
-# This sets the start time for the subtitles to start displaying, this is set
-# as a frame number.
-subff = 685 
+####################
+# DEFAULT SETTINGS #
+####################
+
+# This setting turns the audio/video desync fixer on/off using true/false.
+# The below should always be set to false, barring the unusual occasion that it
+# actually fixes the audio.
+desyncfixer = false
+
+# Below is the size for the subtitles, standard encodes use a size of 10.
+subsize = 10
 
 # This controls how long the subtitles stay on the screen.
 sublength = 300
-
-# Autoadjust the timing due to HD framerate reduction
-subff = hd ? subff / 2 + 1 : subff
-sublength = hd ? sublength / 2 : sublength
-
-# This sets the start time for the second set of subtitles to start displaying,
-# this is set as a frame number. Make sure there's at least a delay of 1 frame
-# in between this set and the previous one.
-subff2 = subff + sublength + 1
-
-# This controls how long the second set of subtitles stay on the screen.
-sublength2 = sublength
-
-# Below is the size for the subtitles, standard encodes use a size of 10.
-subsize = 12
-
-# Adjust the below items to adjust the subtitles.
-# This is so that the movie will have the correct subtitles.
-# All the required information will be on the movies submission page.
-# Be sure to keep the quotes everywhere, even when branch is blank ("").
-game = "High Seas Havoc"
-branch = ""
-author = "philipptr"
-time = "19:52.22"
-rerecords = "37170"
 
 # Below is the values for the left, center, or right positioning for the
 # subtitles below in the script, modification shouldn't be attempted unless you
@@ -77,25 +65,14 @@ positionright = 9
 # positions shouldn't be used unless it looks far better.
 position = positioncenter
 
-# This sets the y position for the subtitles, basically, how high or low they
-# are up on the screen.
-# The higher the number, the lower the subtitles.
-ypos = 2
+# If you are sure, there's no frame altering flickering in the movie,
+# or the game runs at half normal framerate, you can set this to false
+# Has no effect if hd = false.
+blend = true
 
-# Several methods prevent the logo distortion:
-# 1) Separate logo for each aspect ratio the console has, except if it's TV based.
-# 2) 4:3 aspect ratio for TV based consoles.
-# 3) Logo resolution above 720.
-# The below filenames are the filenames of your logo.
-# Be sure to keep the "" tags.
-file = hd ? "hdlogo.png" :"logo.png"
-
-# This setting turns the audio/video desync fixer on/off using true/false.
-# The below should always be set to false, barring the unusual occasion that it
-# actually fixes the audio.
-desyncfixer = false
-
-AVISource("movie.avi").Trim(0, 200).ConvertToRGB32() #360250
+# Set this to true to use the new advanced ng_deblink instead of TasBlend.
+# Generally better.  Has no effect if blend = false or hd = false.
+ngdb = true
 
 # This setting adjusts the framerate for HD encodes when uploading to YouTube.
 # This is to save space due to YouTube having a maximum framerate of 30 anyway.
@@ -106,6 +83,45 @@ AVISource("movie.avi").Trim(0, 200).ConvertToRGB32() #360250
 # anyway. If you have ng_deblink enabled, you can ignore this.
 hdframerate = 30
 
+######################
+# AUTOMATED SETTINGS #
+######################
+
+LoadPlugin("./programs/ExactDedup.dll")
+LoadPlugin("./programs/mvtools2.dll")
+LoadPlugin("./programs/mt_masktools-26.dll")
+
+# Batch sets this flag for HD encodings.
+# After uploading to YouTube, add "yt:stretch=4:3" tag to resulting video
+# to correct the aspect ratio for TV consoles (not for handhelds)
+hd = false
+
+file = hd ? "hdlogo.png" :"logo.png"
+
+# Batch sets this flag for handhelds, computers and arcade machines.
+handheld = false
+
+# Autoadjust the timing due to HD framerate reduction
+subff = hd ? subff / 2 + 1 : subff
+sublength = hd ? sublength / 2 : sublength
+
+# This sets the start time for the second set of subtitles to start displaying,
+# this is set as a frame number. Make sure there's at least a delay of 1 frame
+# in between this set and the previous one.
+subff2 = subff + sublength + 1
+
+# This controls how long the second set of subtitles stay on the screen.
+sublength2 = sublength
+
+# Batch sets this flag for 10 bit 444 encodes.
+i444 = false
+
+# Batch sets a pass for downloadable/streaming encodes:
+# 0: audio extraction / streaming (archive.org 512kb; AR correction);
+# 1: DupMC (no AR correction);
+# 2: DeDup (no AR correction).
+pass = 0
+
 # THE BELOW CODE SHOULDN'T BE MODIFIED UNLESS YOU KNOW WHAT YOU ARE DOING!
 # This automatically fixes length based audio/video desync if it exists inside
 # the encode (eg. Many PCEngine games).
@@ -114,14 +130,8 @@ denom = last.FrameCount * last.FrameRateDenominator
 fixedaudiorate = Round(num / denom)
 (desyncfixer) ? last.AssumeSampleRate(fixedaudiorate) : 0
 
-# This activates the frame dropper or the ng_deblink function for HD encodes.
-# This depends on if the game simulates transperancy with alternating frame
-# flicker. The frame dropper saves filesize without image loss, because YouTube
-# caps at 30fps. The ng_deblink function, however, increases the filesize due to
-# the frame blending, but optimizes the flicker effects for YouTube.
-
 # blended = last.TASBlend()
-hd ? (blend ? (ngdb ? ng_deblink.SelectEven : TasBlend()) : ChangeFPS(hdframerate)) : 0
+hd ? (blend ? (ngdb ? ng_deblink.selectodd : TasBlend()) : ChangeFPS(hdframerate)) : 0
 
 # someone really likes these nonsensical clip names, so they shall remain untouched
 sourcevideo = last
@@ -165,14 +175,7 @@ last = f + g
 
 # This is set of subtitles.
 # This shouldn't be modified unless you know what you are doing
-hd ? ng_bighalo( \
-    game + "\n" + ( \
-        (branch == "") ? "" : branch + "\n" \
-    ) + "Played by " + author + "\nPlaying time: " + \
-    time + "\nRerecord count: " + rerecords, y=(ypos * multi), \
-    align=position, first_frame=subff, last_frame=(subff + sublength), \
-    size=(subsize * multi), text_color=$00FFFFFF, halo_color=$00000000, lsp=2 \
-) : Subtitle( \
+Subtitle( \
     game + "\n" + ( \
         (branch == "") ? "" : branch + "\n" \
     ) + "Played by " + author + "\nPlaying time: " + \
@@ -181,12 +184,7 @@ hd ? ng_bighalo( \
     size=(subsize * multi), text_color=$00FFFFFF, halo_color=$00000000, lsp=2 \
 )
 
-hd ? ng_bighalo( \
-    "This is a tool\nassisted recording.\nFor details, visit\n" + \
-    "http://TASVideos.org/", y=(ypos * multi), \
-    align=position, first_frame=subff2, last_frame=(subff2 + sublength2), \
-    size=(subsize * multi), text_color=$00FFFFFF, halo_color=$00000000, lsp=2 \
-) : Subtitle( \
+Subtitle( \
     "This is a tool\nassisted recording.\nFor details, visit\n" + \
     "http://TASVideos.org/", y=(ypos * multi), \
     align=position, first_frame=subff2, last_frame=(subff2 + sublength2), \
@@ -205,12 +203,11 @@ i444 ? last : ConvertToYV12( \
         matrix=(hd ? "Rec709" : (pass == 0 ? "Rec601" : "PC.601")) \
 )
 
+####################
+# CUSTOM FUNCTIONS #
+####################
 
-
-#begin nanogyth's deblink code here
-
-
-
+# nanogyth's deblink.
 function ng_deblink(clip clp,
 \ float "ratio",
 \ int "level",
@@ -398,8 +395,7 @@ function ng_plus(clip A, clip B){
     return mt_lutxy(A,B,"x y +")
 }
 
-# nanogyth's bighalo code
-
+# nanogyth's big halo subtitles for HD.
 function ng_bighalo(
 \ clip clp,
 \ string text,
@@ -416,8 +412,11 @@ function ng_bighalo(
 \ int "lsp",
 \ float "font_width",
 \ float "font_angle",
-\ int "halo_radius"
+\ int "halo_radius",
+\ string "memo"
 \){
+
+#Version 7
     x           = default(          x, -1)
     first_frame = default(first_frame, 0)
     last_frame  = default( last_frame, first_frame + 299)
@@ -433,29 +432,35 @@ function ng_bighalo(
     font_angle  = default( font_angle, 0)
     halo_radius = default(halo_radius, 8)
 
-    invis=blankclip(clp, length=1, pixel_type="YV12")
-    text_mask=subtitle(invis, text, x, y, 0, 0, font, size, $00FFFFFF,
+    invis=BlankClip(clp, length=1, pixel_type="YV12")
+    text_mask=Subtitle(invis, text, x, y, 0, 0, font, size, $00FFFFFF,
 \                      $80808080, align, spc, lsp, font_width, font_angle)
     halo_mask=mt_logic(text_mask,
 \                      text_mask.mt_expand(mode=mt_circle(halo_radius)),
 \                      mode="xor")
 
+    hc=BlankClip(clp, length=1, color=halo_color)
+    tc=Subtitle(hc, text, x, y, 0, 0, font, size, text_color,
+\               $FF000000, align, spc, lsp, font_width, font_angle)
+
+
     h_alpha=(halo_color >= 0) ? 255 - halo_color/$01000000
 \                             :  -(halo_color+1)/$01000000
-    hc=blankclip(clp, length=1, color=halo_color)
-    mm=hc.mask(mt_lut(halo_mask, string(h_alpha)+" x * 255 /").converttorgb32)
-    clp2=clp.applyrange(first_frame, last_frame, "Layer", mm)
-
     t_alpha=(text_color >= 0) ? 255 - text_color/$01000000
 \                             :  -(text_color+1)/$01000000
-    tc=blankclip(clp, length=1, color=text_color)
-    mm2=tc.mask(mt_lut(text_mask, string(t_alpha)+" x * 255 /").converttorgb32)
-    clp2.applyrange(first_frame, last_frame, "Layer", mm2)
+
+    lut_str=string(h_alpha)+" x * 255 / "+string(t_alpha)+" y * 255 / max"
+    mm3=tc.Mask(mt_lutxy(halo_mask, text_mask, lut_str).ConvertToRGB32())
+
+    mm4=Defined(memo) ? (
+\       Exist(memo+"0.bmp") ? ImageSource(memo+"0.bmp")
+\                        : mm3.ImageWriter(memo+"%d.bmp")
+\                   ) : mm3
+
+    clp.ApplyRange(first_frame, last_frame, "Layer", mm4)
 }
 
-# This is the TASBlend function. It reduces framerate to 1/2 but leave
-# flickering effects partly visible. Do not touch it.
-
+# TASBlend.
 function TASBlend(clip c, float "ratio") {
     # reduces framerate to 1/2 but leaves flicker effects partly visible
     # blends frame pairs with alternating opacity
@@ -471,6 +476,7 @@ function TASBlend(clip c, float "ratio") {
     )
 }
 
+# Replace for partial blending.
 function Replace(clip c, int i, int j, clip d) {
     Assert(i >= 0, "Replace: parameter i is negative")
     Assert(j >= 0, "Replace: parameter j is negative")
