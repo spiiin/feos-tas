@@ -1,1 +1,0 @@
-x264 --qp 0 --keyint infinite --colorprim bt709 --transfer bt709 --colormatrix bt709 --output video.mp4 hd.avs
