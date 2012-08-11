@@ -5,8 +5,16 @@
 # USER SETTINGS #
 #################
 
-# Replace "-0" with a framenumber to trim the source video after
-AVISource("movie.avi").Trim(0, -0).ConvertToRGB32()
+# Replace "-0" with a framenumber to trim the source video after.
+AVISource("movie.avi").Trim(0,58900).ConvertToRGB32()
+
+# Batch sets this flag for HD encodings.
+# After uploading to YouTube, add "yt:stretch=4:3" tag to resulting video
+# to correct the aspect ratio for TV consoles (not for handhelds)
+hd = false
+
+# Batch sets this flag for handhelds, computers and arcade machines.
+handheld = false
 
 # The below filename is the filename of your logo, be sure to keep the "" tags.
 # Several methods prevent the logo distortion:
@@ -14,26 +22,30 @@ AVISource("movie.avi").Trim(0, -0).ConvertToRGB32()
 # 2) 4:3 aspect ratio for TV based consoles.
 # 3) Logo resolution above 720.
 # file = "logo.png"
+file = hd ? "hdlogo.png" :"logo.png"
+
+# Find your favourive BDF font and put in its filename.
+fontfile = "./fonts/helvB10.bdf"
 
 # Edit the below items to adjust the subtitles text.
 # All the required information will be on the movie's submission page.
 # Be sure to keep the quotes everywhere, even when branch is blank ("").
-game = "Metroid Fusion"
-branch = "100%"
-author = "BioSpark"
-time = "1:35:19.3"
-rerecords = "143141"
+game = "Ninja Gaiden"
+branch = ""
+author = "Scumtron"
+time = "10:52.68"
+rerecords = "33001"
 
 # This sets the start time for the subtitles to start displaying.
 # A good choise is the beginning of the first level.
 # This is set as a frame number.
-subff = 400
+subff = 295
 
 # This sets the y position for the subtitles,
 # basically, how high or low they are up on the screen.
 # The higher the number, the lower the subtitles.
 # Make sure the subtitles don't obstruct any important action
-ypos = 2
+ypos = 50
 
 ####################
 # DEFAULT SETTINGS #
@@ -44,8 +56,12 @@ ypos = 2
 # actually fixes the audio.
 desyncfixer = false
 
-# Below is the size for the subtitles, standard encodes use a size of 10.
-subsize = 10
+# Below is the size for the subtitles.
+# 1 stands for original DBF subtitles size.
+subsize = 1
+
+# Subtitles halo size. Better be kept bigger than the subtitles size.
+halosize = 2
 
 # This controls how long the subtitles stay on the screen.
 sublength = 300
@@ -57,12 +73,9 @@ positionleft = 7
 positioncenter = 8
 positionright = 9
 
-# This sets the position of the subtitles in terms of direction, it can be
-# left, right, or center.
+# This sets the position of the subtitles in terms of direction.
 # Set positionleft for left, set positioncenter for center, set positionright
 # for right.
-# Setting this to positioncenter is considered standard practice, so other
-# positions shouldn't be used unless it looks far better.
 position = positioncenter
 
 # If you are sure, there's no frame altering flickering in the movie,
@@ -90,16 +103,7 @@ hdframerate = 30
 LoadPlugin("./programs/ExactDedup.dll")
 LoadPlugin("./programs/mvtools2.dll")
 LoadPlugin("./programs/mt_masktools-26.dll")
-
-# Batch sets this flag for HD encodings.
-# After uploading to YouTube, add "yt:stretch=4:3" tag to resulting video
-# to correct the aspect ratio for TV consoles (not for handhelds)
-hd = false
-
-file = hd ? "hdlogo.png" :"logo.png"
-
-# Batch sets this flag for handhelds, computers and arcade machines.
-handheld = false
+LoadCPlugin("./programs/freesub.dll")
 
 # Autoadjust the timing due to HD framerate reduction
 subff = hd ? subff / 2 + 1 : subff
@@ -131,17 +135,23 @@ fixedaudiorate = Round(num / denom)
 (desyncfixer) ? last.AssumeSampleRate(fixedaudiorate) : 0
 
 # blended = last.TASBlend()
-hd ? (blend ? (ngdb ? ng_deblink.selectodd : TasBlend()) : ChangeFPS(hdframerate)) : 0
+
+# ng_deblink parameters:
+# ng_deblink(0.5).SelectOdd (30 fps, NTSC encodes)
+# Change "0.5" to "1.0" to get half framerate flickering.
+# Leave empty "()" for default; some transparency, some flickering - TASBlend style.
+# Exclude ".SelectOdd" to prevent framerate reduction.
+# Replace ".SelectOdd" with ".SelectEvery(5,0,2,4)" for 25 fps, PAL encodes
+hd ? (blend ? (ngdb ? ng_deblink(0.5).SelectOdd \
+	: TasBlend()) : ChangeFPS(hdframerate)) : 0
 
 # someone really likes these nonsensical clip names, so they shall remain untouched
 sourcevideo = last
 
 # High Definition.
-factor = hd ? 4 : 1
+factor = hd ? 8 : 1
 
-b = sourcevideo.PointResize( \
-    sourcevideo.width * factor, sourcevideo.height * factor \
-)
+b = sourcevideo.PointResize(sourcevideo.width * factor, sourcevideo.height * factor)
 
 width = (b.width > b.height * 4 / 3) ? b.width : b.height * 4 / 3
 width = (width % 4 == 1) ? width + 3 : \
@@ -152,13 +162,8 @@ height = (height % 4 == 1) ? height + 3 : \
          (height % 4 == 2) ? height + 2 : \
          (height % 4 == 3) ? height + 1 : height
 
-c = handheld ? b : ( \
-    hd ? b : b.LanczosResize(width, height, taps=2) \
-)
-g = hd ? c.PointResize(c.width * 2, c.height * 2) \
-           : ((pass == 0) ? c : sourcevideo)
-multi = g.height / 224
-multi = (multi > (g.height / sourcevideo.height)) ? multi : (g.height / sourcevideo.height)
+c = handheld ? b : (hd ? b : b.LanczosResize(width, height, taps=2))
+g = hd ? c : ((pass == 0) ? c : sourcevideo)
 
 # Logo.
 d = ImageSource( \
@@ -170,27 +175,45 @@ d = ImageSource( \
 e = BlankClip( \
     d, audio_rate=sourcevideo.AudioRate, channels=sourcevideo.AudioChannels \
 )
-f = AudioDub(d, e).LanczosResize(g.width, g.height, taps=2)
-last = f + g
+f = AudioDub(d, blankclip(g)).LanczosResize(g.width, g.height, taps=2) 
+last = f ++ g
 
 # This is set of subtitles.
 # This shouldn't be modified unless you know what you are doing
-Subtitle( \
+
+FreeSub( \
     game + "\n" + ( \
         (branch == "") ? "" : branch + "\n" \
     ) + "Played by " + author + "\nPlaying time: " + \
-    time + "\nRerecord count: " + rerecords, y=(ypos * multi), \
-    align=position, first_frame=subff, last_frame=(subff + sublength), \
-    size=(subsize * multi), text_color=$00FFFFFF, halo_color=$00000000, lsp=2 \
+    time + "\nRerecord count: " + rerecords, y=(ypos * factor), \
+    font=fontfile, halo_width=(halosize * factor), halo_height=(halosize * factor), \
+	align=position, first_frame=subff, last_frame=(subff + sublength), \
+    size=(subsize * factor), text_color=$00FFFFFF, halo_color=$00000000, lsp=2 \
 )
 
-Subtitle( \
+FreeSub( \
     "This is a tool\nassisted recording.\nFor details, visit\n" + \
-    "http://TASVideos.org/", y=(ypos * multi), \
-    align=position, first_frame=subff2, last_frame=(subff2 + sublength2), \
-    size=(subsize * multi), text_color=$00FFFFFF, halo_color=$00000000, lsp=2 \
+    "http://TASVideos.org/", y=(ypos * factor), \
+    font=fontfile, halo_width=(halosize * factor), halo_height=(halosize * factor), \
+	align=position, first_frame=subff2, last_frame=(subff2 + sublength2), \
+    size=(subsize * factor), text_color=$00FFFFFF, halo_color=$00000000, lsp=2 \
+)
+/*
+FreeSub( \
+    game + branch + "in " + time + "\nPlayed by " + author + \
+    ". Rerecord count: " + rerecords, y=(ypos * factor), \
+    font=fontfile, halo_width=(halosize * factor), halo_height=(halosize * factor), \
+	align=position, first_frame=subff, last_frame=(subff + sublength), \
+    size=(subsize * factor), text_color=$00FFFFFF, halo_color=$00000000, lsp=2 \
 )
 
+FreeSub( \
+    "This is a tool-assisted recording.\nFor details, visit: http://TASVideos.org/", y=(ypos * factor), \
+    font=fontfile, halo_width=(halosize * factor), halo_height=(halosize * factor), \
+	align=position, first_frame=subff2, last_frame=(subff2 + sublength2), \
+    size=(subsize * factor), text_color=$00FFFFFF, halo_color=$00000000, lsp=2 \
+)
+*/
 # Downloadable encodes need a resizing filter for the colourspace reduction.
 # HD encodes need to be point resized to keep the colour information faithful.
 ConvertToYV24(chromaresample="point", matrix=(hd ? "Rec709" : "PC.601") )
@@ -393,71 +416,6 @@ function ng_AD(clip A, clip B){
 
 function ng_plus(clip A, clip B){
     return mt_lutxy(A,B,"x y +")
-}
-
-# nanogyth's big halo subtitles for HD.
-function ng_bighalo(
-\ clip clp,
-\ string text,
-\ float "x",
-\ float "y",
-\ int "first_frame",
-\ int "last_frame",
-\ string "font",
-\ float "size",
-\ int "text_color",
-\ int "halo_color",
-\ int "align",
-\ int "spc",
-\ int "lsp",
-\ float "font_width",
-\ float "font_angle",
-\ int "halo_radius",
-\ string "memo"
-\){
-
-#Version 7
-    x           = default(          x, -1)
-    first_frame = default(first_frame, 0)
-    last_frame  = default( last_frame, first_frame + 299)
-    font        = default(       font, "Ariel")
-    size        = default(       size, 18)
-    y           = default(          y, size)
-    text_color  = default( text_color, $20FFFFFF)
-    halo_color  = default( halo_color, $20000000)
-    align       = default(      align, 5)
-    spc         = default(        spc, 0)
-    lsp         = default(        lsp, 1)
-    font_width  = default( font_width, 0)
-    font_angle  = default( font_angle, 0)
-    halo_radius = default(halo_radius, 8)
-
-    invis=BlankClip(clp, length=1, pixel_type="YV12")
-    text_mask=Subtitle(invis, text, x, y, 0, 0, font, size, $00FFFFFF,
-\                      $80808080, align, spc, lsp, font_width, font_angle)
-    halo_mask=mt_logic(text_mask,
-\                      text_mask.mt_expand(mode=mt_circle(halo_radius)),
-\                      mode="xor")
-
-    hc=BlankClip(clp, length=1, color=halo_color)
-    tc=Subtitle(hc, text, x, y, 0, 0, font, size, text_color,
-\               $FF000000, align, spc, lsp, font_width, font_angle)
-
-
-    h_alpha=(halo_color >= 0) ? 255 - halo_color/$01000000
-\                             :  -(halo_color+1)/$01000000
-    t_alpha=(text_color >= 0) ? 255 - text_color/$01000000
-\                             :  -(text_color+1)/$01000000
-
-    lut_str=string(h_alpha)+" x * 255 / "+string(t_alpha)+" y * 255 / max"
-    mm3=tc.Mask(mt_lutxy(halo_mask, text_mask, lut_str).ConvertToRGB32())
-
-    mm4=Defined(memo) ? (
-\       Exist(memo+"0.bmp") ? ImageSource(memo+"0.bmp")
-\                        : mm3.ImageWriter(memo+"%d.bmp")
-\                   ) : mm3
-
-    clp.ApplyRange(first_frame, last_frame, "Layer", mm4)
 }
 
 # TASBlend.
