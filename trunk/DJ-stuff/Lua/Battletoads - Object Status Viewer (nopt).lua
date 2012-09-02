@@ -101,7 +101,6 @@ for i=1, NO do
 	mat:setcell(0,i,"Obj" .. i);
 end;
 
-mat.fgcolor = "255 255 255";
 mat.bgcolor = "0 0 0";
 
 dialogs = dialogs + 1;
@@ -167,6 +166,8 @@ while (true) do
 		specfound = false;
 	end;
 	--end;
+	mat.fgcolor = "255 255 255";
+		
 	mat.redraw = "C1:15"; --= "L1:15";
 	--mat.bgcolor = "0 0 0";
 	--mat.redraw = "C1:15";
