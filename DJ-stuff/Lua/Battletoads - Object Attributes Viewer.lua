@@ -9,9 +9,11 @@ Offs = 0xF;		-- Number of slots
 -- Instert anything to check
 -- You can check for single bit matches applying AND masks
 Highlight = {
-	{CheckName="ID", CheckVal=0x22, Color="0 0 192"},	-- Warp object
-	{CheckName="ID", CheckVal=0x55, Color="0 0 192"},	-- ?
-	{CheckName="ID", CheckVal=0x7F, Color="192 0 0"}	-- Level End
+	{CheckName="ID", CheckVal=0x01, Color="64 64 64"},	-- Player 1
+	{CheckName="ID", CheckVal=0x02, Color="32 32 32"},	-- Player 2
+	{CheckName="ID", CheckVal=0x22, Color="0 0 192"},  --, CheckName2="Target", CheckVal2=0x55, Color="0 0 192"},	-- Object Effector
+	{CheckName="ID", CheckVal=0x7E, Color="0 192 0"},  --, CheckName2="Cntr2", CheckVal2=0x7F, Color="0 192 0"},	-- Dark Queen
+	{CheckName="ID", CheckVal=0x7F, Color="192 0 0"},  --, CheckName2="VarFlg", CheckVal2=0x7F, Color="192 0 0"}	-- Level End
 }
 
 -- Whole Object RAM block
@@ -102,8 +104,8 @@ function DrawMatrix()
 			-- Highlight the cell and print debug info on matches
 			-- You can add virtual breakpoints with memory.register library
 			for _,case in ipairs(Highlight) do
-				if v.name == case.CheckName and Val == case.CheckVal then
-					mat["bgcolor".. i ..":".. Slot] = case.Color;
+				if v.name == case.CheckName and (Val == case.CheckVal or Val == case.CheckVal + 0x80) then
+					mat["bgcolor*:".. Slot] = case.Color;
 					gui.text(1,i*10-9, v.name..":")
 					gui.text(1+Slot*16+18, i*10-9, string.format("%X:%02X",Slot,Val))
 				end;
