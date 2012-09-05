@@ -1,0 +1,14 @@
+ID	Name of Obj	Attrib	AttrVal	Effect
+7F	LevelEnder	Timer	7F(m)	Fast end the level (if the value is greater than the 0x7f)
+7E	DarkQueen	VarFlg	7F(m)	Call Game End/Over event (if the value is greater than the 0x7f)
+22	ObjRespawner	Target	55	Becomes the "Warp Sprite"
+01	Player_1	<NONE>	--	Player 1 Object
+02	Player_2	<NONE>	--	Player 2 Object
+44	ObjDestroyer	<NONE>	--	Removes all objects from the screen.
+1F	ExitHole	<NONE>	--	If you get to him, you will finish the first level stage.
+46	RunningRat	VarFlg	7F(m)	Calls the end of the level for some levels (if the value is greater than the 0x7f)
+42	ObjPositioner	<NONE>	--	The place where the players will be respawned.
+41	CheckPoint	<NONE>	--	Sets the coordinates for the object 0x42.
+
+Legend:
+m - is needed a minus flag (1 0 0 0 0 0 0 0) bit
