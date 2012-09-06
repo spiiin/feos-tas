@@ -1,3 +1,6 @@
+-- Drand the toad with the mouse.
+-- Up/down still works.
+
 a1xl = 0x3fd
 a1xh = 0x3ee
 a1yl = 0x439
