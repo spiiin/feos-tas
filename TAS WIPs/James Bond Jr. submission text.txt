@@ -11,6 +11,18 @@ If the original palette looks too dark for you, here's [http://www.youtube.com/w
 * HP, lifes and items management
 * Features new format .fm3
 
+!! Game
+
+The Name is Bond, [http://www.eurocom.co.uk/index.php/video-games/james-bond-jr|James Bond Jr.]
+
+The world's greatest scientists have disappeared and now it's up to you as James Bond Jr. to rescue them! Intelligence reports indicates that your old enemy S.C.U.M Lord has imprisoned them on his island fortress in the Caribbean. You head out on four dangerous missions to save the scientists and thwart S.C.U.M. Lord's plans! 
+
+The action never stops! Deactivate missile before they launch to disaster. Crack open safes that hold blueprints of the menacing World Domination Device and use your well-honed combat prowess against scores of enemy agents. Surprises wait around every corner! 
+
+Collect weapons and shields to become an unstoppable force of one!
+A special potion transforms you into a powerful Werewolf!
+Jet Pac feature brings your battles to the skies!
+
 !! History
 
 After finishing Battletoads and Double Dragon, I was looking for a good game that I'm familiar with and that can produce an interesting TAS (to make). James Bond Jr. matches it all - it has nice graphics and music, suggests variable gameplay and insane item management, and I played it in my childhood (solving color puzzles on black and white TV-set).
