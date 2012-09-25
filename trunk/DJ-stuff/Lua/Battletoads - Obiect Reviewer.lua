@@ -48,6 +48,7 @@ function SetBit(q)
 	JP.left = SetButton()
 	JP.right = SetButton()
 end
+
 x = 3
 function Main()
 	key = input.get()
@@ -63,6 +64,7 @@ function Main()
 		SetBit()
 		joypad.set(1, JP)
 		SetBit()
+		--if CFC <= 3500 then JP.left = true end
 		joypad.set(2, JP)
 	end
 
@@ -107,7 +109,7 @@ function Main()
 	gui.text(1, 25, SFO)
 	gui.text(1, 216, string.format("P1X: %4X\tP2X: %4X\tO" .. x .. "X: %4X\tCX: %4X", memory.readbyte(0x3ee)*256 + memory.readbyte(0x3fd), memory.readbyte(0x3ef)*256 + memory.readbyte(0x3fe), memory.readbyte(0x3ef+x)*256 + memory.readbyte(0x3fe+x), memory.readbyte(0x87) + 256*memory.readbyte(0x88)))
 	gui.text(1, 224, string.format("P1Y: %4X\tP2Y: %4X\tO" .. x .. "Y: %4X\tCY: %4X", memory.readbyte(0x42a)*256 + memory.readbyte(0x439), memory.readbyte(0x42a+1)*256 + memory.readbyte(0x439+1), memory.readbyte(0x42a+1+x)*256 + memory.readbyte(0x439+1+x), memory.readbyte(0x89) + 256*memory.readbyte(0xe0)))
-	gui.text(1, 232, string.format("P1Z: %4X\tP2Z: %4X\tO" .. x .. "Z: %4X", memory.readbyte(0x40c)*256 + memory.readbyte(0x493), memory.readbyte(0x40c+1)*256 + memory.readbyte(0x493+1), memory.readbyte(0x40c+1+x)*256 + memory.readbyte(0x493+1+x)))
+	gui.text(1, 232, string.format("P1Z: %4X\tP2Z: %4X\tO" .. x .. "Z: %4X\tMC: %4X", memory.readbyte(0x40c)*256 + memory.readbyte(0x493), memory.readbyte(0x40c+1)*256 + memory.readbyte(0x493+1), memory.readbyte(0x40c+1+x)*256 + memory.readbyte(0x493+1+x), memory.readbyte(0xB7) + 256*memory.readbyte(0xB8)))
 end
 
 emu.registerafter(Main)
