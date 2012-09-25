@@ -72,10 +72,10 @@ function Main()
 	EOT = memory.readbyterange(0x585, CNT)
 	ROT = memory.readbyterange(0x3c3, CNT)
 	TOT = memory.readbyterange(0x4e0, CNT)
-	SFO = "ObjFlg: "
-	SEO = "ObjEvt: "
-	SRO = "ObjReS: "
-	STO = "ObjTmr: "
+	SFO = "[ObjFLG]: "
+	SEO = "[ObjEVT]: "
+	SRO = "[ObjRES]: "
+	STO = "[ObjTMR]: "
 	ISC = false
 
 	for i = 1, CNT do
