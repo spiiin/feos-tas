@@ -74,12 +74,12 @@ function Main()
 	DOT = memory.readbyterange(0x574, CNT)
 	TOT = memory.readbyterange(0x4de, CNT)
 	HOT = memory.readbyterange(0x4f0, CNT)
-	--SFO = "[ObjFLG]:"
-	--SEO = "[ObjEVT]:"
-	SRO = "[ObjRES]:"
-	STO = "[ObjTMR]:"
-	SDO = "[ObjDTR]:"
-	SHO = "[ObjHTD]:"
+	--SFO = "[ObjF]:"
+	--SEO = "[ObjE]:"
+	SRO = "[ObjR]:"
+	STO = "[ObjT]:"
+	SDO = "[ObjD]:"
+	SHO = "[ObjH]:"
 	ISC = false
 
 	for i = 1, CNT do
