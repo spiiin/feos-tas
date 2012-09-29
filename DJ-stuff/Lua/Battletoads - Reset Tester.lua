@@ -42,7 +42,7 @@ function main()
 	else
 		set_joy(current_frame % 2)
 		if current_frame == reset_check_frames then
-			if memory.readbyte(0xd) ~= 0 then
+			if (memory.readbyte(0xd) ~= 0) or (memory.readbyte(0xf4) ~= 0) then
 				emu.message("YOU FIND THE CRASH!")
 				gui.text(1,9, "Reset Glich Frame: " .. start_counter)
 				emu.pause()
