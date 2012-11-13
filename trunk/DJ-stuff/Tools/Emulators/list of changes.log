@@ -1,0 +1,16 @@
+--List of changes (rev. 255X)--
+--incomplete--
+
+Menu>NES>Emu Speed>Custom Speed --> Manual speed setting
+Menu>Tools>AF Pattern/Offset>Custom --> Manual af setting
+Menu>Tools>TAS Editor>
+List of changes:
+Auto-refresh (tooltip=tt)
+Ignore AP (tt)
+Menu>Config>Don't make GreenZone --> Manual switch adding GreenZone (MENU TODO)
+Menu>Config>Disable Effects --> elimination of the object effects of illumination, causing asynchronous delay, for someone very interfere.
+Menu>Config>Clear AP in NP --> New Project = Clear all AP-s
+Menu>Config>Remove AP after Trunc --> All off movie AP will be cleared after Truncate
+ContextMenu>Set/Enable/Remove/Clear AP --> Manual playback controller
+ContextMenu>Edit>Copy/Paste etc. --> Piano basic functions
+ContextMenu>Edit>Modify>Clear/Delete etc. --> Piano advanced functions
