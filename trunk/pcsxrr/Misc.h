@@ -21,25 +21,26 @@
 
 #undef s_addr
 
-typedef struct {
-	unsigned char id[8];
-    unsigned long text;                   
-    unsigned long data;                    
-    unsigned long pc0;
-    unsigned long gp0;                     
-    unsigned long t_addr;
-    unsigned long t_size;
-    unsigned long d_addr;                  
-    unsigned long d_size;                  
-    unsigned long b_addr;                  
-    unsigned long b_size;                  
-    unsigned long s_addr;
-    unsigned long s_size;
-    unsigned long SavedSP;
-    unsigned long SavedFP;
-    unsigned long SavedGP;
-    unsigned long SavedRA;
-    unsigned long SavedS0;
+typedef struct
+{
+  unsigned char id[8];
+  unsigned long text;
+  unsigned long data;
+  unsigned long pc0;
+  unsigned long gp0;
+  unsigned long t_addr;
+  unsigned long t_size;
+  unsigned long d_addr;
+  unsigned long d_size;
+  unsigned long b_addr;
+  unsigned long b_size;
+  unsigned long s_addr;
+  unsigned long s_size;
+  unsigned long SavedSP;
+  unsigned long SavedFP;
+  unsigned long SavedGP;
+  unsigned long SavedRA;
+  unsigned long SavedS0;
 } EXE_HEADER;
 
 extern char CdromId[10];
@@ -50,12 +51,12 @@ int LoadCdromFile(char *filename, EXE_HEADER *head);
 int CheckCdrom();
 int Load(char *ExePath);
 
-int SaveState(char *file);
-int LoadState(char *file);
-int CheckState(char *file);
+int SaveState(const char *file);
+int LoadState(const char *file);
+int CheckState(const char *file);
 
-int SaveStateEmbed(char *file);
-int LoadStateEmbed(char *file);
+int SaveStateEmbed(const char *file);
+int LoadStateEmbed(const char *file);
 
 int SendPcsxInfo();
 int RecvPcsxInfo();
