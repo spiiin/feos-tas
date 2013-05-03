@@ -275,8 +275,8 @@ char *GetSavestateFilename(int newState);
 #include "Misc.h"
 #include "Debug.h"
 #include "Gte.h"
-#include "Movie.h"
-#include "Cheat.h"
+#include "movie.h"
+#include "cheat.h"
 #include "LuaEngine.h"
 
 #endif /* __PSXCOMMON_H__ */
