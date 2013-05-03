@@ -34,7 +34,7 @@
 
 #include "../version.h"
 #include "PsxCommon.h"
-#include "plugin.h"
+#include "Plugin.h"
 #include "Debug.h"
 #include "Win32.h"
 #include "../cheat.h"

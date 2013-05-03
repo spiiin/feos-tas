@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="pcsx"
 	ProjectGUID="{66893A12-B867-4F74-B698-38DB297CDDA5}"
 	RootNamespace="pcsx"
@@ -61,7 +61,7 @@
 				ProgramDataBaseFileName="$(IntDir)\vc80.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 				CompileAs="0"
 				DisableSpecificWarnings="4996"
 			/>
@@ -84,7 +84,9 @@
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="./includes;./lua/lib;zlib;libpng"
 				GenerateDebugInformation="true"
+				AssemblyDebug="1"
 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
+				GenerateMapFile="true"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -170,6 +172,7 @@
 				ProgramDataBaseFileName="$(IntDir)\vc80.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
+				DebugInformationFormat="3"
 				CompileAs="0"
 				DisableSpecificWarnings="4996"
 			/>
@@ -192,6 +195,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="./includes;./lua/lib;zlib;libpng"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
