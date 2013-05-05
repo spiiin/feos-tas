@@ -77,6 +77,7 @@ void WinLuaOnStart(int hDlgAsInt)
 	EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_LUASTOP), true);
 	SetWindowText(GetDlgItem(hDlg, IDC_BUTTON_LUARUN), "Restart");
 	SetWindowText(GetDlgItem(hDlg, IDC_LUACONSOLE), ""); // clear the console
+  ShowWindow(hDlg, SW_SHOW);
 //	Show_Genesis_Screen(HWnd); // otherwise we might never show the first thing the script draws
 }
 
@@ -128,8 +129,8 @@ INT_PTR CALLBACK DlgLuaScriptDialog(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 		r.bottom += staggerOffset;
 
 		// push it away from the main window if we can
-		const int width = (r.right-r.left); 
-		const int width2 = (r2.right-r2.left); 
+		const int width = (r.right-r.left);
+		const int width2 = (r2.right-r2.left);
 		if(r.left+width2 + width < GetSystemMetrics(SM_CXSCREEN))
 		{
 			r.right += width;

@@ -9,7 +9,7 @@ UPX=upx
 BASEFLAGS=-W -Wall -Winit-self -Wpointer-arith -Wcast-align -Wwrite-strings \
   -march=i686 -mtune=generic -fomit-frame-pointer -finline-functions -ffast-math \
   -DPCSX_VERSION=\"${VERSION}\" -D__MINGW32__ -D_FILE_OFFSET_BITS=64 -D__MINGW_USE_VC2005_COMPAT -DWIN32_LEAN_AND_MEAN \
-  -IWin32 -I. -mwindows
+  -IWin32 -I.
 CFLAGS=$(BASEFLAGS) -Wbad-function-cast -Wc++-compat
 CXXFLAGS=$(BASEFLAGS) -Wnon-virtual-dtor -Wstrict-null-sentinel -fno-exceptions -fno-rtti
 #-Wold-style-cast
@@ -64,11 +64,11 @@ debug: pcsx_debug$(OUTE)
 
 
 pcsx$(OUTE): $(OBJECTS)
-	$(CXX) -o $@ $(OBJECTS) $(LFLAGS) -s
+	$(CXX) -o $@ $(OBJECTS) $(LFLAGS) -mwindows -s
 	$(UPX) --best --lzma $@
 
 pcsx_debug$(OUTE): $(DOBJECTS)
-	$(CXX) -o $@ $(DOBJECTS) $(LFLAGS) -ggdb3
+	$(CXX) -o $@ $(DOBJECTS) $(LFLAGS) -mwindows -ggdb3
 
 
 include $(DEP)
