@@ -19,6 +19,8 @@
 #include <windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
+#include <commdlg.h>
+#include <shellapi.h>
 #include <time.h>
 #include <stdio.h>
 #include <string.h>
@@ -34,7 +36,7 @@
 
 #include "../version.h"
 #include "PsxCommon.h"
-#include "plugin.h"
+#include "Plugin.h"
 #include "Debug.h"
 #include "Win32.h"
 #include "../cheat.h"

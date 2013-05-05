@@ -8,6 +8,8 @@
 #include "Win32.h"
 #endif
 
+#include <commdlg.h>
+
 extern AppData gApp;
 
 static void LoadCheatFile(char nameo[2048])
