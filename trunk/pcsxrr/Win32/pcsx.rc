@@ -1,6 +1,6 @@
 // Microsoft Visual C++ generated resource script.
 //
-#include "Win32.h"
+#include "win32.h"
 #include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
@@ -419,7 +419,7 @@ END
 // remains consistent on all systems.
 
 #ifdef __MINGW32__
-IDI_APP_ICON            ICON    DISCARDABLE     "./Win32/Cdrom02.ico"
+IDI_APP_ICON            ICON    DISCARDABLE     ".\\win32\\Cdrom02.ico"
 #else
 IDI_APP_ICON            ICON    DISCARDABLE     "Cdrom02.ico"
 #endif

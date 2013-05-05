@@ -26,7 +26,7 @@
 
 
 #include "../PsxCommon.h"
-#include "../cheat.h"
+#include "../Cheat.h"
 #ifdef WIN32
 #include "Win32.h"
 #endif
@@ -38,7 +38,7 @@
 #include <commctrl.h>
 #include <list>
 #include <vector>
-#ifdef _MSC_VER
+#ifdef WIN32
 	#include "BaseTsd.h"
 	typedef INT_PTR intptr_t;
 #else
