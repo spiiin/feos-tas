@@ -20,7 +20,7 @@
 #include <windowsx.h>
 #include <stdio.h>
 #include "PsxCommon.h"
-#include "Plugin.h"
+#include "plugin.h"
 #include "resource.h"
 #include "Win32.h"
 #include "maphkeys.h"
