@@ -385,17 +385,20 @@ void MOV_StartMovie(int mode)
 
 void MOV_StopMovie()
 {
-	if (Movie.mode == MOVIEMODE_RECORD) {
-		MOV_WriteMovieFile();
-		fclose(fpMovie);
-		TruncateMovie();
-	}
-	else {
-		fclose(fpMovie);
-	}
-	fpMovie = NULL;
-	Movie.mode = MOVIEMODE_INACTIVE;
-	SIO_UnsetTempMemoryCards();
+  if (Movie.mode == MOVIEMODE_RECORD)
+  {
+    MOV_WriteMovieFile();
+    fclose(fpMovie);
+    fpMovie = 0;
+    TruncateMovie();
+  }
+  else if (fpMovie)
+  {
+    fclose(fpMovie);
+    fpMovie = 0;
+  }
+  Movie.mode = MOVIEMODE_INACTIVE;
+  SIO_UnsetTempMemoryCards();
 }
 
 #ifdef _MSC_VER_
