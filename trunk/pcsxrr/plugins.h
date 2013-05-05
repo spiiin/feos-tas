@@ -20,7 +20,7 @@
 #define __PLUGINS_H__
 
 #if defined (__WIN32__)
-#include "Win32\plugin.h"
+#include "Win32/Plugin.h"
 #elif defined(__LINUX__) || defined(__MACOSX__)
 typedef void* HWND;
 #define CALLBACK

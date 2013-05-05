@@ -10,6 +10,8 @@
 #include <assert.h>
 #include <windows.h>
 #include <commctrl.h>
+#include <commdlg.h>
+#include <shellapi.h>
 #include <string>
 #include <algorithm>
 

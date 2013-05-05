@@ -4,6 +4,9 @@
 #include "Win32.h"
 #endif
 
+#include <commdlg.h>
+#include <shellapi.h>
+
 #include "resource.h"
 
 HWND LuaConsoleHWnd = NULL;

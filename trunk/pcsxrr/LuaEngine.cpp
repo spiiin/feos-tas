@@ -16,10 +16,10 @@ using std::max;
 #endif
 
 extern "C" {
-	#include <lua.h>
-	#include <lauxlib.h>
-	#include <lualib.h>
-	#include <lstate.h>
+	#include <lua/lua.h>
+	#include <lua/lauxlib.h>
+	#include <lua/lualib.h>
+	#include <lua/lstate.h>
 }
 
 #include "PsxCommon.h"

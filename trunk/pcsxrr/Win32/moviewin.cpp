@@ -3,6 +3,7 @@
 #include <string.h>
 #include <assert.h>
 #include <windows.h>
+#include <commdlg.h>
 #include "../PsxCommon.h"
 #include "resource.h"
 #include "Win32.h"
