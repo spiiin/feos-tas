@@ -47,6 +47,7 @@
 
 extern HWND LuaConsoleHWnd;
 extern INT_PTR CALLBACK DlgLuaScriptDialog(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
+static const char *loadLua = 0;
 
 // global variables
 AppData gApp;
@@ -290,7 +291,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			sprintf(Movie.wavFilename,"%s",argv[++i]);
 		}
 		else if (!strcmp(argv[i], "-lua")) {
-			PCSX_LoadLuaCode(argv[++i]);
+      loadLua = argv[++i];
 		}
 		else if (!strcmp(argv[i], "-stopcapture"))
 			sscanf (argv[++i],"%lu",&Movie.stopCapture);
@@ -336,12 +337,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	CreateMainWindow(SW_SHOW);
 
 	//process some command line options
-	if (runcd == 1)
-		PostMessage(gApp.hWnd, WM_COMMAND, ID_FILE_RUN_CD, 0);
-	else if (runcd == 2)
-		PostMessage(gApp.hWnd, WM_COMMAND, ID_FILE_RUNCDBIOS, 0);
-	else if (loadMovie)
-		WIN32_StartMovieReplay(szMovieToLoad);
+
+	if (runcd == 1) { PostMessage(gApp.hWnd, WM_COMMAND, ID_FILE_RUN_CD, 0); }
+	else if (runcd == 2) { PostMessage(gApp.hWnd, WM_COMMAND, ID_FILE_RUNCDBIOS, 0); }
+	else if (loadMovie) {	WIN32_StartMovieReplay(szMovieToLoad); }
 
 	if (loadWatch) {
 		RamWatchHWnd = CreateDialog(gApp.hInstance, MAKEINTRESOURCE(IDD_RAMWATCH), NULL, (DLGPROC) RamWatchProc);
@@ -351,6 +350,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			MessageBox(NULL, errorMessage, NULL, MB_ICONERROR);
 		}
 	}
+
+  if (loadLua) { PCSX_LoadLuaCode(loadLua); loadLua = 0; }
 
 	RunGui();
 
@@ -1828,6 +1829,7 @@ void WIN32_StartMovieReplay(char* szFilename)
 		}
 		Running = 1;
 		MOV_StartMovie(MOVIEMODE_PLAY);
+    if (loadLua) { PCSX_LoadLuaCode(loadLua); loadLua = 0; }
 		psxCpu->Execute();
 	}
 }
