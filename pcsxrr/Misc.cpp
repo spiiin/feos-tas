@@ -531,7 +531,7 @@ static int LoadStateBase(gzFile f, bool embed)
 
 int SaveState(const char *file)
 {
-  SaveStateBase(file, false);
+  return SaveStateBase(file, false);
 }
 
 int LoadState(const char *file)
@@ -569,7 +569,7 @@ int CheckState(const char *file)
 
 int SaveStateEmbed(const char *file)
 {
-  SaveStateBase(file, true);
+  return SaveStateBase(file, true);
 }
 
 int LoadStateEmbed(const char *file)
