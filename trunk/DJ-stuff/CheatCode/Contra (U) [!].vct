@@ -1,5 +1,0 @@
-; Contra (U) [!]
-#1 0030-11-05		Level (0-7)
-#1 00AA-01-13		Weapon (Norm: 0-4, Speed: 16-20 = [10h+1,2,3,4])
-#1 00B0-01-02		Inmortal Time (0-255)
-#1 0032-01-63		Lifes (max vis: 99 = [63h])

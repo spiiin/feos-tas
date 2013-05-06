@@ -1,1 +1,0 @@
-FCEUX Hybrid this is a modified version of the emulator FCEUX v2.5 by <D-a-X> for TAS-er DyLaX.
