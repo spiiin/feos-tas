@@ -433,100 +433,105 @@ int Load(char *ExePath) {
 }
 
 // STATES
-
-const char PcsxHeader[32] = "STv3 PCSX v" PCSX_VERSION;
-
-static int SaveStateBase(const char *file, bool embed)
+namespace
 {
-  gzFile f;
+  const char PcsxHeader[32] = "STv3 PCSX v" PCSX_VERSION;
+
   GPUFreeze_t gpufP;
   SPUFreeze_t spufP;
-  int Size, ret = 0;
-  unsigned char pMem[128*96*3];
 
-  f = gzopen(file, !embed ? "wb0" : "ab");
-  if (f)
+  int SaveStateBase(const char *file, bool embed)
   {
-    gzwrite(f, (void*)PcsxHeader, sizeof(PcsxHeader));
+    gzFile f;
+    int Size, ret = 0;
+    unsigned char pMem[128*96*3];
 
-    GPU_getScreenPic(pMem);
-    gzwrite(f, pMem, sizeof(pMem));
+    f = gzopen(file, !embed ? "wb0" : "ab");
+    if (f)
+    {
+      gzwrite(f, (void*)PcsxHeader, sizeof(PcsxHeader));
 
-    gzwrite(f, psxM, 0x00200000);
-    gzwrite(f, psxR, 0x00080000);
-    gzwrite(f, psxH, 0x00010000);
-    gzwrite(f, (void*)&psxRegs, sizeof(psxRegs));
+      GPU_getScreenPic(pMem);
+      gzwrite(f, pMem, sizeof(pMem));
 
-    if (Config.HLE) { psxBiosFreeze(1); }
+      gzwrite(f, psxM, 0x00200000);
+      gzwrite(f, psxR, 0x00080000);
+      gzwrite(f, psxH, 0x00010000);
+      gzwrite(f, (void*)&psxRegs, sizeof(psxRegs));
 
-    // gpu
-    gpufP.ulFreezeVersion = 1;
-    GPU_freeze(1, &gpufP);
-    gzwrite(f, &gpufP, sizeof(gpufP));
+      if (Config.HLE) { psxBiosFreeze(1); }
 
-    // spu
-    SPU_freeze(2, &spufP);
-    Size = spufP.Size;
-    gzwrite(f, &Size, 4);
+      // gpu
+      memset(&gpufP, 0, sizeof(gpufP));
+      gpufP.ulFreezeVersion = 1;
+      GPU_freeze(1, &gpufP);
+      gzwrite(f, &gpufP, sizeof(gpufP));
 
-    SPU_freeze(1, &spufP);
-    gzwrite(f, &spufP, Size);
+      // spu
+      memset(&spufP, 0, sizeof(spufP));
+      SPU_freeze(2, &spufP);
+      Size = spufP.Size;
+      gzwrite(f, &Size, 4);
 
-    sioFreeze(f, 1);
-    cdrFreeze(f, 1);
-    psxHwFreeze(f, 1);
-    psxRcntFreeze(f, 1);
-    mdecFreeze(f, 1);
-    if (!embed) { MovieFreeze(f, 1); }
+      SPU_freeze(1, &spufP);
+      gzwrite(f, &spufP, Size);
 
-    gzclose(f);
+      sioFreeze(f, 1);
+      cdrFreeze(f, 1);
+      psxHwFreeze(f, 1);
+      psxRcntFreeze(f, 1);
+      mdecFreeze(f, 1);
+      if (!embed) { MovieFreeze(f, 1); }
+
+      gzclose(f);
+    }
+    else { ret = -1; }
+
+    return ret;
   }
-  else { ret = -1; }
 
-  return ret;
-}
-
-static int LoadStateBase(gzFile f, bool embed)
-{
-  GPUFreeze_t gpufP;
-  SPUFreeze_t spufP;
-  int Size, ret = 0;
-  char header[32];
-
-  psxCpu->Reset();
-
-  gzread(f, header, sizeof(header));
-
-  if (!strncmp("STv3 PCSX", header, 9))
+  int LoadStateBase(gzFile f, bool embed)
   {
-    gzseek(f, 128*96*3, SEEK_CUR);
+    int Size, ret = 0;
+    char header[32];
 
-    gzread(f, psxM, 0x00200000);
-    gzread(f, psxR, 0x00080000);
-    gzread(f, psxH, 0x00010000);
-    gzread(f, (void*)&psxRegs, sizeof(psxRegs));
+    psxCpu->Reset();
 
-    if (Config.HLE) { psxBiosFreeze(0); }
+    gzread(f, header, sizeof(header));
 
-    // gpu
-    gzread(f, &gpufP, sizeof(gpufP));
-    GPU_freeze(0, &gpufP);
+    if (!strncmp("STv3 PCSX", header, 9))
+    {
+      gzseek(f, 128*96*3, SEEK_CUR);
 
-    // spu
-    gzread(f, &Size, 4);
-    gzread(f, &spufP, Size);
-    SPU_freeze(0, &spufP);
+      gzread(f, psxM, 0x00200000);
+      gzread(f, psxR, 0x00080000);
+      gzread(f, psxH, 0x00010000);
+      gzread(f, (void*)&psxRegs, sizeof(psxRegs));
 
-    sioFreeze(f, 0);
-    cdrFreeze(f, 0);
-    psxHwFreeze(f, 0);
-    psxRcntFreeze(f, 0);
-    mdecFreeze(f, 0);
-    if (!embed) { MovieFreeze(f, 0); }
+      if (Config.HLE) { psxBiosFreeze(0); }
+
+      // gpu
+      memset(&gpufP, 0, sizeof(gpufP));
+      gzread(f, &gpufP, sizeof(gpufP));
+      GPU_freeze(0, &gpufP);
+
+      // spu
+      memset(&spufP, 0, sizeof(spufP));
+      gzread(f, &Size, 4);
+      gzread(f, &spufP, Size);
+      SPU_freeze(0, &spufP);
+
+      sioFreeze(f, 0);
+      cdrFreeze(f, 0);
+      psxHwFreeze(f, 0);
+      psxRcntFreeze(f, 0);
+      mdecFreeze(f, 0);
+      if (!embed) { MovieFreeze(f, 0); }
+    }
+    else { ret = -1; }
+
+    return(ret);
   }
-  else { ret = -1; }
-
-  return(ret);
 }
 
 int SaveState(const char *file)
