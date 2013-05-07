@@ -446,7 +446,7 @@ namespace
     int Size, ret = 0;
     unsigned char pMem[128*96*3];
 
-    f = gzopen(file, !embed ? "wb0" : "ab");
+    f = gzopen(file, !embed ? "wb1" : "ab");
     if (f)
     {
       gzwrite(f, (void*)PcsxHeader, sizeof(PcsxHeader));
