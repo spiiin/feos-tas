@@ -26,6 +26,7 @@ extern "C" {
 #ifdef WIN32
 #include "Win32/Win32.h"
 #include "Win32/resource.h"
+#define sleep(x) Sleep(x*1000)
 #endif
 #include "LuaEngine.h"
 
@@ -562,6 +563,12 @@ static int print(lua_State *L)
 
 	//worry(L, 100);
 	return 0;
+}
+
+static int pcsx_sleep(lua_State *L)
+{
+  sleep(luaL_checkinteger(L, 1));
+  return 1;
 }
 
 char pcsx_message_buffer[1024];
@@ -3060,20 +3067,22 @@ void CallRegisteredLuaFunctions(int calltype)
 }
 
 
-static const struct luaL_reg pcsxlib [] = {
-	{"speedmode", pcsx_speedmode},
-	{"frameadvance", pcsx_frameadvance},
-	{"pause", pcsx_pause},
-	{"unpause", pcsx_unpause},
-	{"framecount", movie_framecount},
-	{"lagcount", pcsx_lagcount},
-	{"lagged", pcsx_lagged},
-	{"registerbefore", pcsx_registerbefore},
-	{"registerafter", pcsx_registerafter},
-	{"registerexit", pcsx_registerexit},
-	{"message", pcsx_message},
-	{"print", print}, // sure, why not
-	{NULL,NULL}
+static const struct luaL_reg pcsxlib[] =
+{
+  {"speedmode", pcsx_speedmode},
+  {"frameadvance", pcsx_frameadvance},
+  {"pause", pcsx_pause},
+  {"unpause", pcsx_unpause},
+  {"framecount", movie_framecount},
+  {"lagcount", pcsx_lagcount},
+  {"lagged", pcsx_lagged},
+  {"registerbefore", pcsx_registerbefore},
+  {"registerafter", pcsx_registerafter},
+  {"registerexit", pcsx_registerexit},
+  {"message", pcsx_message},
+  {"print", print}, // sure, why not
+  {"sleep", pcsx_sleep},
+  {NULL,NULL}
 };
 
 static const struct luaL_reg memorylib [] = {
