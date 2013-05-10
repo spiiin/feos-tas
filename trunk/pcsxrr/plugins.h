@@ -37,7 +37,7 @@ typedef void* HWND;
 
 int  LoadPlugins();
 void ReleasePlugins();
-int  OpenPlugins();
+// int  OpenPlugins();
 void ClosePlugins();
 void ResetPlugins();
 

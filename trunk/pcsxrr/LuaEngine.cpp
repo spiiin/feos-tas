@@ -44,6 +44,8 @@ static void(*info_onstart)(int uid);
 static void(*info_onstop)(int uid);
 static int info_uid;
 #ifdef WIN32
+extern AppData gApp;
+extern bool OpenPlugins(HWND hWnd);
 extern HWND LuaConsoleHWnd;
 extern INT_PTR CALLBACK DlgLuaScriptDialog(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 extern void PrintToWindowConsole(int hDlgAsInt, const char* str);
@@ -568,6 +570,20 @@ static int print(lua_State *L)
 static int pcsx_sleep(lua_State *L)
 {
   sleep(luaL_checkinteger(L, 1));
+  return 1;
+}
+
+static int pcsx_switchspu(lua_State *L)
+{
+  strcpy(Config.Spu, "spuEternal.dll");
+  char Plugin[256];  
+  sprintf(Plugin, "%s%s", Config.PluginsDir, Config.Spu);
+  SaveConfig();
+  SPU_close();
+  SPU_shutdown();
+  LoadSPUplugin(Plugin);
+  SPU_init();
+  SPU_open(gApp.hWnd);
   return 1;
 }
 
@@ -3082,6 +3098,7 @@ static const struct luaL_reg pcsxlib[] =
   {"message", pcsx_message},
   {"print", print}, // sure, why not
   {"sleep", pcsx_sleep},
+  {"switchspu", pcsx_switchspu},
   {NULL,NULL}
 };
 
