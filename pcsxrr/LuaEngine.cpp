@@ -28,6 +28,7 @@ extern "C" {
 #include "Win32/resource.h"
 #define sleep(x) Sleep((x)*1000)
 #endif
+#include "LuaEngine.h"
 
 #ifndef TRUE
 #define TRUE 1
