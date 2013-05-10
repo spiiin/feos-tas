@@ -28,7 +28,6 @@ extern "C" {
 #include "Win32/resource.h"
 #define sleep(x) Sleep((x)*1000)
 #endif
-#include "LuaEngine.h"
 
 #ifndef TRUE
 #define TRUE 1
@@ -574,10 +573,17 @@ static int pcsx_sleep(lua_State *L)
 }
 
 SPUFreeze_t spufP;
+GPUFreeze_t gpufP;
+
+lua_State *BACKUP_LUA;
 
 static int pcsx_switchspu(lua_State *L)
 {
+	BACKUP_LUA = LUA;
+
 	SPU_freeze(1, &spufP);	
+	GPU_freeze(1, &gpufP);
+
 	const char *dllSpu = luaL_checkstring(L,1);
 	strcpy(Config.Spu, dllSpu);
 	char Plugin[256];  
@@ -587,8 +593,12 @@ static int pcsx_switchspu(lua_State *L)
 	SPU_shutdown();
 	LoadSPUplugin(Plugin);
 	SPU_init();
-	SPU_open(gApp.hWnd);
+	//SPU_open(gApp.hWnd);
+	SPU_open(LuaConsoleHWnd);
 	SPU_freeze(0, &spufP);
+	GPU_freeze(0, &gpufP);
+	
+	LUA = BACKUP_LUA;
 
 	return 1;
 }
