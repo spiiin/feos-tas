@@ -421,6 +421,7 @@ unsigned short regArea[10000];
 unsigned short spuCtrl,spuStat,spuIrq;
 unsigned long spuAddr;
 
+
 void CALLBACK SPU__writeRegister(unsigned long add,unsigned short value) { // Old Interface
 	unsigned long r=add&0xfff;
 	regArea[(r-0xc00)/2] = value;
