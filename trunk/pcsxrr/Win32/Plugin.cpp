@@ -178,6 +178,12 @@ void PADhandleKey(int key) {
 	&& modifiers == EmuCommandTable[EMUCMD_MENU].keymod)
 	{
 		iCallW32Gui=1;
+		if (Movie.mode != MOVIEMODE_INACTIVE) {
+			MOV_StopMovie();
+			EnableMenuItem(gApp.hMenu,ID_FILE_RECORD_MOVIE,MF_ENABLED);
+			EnableMenuItem(gApp.hMenu,ID_FILE_REPLAY_MOVIE,MF_ENABLED);
+			EnableMenuItem(gApp.hMenu,ID_FILE_STOP_MOVIE,MF_GRAYED);
+		}
 		return;
 	}
 
