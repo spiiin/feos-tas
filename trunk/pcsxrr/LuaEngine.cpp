@@ -575,16 +575,17 @@ static int pcsx_sleep(lua_State *L)
 
 static int pcsx_switchspu(lua_State *L)
 {
-  strcpy(Config.Spu, "spuEternal.dll");
-  char Plugin[256];  
-  sprintf(Plugin, "%s%s", Config.PluginsDir, Config.Spu);
-  SaveConfig();
-  SPU_close();
-  SPU_shutdown();
-  LoadSPUplugin(Plugin);
-  SPU_init();
-  SPU_open(gApp.hWnd);
-  return 1;
+	const char *dllSpu = luaL_checkstring(L,1);
+	strcpy(Config.Spu, dllSpu);
+	char Plugin[256];  
+	sprintf(Plugin, "%s%s", Config.PluginsDir, Config.Spu);
+	SaveConfig();
+	SPU_close();
+	SPU_shutdown();
+	LoadSPUplugin(Plugin);
+	SPU_init();
+	SPU_open(gApp.hWnd);
+	return 1;
 }
 
 char pcsx_message_buffer[1024];
