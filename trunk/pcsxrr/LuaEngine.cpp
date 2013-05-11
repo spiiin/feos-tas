@@ -580,22 +580,30 @@ lua_State *BACKUP_LUA;
 
 static int pcsx_switchspu(lua_State *L)
 {
+	const char *dllSpu = luaL_checkstring(L,1);
 	BACKUP_LUA = LUA;
+	
+	char OldPlugin[256];  
+	sprintf(OldPlugin, "%s%s", Config.PluginsDir, Config.Spu);
+
+	strcpy(Config.Spu, dllSpu);
+
+	char Plugin[256];  
+	sprintf(Plugin, "%s%s", Config.PluginsDir, Config.Spu);
+	
+	if(strcasecmp(OldPlugin, Plugin)==0)
+		return 1; //already same plugin
 
 	SPU_freeze(1, &spufP);	
 	GPU_freeze(1, &gpufP);
 
-	const char *dllSpu = luaL_checkstring(L,1);
-	strcpy(Config.Spu, dllSpu);
-	char Plugin[256];  
-	sprintf(Plugin, "%s%s", Config.PluginsDir, Config.Spu);
-	//SaveConfig();
 	SPU_close();
 	SPU_shutdown();
 	LoadSPUplugin(Plugin);
 	SPU_init();
 	//SPU_open(gApp.hWnd);
 	SPU_open(LuaConsoleHWnd);
+	SaveConfig(); //SaveConfig might not work if any game isn't loaded?
 	SPU_freeze(0, &spufP);
 	GPU_freeze(0, &gpufP);
 	
@@ -603,6 +611,16 @@ static int pcsx_switchspu(lua_State *L)
 
 	return 1;
 }
+
+static int pcsx_redrawscreen(lua_State *L)
+{
+	GPU_updateframe();
+	return 1;
+}
+
+
+
+
 
 char pcsx_message_buffer[1024];
 // pcsx.message(string msg)
@@ -1873,6 +1891,40 @@ static int gui_parsecolor(lua_State *L)
 }
 
 
+
+
+static int gui_hashframe(lua_State *L)
+{	
+	int x,y;
+
+	int width = iScreenWidth;
+	int height = iScreenHeight;
+
+	unsigned char* ptr;
+	uint8 *screen;
+
+	screen=XBuf;
+	long hashValue = 0;
+	long counter = 1;
+
+	for(y=0; y<height; y++){
+		for(x=0; x<width; x++){
+			uint32 r, g, b;
+			r = screen[(y*LUA_SCREEN_WIDTH+x)*4+2];
+			g = screen[(y*LUA_SCREEN_WIDTH+x)*4+1];
+			b = screen[(y*LUA_SCREEN_WIDTH+x)*4];
+
+			int value = r+g+b;
+			counter += ((8161*value) % 4294967279)+ value*16776193;
+		}		
+	}
+
+	hashValue = abs(counter % 4294967291);	
+	lua_pushinteger(L, hashValue);
+	return 1;
+}
+
+
 // gui.gdscreenshot()
 //
 //  Returns a screen shot as a string in gd's v1 file format.
@@ -3116,6 +3168,7 @@ static const struct luaL_reg pcsxlib[] =
   {"print", print}, // sure, why not
   {"sleep", pcsx_sleep},
   {"switchspu", pcsx_switchspu},
+  {"redrawscreen", pcsx_redrawscreen},
   {NULL,NULL}
 };
 
@@ -3221,6 +3274,8 @@ static const struct luaL_reg guilib[] = {
 	{"drawimage", gui_gdoverlay},
 	{"image", gui_gdoverlay},
 	{"readpixel", gui_getpixel},
+	{"hashframe", gui_hashframe},
+
 	{NULL,NULL}
 };
 
