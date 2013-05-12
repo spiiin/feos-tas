@@ -618,9 +618,18 @@ static int pcsx_redrawscreen(lua_State *L)
 	return 1;
 }
 
+static int pcsx_makesnap(lua_State *L)
+{	
+	GPU_makeSnapshot();
+	return 1;
+}
 
-
-
+//may help to know if the gpu is ready
+static int pcsx_testgpu(lua_State *L)
+{		
+	lua_pushinteger(L, GPU_test());	
+	return 1;
+}
 
 char pcsx_message_buffer[1024];
 // pcsx.message(string msg)
@@ -1233,6 +1242,24 @@ static int movie_stop(lua_State *L) {
 	return 0;
 
 }
+
+static int movie_load(lua_State *L) {
+	if (Movie.mode != MOVIEMODE_INACTIVE)
+		MOV_StopMovie();
+	
+/*
+	const char *MovieName = luaL_checkstring(L,1);
+	char MoviePath[256];
+	strncpy(MoviePath,MovieName,256);
+	GetRecordingPath(MoviePath);
+
+	//struct MovieType dataMovie;
+	//MOV_ReadMovieFile(MoviePath, &dataMovie);
+	//StartReplay();
+	*/
+	return 1;
+}
+
 
 int LUA_SCREEN_WIDTH  = 640;
 int LUA_SCREEN_HEIGHT = 512;
@@ -1890,9 +1917,6 @@ static int gui_parsecolor(lua_State *L)
 	return 4;
 }
 
-
-
-
 static int gui_hashframe(lua_State *L)
 {	
 	int x,y;
@@ -1900,7 +1924,6 @@ static int gui_hashframe(lua_State *L)
 	int width = iScreenWidth;
 	int height = iScreenHeight;
 
-	unsigned char* ptr;
 	uint8 *screen;
 
 	screen=XBuf;
@@ -3169,6 +3192,8 @@ static const struct luaL_reg pcsxlib[] =
   {"sleep", pcsx_sleep},
   {"switchspu", pcsx_switchspu},
   {"redrawscreen", pcsx_redrawscreen},
+  {"makesnap", pcsx_makesnap},
+  {"testgpu", pcsx_testgpu},  
   {NULL,NULL}
 };
 
@@ -3242,6 +3267,8 @@ static const struct luaL_reg movielib[] = {
 	{"framecount", movie_framecount},
 	{"rerecordcounting", movie_rerecordcounting},
 	{"stop", movie_stop},
+	{"load", movie_load},
+	
 
 	// alternative names
 	{"close", movie_stop},
