@@ -576,7 +576,7 @@ static int pcsx_sleep(lua_State *L)
 SPUFreeze_t spufP;
 GPUFreeze_t gpufP;
 
-lua_State *BACKUP_LUA;
+lua_State *BACKUP_LUA = NULL;
 
 static int pcsx_switchspu(lua_State *L)
 {
@@ -608,6 +608,7 @@ static int pcsx_switchspu(lua_State *L)
 	GPU_freeze(0, &gpufP);
 	
 	LUA = BACKUP_LUA;
+	BACKUP_LUA = NULL;
 
 	return 1;
 }
@@ -1243,22 +1244,57 @@ static int movie_stop(lua_State *L) {
 
 }
 
+bool resetMovie = false;
+
 static int movie_load(lua_State *L) {
 	if (Movie.mode != MOVIEMODE_INACTIVE)
 		MOV_StopMovie();
-	
-/*
+
+	BACKUP_LUA = LUA;
+
 	const char *MovieName = luaL_checkstring(L,1);
 	char MoviePath[256];
-	strncpy(MoviePath,MovieName,256);
-	GetRecordingPath(MoviePath);
 
-	//struct MovieType dataMovie;
-	//MOV_ReadMovieFile(MoviePath, &dataMovie);
-	//StartReplay();
-	*/
+	sprintf(MoviePath, "%smovies\\%s", szCurrentPath, MovieName);
+
+	if(Running){
+		SPU_freeze(1, &spufP);	
+		GPU_freeze(1, &gpufP);
+	}
+
+	CheckCdrom();
+
+	if (!MOV_ReadMovieFile(MoviePath, &Movie)){
+		GPU_displayText("Movie not found");
+		return 1;
+	}
+
+	SetMenu(gApp.hWnd, NULL);
+	OpenPlugins(gApp.hWnd);
+
+	LUA = NULL;
+	SysReset();
+	CheckCdrom();
+
+	MOV_StartMovie(MOVIEMODE_PLAY);
+	if(Running){
+		SPU_freeze(0, &spufP);	
+		GPU_freeze(0, &gpufP);
+	} 
+	if (LoadCdrom() == -1) {
+		ClosePlugins();
+		SysMessage(_("Could not load Cdrom"));
+		return 1;
+	}
+
+	Running = 1;
+	LUA = BACKUP_LUA;
+	luaRunning = TRUE;
+	resetMovie = TRUE;
+
 	return 1;
 }
+ 
 
 
 int LUA_SCREEN_WIDTH  = 640;
@@ -3317,7 +3353,7 @@ static const struct luaL_reg inputlib[] = {
 
 void PCSX_LuaFrameBoundary() {
 	lua_State *thread;
-	int result;
+	int result;	
 
 	// HA!
 	if (!LUA || !luaRunning)
@@ -3342,6 +3378,12 @@ void PCSX_LuaFrameBoundary() {
 	
 	if (result == LUA_YIELD) {
 		// Okay, we're fine with that.
+		if(resetMovie){
+			resetMovie=FALSE;
+			frameBoundary = FALSE;
+			psxCpu->Execute();
+		}
+
 	} else if (result != 0) {
 		// Done execution by bad causes
 		PCSX_LuaOnStop();
