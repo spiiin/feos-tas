@@ -578,7 +578,9 @@ void MOV_ProcessControlFlags() {
 
 int MovieFreeze(gzFile f, int Mode) {
 	unsigned long bufSize = 0;
-	unsigned long buttonToSend = 0;
+	unsigned long buttonToSend = 0;	
+	char CustomInputDisplay[37];
+	char customHUD[500];
 
 	//saving state
 	if (Mode == 1)
@@ -624,6 +626,52 @@ int MovieFreeze(gzFile f, int Mode) {
 		buttonToSend = Movie.lastPad1.buttonStatus;
 		buttonToSend = (buttonToSend ^ (Movie.lastPad2.buttonStatus << 16));
 		GPU_inputdisplay(buttonToSend);
+
+		CustomInputDisplay[0]  = buttonToSend&0x80       ?' ':'<';
+		CustomInputDisplay[1]  = buttonToSend&0x10       ?' ':'^';
+		CustomInputDisplay[2]  = buttonToSend&0x20       ?' ':'>';
+		CustomInputDisplay[3]  = buttonToSend&0x40       ?' ':'v';
+		CustomInputDisplay[4]  = buttonToSend&0x8        ?' ':'S';
+		CustomInputDisplay[5]  = buttonToSend&0x1        ?' ':'s';
+		CustomInputDisplay[6]  = buttonToSend&0x8000     ?' ':19;
+		CustomInputDisplay[7]  = buttonToSend&0x4000     ?' ':'X';
+		CustomInputDisplay[8]  = buttonToSend&0x2000     ?' ':'O';
+		CustomInputDisplay[9]  = buttonToSend&0x1000     ?' ':'T';
+		CustomInputDisplay[10] = buttonToSend&0x400      ?' ':'L'; //l1
+		CustomInputDisplay[11] = buttonToSend&0x400      ?' ':'1'; //l1
+		CustomInputDisplay[12] = buttonToSend&0x800      ?' ':'R'; //r1
+		CustomInputDisplay[13] = buttonToSend&0x800      ?' ':'1'; //r1
+		CustomInputDisplay[14] = buttonToSend&0x100      ?' ':'L'; //l2
+		CustomInputDisplay[15] = buttonToSend&0x100      ?' ':'2'; //l2
+		CustomInputDisplay[16] = buttonToSend&0x200      ?' ':'R'; //r2
+		CustomInputDisplay[17] = buttonToSend&0x200      ?' ':'2'; //r2
+		CustomInputDisplay[18] = buttonToSend&0x800000   ?' ':'<';
+		CustomInputDisplay[19] = buttonToSend&0x100000   ?' ':'^';
+		CustomInputDisplay[20] = buttonToSend&0x200000   ?' ':'>';
+		CustomInputDisplay[21] = buttonToSend&0x400000   ?' ':'v';
+		CustomInputDisplay[22] = buttonToSend&0x80000    ?' ':'S';
+		CustomInputDisplay[23] = buttonToSend&0x10000    ?' ':'s';
+		CustomInputDisplay[24] = buttonToSend&0x80000000 ?' ':19;
+		CustomInputDisplay[25] = buttonToSend&0x40000000 ?' ':'X';
+		CustomInputDisplay[26] = buttonToSend&0x20000000 ?' ':'O';
+		CustomInputDisplay[27] = buttonToSend&0x10000000 ?' ':'T';
+		CustomInputDisplay[28] = buttonToSend&0x4000000  ?' ':'L'; //l1
+		CustomInputDisplay[29] = buttonToSend&0x4000000  ?' ':'1'; //l1
+		CustomInputDisplay[30] = buttonToSend&0x8000000  ?' ':'R'; //r1
+		CustomInputDisplay[31] = buttonToSend&0x8000000  ?' ':'1'; //r1
+		CustomInputDisplay[32] = buttonToSend&0x1000000  ?' ':'L'; //l2
+		CustomInputDisplay[33] = buttonToSend&0x1000000  ?' ':'2'; //l2
+		CustomInputDisplay[34] = buttonToSend&0x2000000  ?' ':'R'; //r2
+		CustomInputDisplay[35] = buttonToSend&0x2000000  ?' ':'2'; //r2
+		CustomInputDisplay[36] = 0;
+
+		sprintf(customHUD, "%s\n%lu : %lu",
+			CustomInputDisplay,
+			Movie.currentFrame,
+			Movie.lagCounter		
+		);
+
+		GPU_displayText(customHUD);
 	}
 
 	return 0;
