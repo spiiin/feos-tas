@@ -573,6 +573,105 @@ static int pcsx_sleep(lua_State *L)
 	return 1;
 }
 
+//return a table with the config info stored in the windows registry.
+static int pcsx_getconfig(lua_State *L) {	
+	lua_newtable(L);
+
+	lua_pushstring(L, Config.Gpu);
+	lua_setfield(L, -2, "gpu");
+	
+	lua_pushstring(L, Config.Spu);
+	lua_setfield(L, -2, "spu");
+	
+	lua_pushstring(L, Config.Bios);
+	lua_setfield(L, -2, "bios");	
+
+	lua_pushstring(L, Config.Cdr);
+	lua_setfield(L, -2, "cdr");
+
+	lua_pushstring(L, Config.Pad1);
+	lua_setfield(L, -2, "pad1");
+
+	lua_pushstring(L, Config.Pad1);
+	lua_setfield(L, -2, "pad2");
+
+	lua_pushstring(L, Config.Net);
+	lua_setfield(L, -2, "net");	
+	
+	lua_pushstring(L, Config.Mcd1);
+	lua_setfield(L, -2, "mcd1");
+	
+	lua_pushstring(L, Config.Mcd2);
+	lua_setfield(L, -2, "mcd2");
+
+	lua_pushstring(L, Config.OldMcd1);
+	lua_setfield(L, -2, "oldMcd1");
+	
+	lua_pushstring(L, Config.OldMcd2);
+	lua_setfield(L, -2, "oldMcd2");
+	
+	lua_pushstring(L, Config.Bios);
+	lua_setfield(L, -2, "bios");
+	
+	lua_pushstring(L, Config.PluginsDir);
+	lua_setfield(L, -2, "pluginsDir");
+
+	lua_pushstring(L, Config.Lang);
+	lua_setfield(L, -2, "lang");
+
+	char tmpStr[256];
+
+	lua_pushstring(L, itoa(Config.Xa, tmpStr, 10));
+	lua_setfield(L, -2, "xa");
+	
+	lua_pushstring(L, itoa(Config.Sio, tmpStr, 10));
+	lua_setfield(L, -2, "sio");
+
+	lua_pushstring(L, itoa(Config.Mdec, tmpStr, 10));
+	lua_setfield(L, -2, "mdec");
+
+	lua_pushstring(L, itoa(Config.PsxAuto, tmpStr, 10));
+	lua_setfield(L, -2, "psxauto");
+
+	lua_pushstring(L, itoa(Config.PsxType, tmpStr, 10));
+	lua_setfield(L, -2, "PsxType");
+
+	lua_pushstring(L, itoa(Config.Mdec, tmpStr, 10));
+	lua_setfield(L, -2, "PsxType");
+
+	lua_pushstring(L, itoa(Config.QKeys, tmpStr, 10));
+	lua_setfield(L, -2, "qkeys");
+
+	lua_pushstring(L, itoa(Config.Cdda, tmpStr, 10));
+	lua_setfield(L, -2, "cdda");
+
+	lua_pushstring(L, itoa(Config.HLE, tmpStr, 10));
+	lua_setfield(L, -2, "hle");
+
+	lua_pushstring(L, itoa(Config.Cpu, tmpStr, 10));
+	lua_setfield(L, -2, "cpu");
+
+	lua_pushstring(L, itoa(Config.PsxOut, tmpStr, 10));
+	lua_setfield(L, -2, "psxout");
+
+	lua_pushstring(L, itoa(Config.SpuIrq, tmpStr, 10));
+	lua_setfield(L, -2, "spuirq");
+
+	lua_pushstring(L, itoa(Config.RCntFix, tmpStr, 10));
+	lua_setfield(L, -2, "rcntfix");
+
+	lua_pushstring(L, itoa(Config.UseNet, tmpStr, 10));
+	lua_setfield(L, -2, "usenet");
+
+	lua_pushstring(L, itoa(Config.VSyncWA, tmpStr, 10));
+	lua_setfield(L, -2, "vsyncwa");
+
+	lua_pushstring(L, itoa(Config.PauseAfterPlayback, tmpStr, 10));
+	lua_setfield(L, -2, "pauseafterplayback");
+
+	return 1;
+}
+
 SPUFreeze_t spufP;
 GPUFreeze_t gpufP;
 
@@ -3230,6 +3329,7 @@ static const struct luaL_reg pcsxlib[] =
   {"redrawscreen", pcsx_redrawscreen},
   {"makesnap", pcsx_makesnap},
   {"testgpu", pcsx_testgpu},  
+  {"getconfig", pcsx_getconfig},    
   {NULL,NULL}
 };
 
