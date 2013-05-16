@@ -258,7 +258,7 @@ void psxRcntUpdate() {
 		Movie.lagCounter		
 	);
 
-	GPU_displayText(customHUD);
+//	GPU_displayText(customHUD);
 
 	modeFlags = 0;
 	if (iPause)
