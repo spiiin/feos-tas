@@ -106,6 +106,7 @@ long           drawH; //!
 unsigned long  dwCfgFixes;
 unsigned long  dwActFixes=0;
 unsigned long  dwEmuFixes=0;
+unsigned short usSpriteBlack=0;
 int            iUseFixes;
 int            iUseDither=0;
 BOOL           bDoVSyncUpdate=FALSE;
@@ -918,6 +919,7 @@ void primSprt8(unsigned char * baseAddr)
 	ly0 = sgpuData[3];
 
 	if (!(dwActFixes&8)) AdjustCoord1();
+	if (dwActFixes&0x800) usSpriteBlack=1;
 
 	SetRenderMode(gpuData[0]);
 
@@ -929,6 +931,7 @@ void primSprt8(unsigned char * baseAddr)
 			                                  baseAddr[9]);
 
 	bDoVSyncUpdate=TRUE;
+	usSpriteBlack=0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -944,6 +947,7 @@ void primSprt16(unsigned char * baseAddr)
 	ly0 = sgpuData[3];
 
 	if (!(dwActFixes&8)) AdjustCoord1();
+	if (dwActFixes&0x800) usSpriteBlack=1;
 
 	SetRenderMode(gpuData[0]);
 
@@ -955,6 +959,7 @@ void primSprt16(unsigned char * baseAddr)
 			                                  baseAddr[9]);
 
 	bDoVSyncUpdate=TRUE;
+	usSpriteBlack=0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1065,6 +1070,7 @@ void primSprtS(unsigned char * baseAddr)
 	ly0 = sgpuData[3];
 
 	if (!(dwActFixes&8)) AdjustCoord1();
+	if (dwActFixes&0x800) usSpriteBlack=1;
 
 	sW = sgpuData[6] & 0x3ff;
 	sH = sgpuData[7] & 0x1ff;
@@ -1103,6 +1109,7 @@ void primSprtS(unsigned char * baseAddr)
 		}
 
 	bDoVSyncUpdate=TRUE;
+	usSpriteBlack=0;
 }
 
 ////////////////////////////////////////////////////////////////////////
