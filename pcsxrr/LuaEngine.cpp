@@ -573,6 +573,11 @@ static int pcsx_sleep(lua_State *L)
 	return 1;
 }
 
+static int pcsx_getgamename(lua_State *L) {		
+	lua_pushstring(L, CdromLabel);
+	return 1;
+}
+
 //return a table with the config info stored in the windows registry.
 static int pcsx_getconfig(lua_State *L) {	
 	lua_newtable(L);
@@ -2082,7 +2087,6 @@ static int gui_hashframe(lua_State *L)
 	return 1;
 }
 
-
 // gui.gdscreenshot()
 //
 //  Returns a screen shot as a string in gd's v1 file format.
@@ -2947,6 +2951,55 @@ void GetMouseData(uint32 *md)
 
 #endif
 
+void SetButtonPolled(char* buffer, long buttonStatus, int pad){
+	char CustomInputDisplay[19];	
+	int padBitArea = pad;
+	if(padBitArea == 2)
+		padBitArea = 0x10000; //second controller aera
+
+	CustomInputDisplay[0]  = buttonStatus&(0x80   *padBitArea) ?' ':'<';
+	CustomInputDisplay[1]  = buttonStatus&(0x10   *padBitArea) ?' ':'^';
+	CustomInputDisplay[2]  = buttonStatus&(0x20   *padBitArea) ?' ':'>';
+	CustomInputDisplay[3]  = buttonStatus&(0x40   *padBitArea) ?' ':'v';
+	CustomInputDisplay[4]  = buttonStatus&(0x8    *padBitArea) ?' ':'S';
+	CustomInputDisplay[5]  = buttonStatus&(0x1    *padBitArea) ?' ':'s';
+	CustomInputDisplay[6]  = buttonStatus&(0x8000 *padBitArea) ?' ':19;
+	CustomInputDisplay[7]  = buttonStatus&(0x4000 *padBitArea) ?' ':'X';
+	CustomInputDisplay[8]  = buttonStatus&(0x2000 *padBitArea) ?' ':'O';
+	CustomInputDisplay[9]  = buttonStatus&(0x1000 *padBitArea) ?' ':'T';
+	CustomInputDisplay[10] = buttonStatus&(0x400  *padBitArea) ?' ':'L'; //l1
+	CustomInputDisplay[11] = buttonStatus&(0x400  *padBitArea) ?' ':'1'; //l1
+	CustomInputDisplay[12] = buttonStatus&(0x800  *padBitArea) ?' ':'R'; //r1
+	CustomInputDisplay[13] = buttonStatus&(0x800  *padBitArea) ?' ':'1'; //r1
+	CustomInputDisplay[14] = buttonStatus&(0x100  *padBitArea) ?' ':'L'; //l2
+	CustomInputDisplay[15] = buttonStatus&(0x100  *padBitArea) ?' ':'2'; //l2
+	CustomInputDisplay[16] = buttonStatus&(0x200  *padBitArea) ?' ':'R'; //r2
+	CustomInputDisplay[17] = buttonStatus&(0x200  *padBitArea) ?' ':'2'; //r2
+	CustomInputDisplay[18] = 0;
+
+	sprintf(buffer,	CustomInputDisplay);
+}
+
+static int input_getlastbuttonpolled(lua_State *L)
+{		
+	lua_newtable(L);
+	long buttonStatus = Movie.lastPad1.buttonStatus ^ (Movie.lastPad2.buttonStatus << 16);	
+	char pad1[20];
+	char pad2[20];
+
+	SetButtonPolled(pad1, buttonStatus, 1);
+	SetButtonPolled(pad2, buttonStatus, 2);
+
+	lua_pushstring(L, pad1);
+	lua_setfield(L, -2, "pad1");
+
+	lua_pushstring(L, pad2);
+	lua_setfield(L, -2, "pad2");
+
+	return 1;
+}
+
+
 // input.get()
 // takes no input, returns a lua table of entries representing the current input state,
 // independent of the joypad buttons the emulated game thinks are pressed
@@ -3330,6 +3383,7 @@ static const struct luaL_reg pcsxlib[] =
   {"makesnap", pcsx_makesnap},
   {"testgpu", pcsx_testgpu},  
   {"getconfig", pcsx_getconfig},    
+  {"getgamename", pcsx_getgamename}, 
   {NULL,NULL}
 };
 
@@ -3438,13 +3492,13 @@ static const struct luaL_reg guilib[] = {
 	{"image", gui_gdoverlay},
 	{"readpixel", gui_getpixel},
 	{"hashframe", gui_hashframe},
-
 	{NULL,NULL}
 };
 
 static const struct luaL_reg inputlib[] = {
 	{"get", input_getcurrentinputstatus},
 	{"popup", input_popup},
+	{"getlastbuttonpolled", input_getlastbuttonpolled},
 	// alternative names
 	{"read", input_getcurrentinputstatus},
 	{NULL, NULL}
