@@ -717,6 +717,21 @@ static int pcsx_switchspu(lua_State *L)
 	return 1;
 }
 
+//pcsx.suspend(int second)
+static int pcsx_suspend(lua_State *L)
+{	
+	int second = luaL_checkinteger(L,1);
+	int cyclePerSecond = 3333333; //might be different from a CPU to an another.
+	iPause=1;
+	frameAdvanceWaiting = TRUE;
+	lua_yield(L, 0);
+	for (int i=0; i< second*cyclePerSecond;i++)		
+		psxCpu->ExecuteBlock();
+	iPause=0;
+	frameAdvanceWaiting = FALSE;
+	return 1;
+}
+
 static int pcsx_redrawscreen(lua_State *L)
 {
 	GPU_updateframe();
@@ -3418,6 +3433,7 @@ static const struct luaL_reg pcsxlib[] =
   {"testgpu", pcsx_testgpu},  
   {"getconfig", pcsx_getconfig},    
   {"getgamename", pcsx_getgamename}, 
+  {"suspend", pcsx_suspend},  
   {NULL,NULL}
 };
 
