@@ -2838,6 +2838,40 @@ static int input_popup(lua_State *L)
 	return doPopup(L, "yesno", "question");
 }
 
+//gui.filepicker(string title, string filter)
+static int gui_filepicker(lua_State *L)
+{
+	const char *title = luaL_checkstring(L,1);	
+	const char *filter = luaL_checkstring(L,2);
+	int lengthFilter = strlen(filter);
+	char *filterFormat = new char[lengthFilter+1];
+	strcpy(filterFormat, filter);
+	filterFormat[lengthFilter+1] = '\0';
+
+	OPENFILENAME ofnrw;	
+	char filePath[2048];
+	strcpy(filePath, filterFormat);
+
+	memset(&ofnrw, 0, sizeof(OPENFILENAME));
+	ofnrw.lStructSize = sizeof(OPENFILENAME);
+	ofnrw.hwndOwner = gApp.hWnd;
+	ofnrw.hInstance = gApp.hInstance;
+	ofnrw.lpstrFile = filePath;
+	ofnrw.nMaxFile = 2047;
+	ofnrw.lpstrFilter = filterFormat;
+	ofnrw.nFilterIndex = 1;
+	ofnrw.lpstrInitialDir = szCurrentPath;
+	ofnrw.lpstrTitle = title;
+	ofnrw.lpstrDefExt = "";
+	ofnrw.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
+	GetOpenFileName(&ofnrw);	
+
+	lua_pushstring(L,filePath);
+
+	return 1;
+}				
+
+
 #ifdef WIN32
 
 const char* s_keyToName[256] =
@@ -3492,6 +3526,7 @@ static const struct luaL_reg guilib[] = {
 	{"image", gui_gdoverlay},
 	{"readpixel", gui_getpixel},
 	{"hashframe", gui_hashframe},
+	{"filepicker", gui_filepicker},	
 	{NULL,NULL}
 };
 
