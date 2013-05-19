@@ -579,8 +579,8 @@ void MOV_ProcessControlFlags() {
 int MovieFreeze(gzFile f, int Mode) {
 	unsigned long bufSize = 0;
 	unsigned long buttonToSend = 0;	
-	char CustomInputDisplay[37];
-	char customHUD[500];
+//	char CustomInputDisplay[37];
+//	char customHUD[500];
 
 	//saving state
 	if (Mode == 1)
@@ -626,7 +626,7 @@ int MovieFreeze(gzFile f, int Mode) {
 		buttonToSend = Movie.lastPad1.buttonStatus;
 		buttonToSend = (buttonToSend ^ (Movie.lastPad2.buttonStatus << 16));
 		GPU_inputdisplay(buttonToSend);
-
+		/*
 		CustomInputDisplay[0]  = buttonToSend&0x80       ?' ':'<';
 		CustomInputDisplay[1]  = buttonToSend&0x10       ?' ':'^';
 		CustomInputDisplay[2]  = buttonToSend&0x20       ?' ':'>';
@@ -672,6 +672,7 @@ int MovieFreeze(gzFile f, int Mode) {
 		);
 
 		GPU_displayText(customHUD);
+		*/
 	}
 
 	return 0;

@@ -123,8 +123,8 @@ void psxUpdateVSyncRateEnd() {
 void psxRcntUpdate() {
 	PadDataS paddtemp;
 	unsigned long buttonToSend;
-	char CustomInputDisplay[37];
-	char customHUD[500];
+//	char CustomInputDisplay[37];
+//	char customHUD[500];
 	char modeFlags;
 
 	if ((psxRegs.cycle - psxCounters[3].sCycle) >= psxCounters[3].Cycle) {
@@ -213,7 +213,7 @@ void psxRcntUpdate() {
 	buttonToSend = Movie.lastPad1.buttonStatus;
 	buttonToSend = (buttonToSend ^ (Movie.lastPad2.buttonStatus << 16));
 	GPU_inputdisplay(buttonToSend);
-	
+	/*
 	CustomInputDisplay[0]  = buttonToSend&0x80       ?' ':'<';
 	CustomInputDisplay[1]  = buttonToSend&0x10       ?' ':'^';
 	CustomInputDisplay[2]  = buttonToSend&0x20       ?' ':'>';
@@ -258,8 +258,8 @@ void psxRcntUpdate() {
 		Movie.lagCounter		
 	);
 
-//	GPU_displayText(customHUD);
-
+	GPU_displayText(customHUD);
+	*/
 	modeFlags = 0;
 	if (iPause)
 		modeFlags |= MODE_FLAG_PAUSED;
