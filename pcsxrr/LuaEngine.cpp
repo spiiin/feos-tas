@@ -717,17 +717,17 @@ static int pcsx_switchspu(lua_State *L)
 	return 1;
 }
 
-//pcsx.suspend(int second)
+//pcsx.suspend(int cycleToWait)
 static int pcsx_suspend(lua_State *L)
 {	
-	int second = luaL_checkinteger(L,1);
-	int cyclePerSecond = 3333333; //might be different from a CPU to an another.
+	int cycleToWait = luaL_checkinteger(L,1);
+	int pauseAfter = iPause;
 	iPause=1;
 	frameAdvanceWaiting = TRUE;
 	lua_yield(L, 0);
-	for (int i=0; i< second*cyclePerSecond;i++)		
+	for (int i=0; i< cycleToWait;i++)		
 		psxCpu->ExecuteBlock();
-	iPause=0;
+	iPause=pauseAfter;
 	frameAdvanceWaiting = FALSE;
 	return 1;
 }
@@ -735,6 +735,18 @@ static int pcsx_suspend(lua_State *L)
 static int pcsx_redrawscreen(lua_State *L)
 {
 	GPU_updateframe();
+	//psxRcntUpdate();
+	/*
+	int cyclePerSecond = 3333333; //might be different from a CPU to an another.
+	int pauseAfter = iPause;
+	iPause=1;
+	frameAdvanceWaiting = TRUE;
+	lua_yield(L, 0);
+	for (int i=0; i< 1*cyclePerSecond;i++)		
+		psxCpu->ExecuteBlock();
+	iPause=0;
+	frameAdvanceWaiting = FALSE;
+	*/
 	return 1;
 }
 
@@ -1242,9 +1254,15 @@ static int savestate_create(lua_State *L) {
 	
 	// Awesome. Return the object
 	return 1;
-	
 }
 
+//savestate.savefile(string filename)
+static int savestate_savefile(lua_State *L) {
+	const char *filename = luaL_checkstring(L,1);
+	numTries--;
+	SaveState(filename);
+	return 0;
+}
 
 // savestate.save(object state)
 //
@@ -1256,6 +1274,14 @@ static int savestate_save(lua_State *L) {
 	numTries--;
 
 	SaveState(filename);
+	return 0;
+}
+
+//savestate.loadfile(string filename)
+static int savestate_loadfile(lua_State *L) {
+	const char *filename = luaL_checkstring(L,1);
+	numTries--;
+	LoadState(filename);
 	return 0;
 }
 
@@ -3487,8 +3513,9 @@ static const struct luaL_reg joypadlib[] = {
 static const struct luaL_reg savestatelib[] = {
 	{"create", savestate_create},
 	{"save", savestate_save},
+	{"savefile", savestate_savefile},
 	{"load", savestate_load},
-
+	{"loadfile", savestate_loadfile},
 	{NULL,NULL}
 };
 
@@ -3740,7 +3767,7 @@ int PCSX_LoadLuaCode(const char *filename) {
 	PCSX_LuaFrameBoundary();
 
 	// Set up our protection hook to be executed once every 10,000 bytecode instructions.
-	lua_sethook(thread, PCSX_LuaHookFunction, LUA_MASKCOUNT, 10000);
+	lua_sethook(thread, PCSX_LuaHookFunction, LUA_MASKCOUNT, 5000000);
 
 	// We're done.
 	return 1;
