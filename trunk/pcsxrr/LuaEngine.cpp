@@ -732,24 +732,16 @@ static int pcsx_suspend(lua_State *L)
 	return 1;
 }
 
+//pcsx.redrawscreen()
 static int pcsx_redrawscreen(lua_State *L)
 {
 	GPU_updateframe();
-	//psxRcntUpdate();
-	/*
-	int cyclePerSecond = 3333333; //might be different from a CPU to an another.
-	int pauseAfter = iPause;
-	iPause=1;
-	frameAdvanceWaiting = TRUE;
-	lua_yield(L, 0);
-	for (int i=0; i< 1*cyclePerSecond;i++)		
-		psxCpu->ExecuteBlock();
-	iPause=0;
-	frameAdvanceWaiting = FALSE;
-	*/
+	SetMenu(gApp.hWnd, gApp.hMenu);
+	SetMenu(gApp.hWnd, NULL);
 	return 1;
 }
 
+//pcsx.makesnap()
 static int pcsx_makesnap(lua_State *L)
 {	
 	GPU_makeSnapshot();
