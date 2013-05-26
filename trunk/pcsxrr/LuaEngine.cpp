@@ -755,6 +755,13 @@ static int pcsx_testgpu(lua_State *L)
 	return 1;
 }
 
+//quit the lua script
+//pcsx.quit()
+static int pcsx_quit(lua_State *L){
+	PCSX_LuaStop();
+	return 1;
+}
+
 char pcsx_message_buffer[1024];
 // pcsx.message(string msg)
 //
@@ -3452,6 +3459,7 @@ static const struct luaL_reg pcsxlib[] =
   {"getconfig", pcsx_getconfig},    
   {"getgamename", pcsx_getgamename}, 
   {"suspend", pcsx_suspend},  
+  {"quit", pcsx_quit},
   {NULL,NULL}
 };
 
