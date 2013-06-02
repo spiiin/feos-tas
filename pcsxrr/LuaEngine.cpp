@@ -26,6 +26,7 @@ extern "C" {
 #ifdef WIN32
 #include "Win32/Win32.h"
 #include "Win32/resource.h"
+#include <oledlg.h>
 #define sleep(x) Sleep((x)*1000)
 #endif
 #include "LuaEngine.h"
