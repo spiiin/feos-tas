@@ -528,7 +528,7 @@ __inline void GetTextureTransColG(unsigned short * pdest,unsigned short color)
 	long r,g,b;
 	unsigned short l;
 
-	if (color==0 && usSpriteBlack==0) return;
+	if (color==0) return;
 
 	if (bCheckMask && *pdest&0x8000) return;
 
@@ -697,7 +697,7 @@ __inline void GetTextureTransColG32(unsigned long * pdest,unsigned long color)
 {
 	long r,g,b,l;
 
-	if (color==0 && usSpriteBlack==0) return;
+	if (color==0) return;
 
 	l=lSetMask|(color&0x80008000);
 
@@ -788,19 +788,19 @@ __inline void GetTextureTransColG32(unsigned long * pdest,unsigned long color)
 
 		*pdest=(X32PSXCOL(r,g,b))|l;
 
-		if ((color&0xffff)==0     && usSpriteBlack==0) *pdest=(ma&0xffff)|(*pdest&0xffff0000);
-		if ((color&0xffff0000)==0 && usSpriteBlack==0) *pdest=(ma&0xffff0000)|(*pdest&0xffff);
+		if ((color&0xffff)==0    ) *pdest=(ma&0xffff)|(*pdest&0xffff0000);
+		if ((color&0xffff0000)==0) *pdest=(ma&0xffff0000)|(*pdest&0xffff);
 		if (ma&0x80000000) *pdest=(ma&0xFFFF0000)|(*pdest&0xFFFF);
 		if (ma&0x00008000) *pdest=(ma&0xFFFF)    |(*pdest&0xFFFF0000);
 
 		return;
 	}
-	if ((color&0xffff)==0      && usSpriteBlack==0)
+	if ((color&0xffff)==0    )
 	{
 		*pdest=(*pdest&0xffff)|(((X32PSXCOL(r,g,b))|l)&0xffff0000);
 		return;
 	}
-	if ((color&0xffff0000)==0  && usSpriteBlack==0)
+	if ((color&0xffff0000)==0)
 	{
 		*pdest=(*pdest&0xffff0000)|(((X32PSXCOL(r,g,b))|l)&0xffff);
 		return;
@@ -3179,7 +3179,7 @@ void drawPoly3TEx4(short x1, short y1, short x2, short y2, short x3, short y3, s
 
 #ifdef FASTSOLID
 
-	if (!bCheckMask && !DrawSemiTrans && !usSpriteBlack)
+	if (!bCheckMask && !DrawSemiTrans)
 	{
 		for (i=ymin;i<=ymax;i++)
 		{
@@ -3651,7 +3651,7 @@ void drawPoly4TEx4(short x1, short y1, short x2, short y2, short x3, short y3, s
 
 #ifdef FASTSOLID
 
-	if (!bCheckMask && !DrawSemiTrans && !usSpriteBlack)
+	if (!bCheckMask && !DrawSemiTrans)
 	{
 		for (i=ymin;i<=ymax;i++)
 		{
@@ -4275,7 +4275,7 @@ void drawPoly3TEx8(short x1, short y1, short x2, short y2, short x3, short y3, s
 
 #ifdef FASTSOLID
 
-	if (!bCheckMask && !DrawSemiTrans && !usSpriteBlack)
+	if (!bCheckMask && !DrawSemiTrans)
 	{
 		for (i=ymin;i<=ymax;i++)
 		{
@@ -4713,7 +4713,7 @@ void drawPoly4TEx8(short x1, short y1, short x2, short y2, short x3, short y3, s
 
 #ifdef FASTSOLID
 
-	if (!bCheckMask && !DrawSemiTrans && !usSpriteBlack)
+	if (!bCheckMask && !DrawSemiTrans)
 	{
 		for (i=ymin;i<=ymax;i++)
 		{
@@ -5282,7 +5282,7 @@ void drawPoly3TD(short x1, short y1, short x2, short y2, short x3, short y3, sho
 
 #ifdef FASTSOLID
 
-	if (!bCheckMask && !DrawSemiTrans && !usSpriteBlack)
+	if (!bCheckMask && !DrawSemiTrans)
 	{
 		for (i=ymin;i<=ymax;i++)
 		{
@@ -5394,7 +5394,7 @@ void drawPoly3TD_TW(short x1, short y1, short x2, short y2, short x3, short y3, 
 
 #ifdef FASTSOLID
 
-	if (!bCheckMask && !DrawSemiTrans && !usSpriteBlack)
+	if (!bCheckMask && !DrawSemiTrans)
 	{
 		for (i=ymin;i<=ymax;i++)
 		{
@@ -5523,7 +5523,7 @@ void drawPoly4TD(short x1, short y1, short x2, short y2, short x3, short y3, sho
 
 #ifdef FASTSOLID
 
-	if (!bCheckMask && !DrawSemiTrans && !usSpriteBlack)
+	if (!bCheckMask && !DrawSemiTrans)
 	{
 		for (i=ymin;i<=ymax;i++)
 		{
@@ -5641,7 +5641,7 @@ void drawPoly4TD_TW(short x1, short y1, short x2, short y2, short x3, short y3, 
 
 #ifdef FASTSOLID
 
-	if (!bCheckMask && !DrawSemiTrans && !usSpriteBlack)
+	if (!bCheckMask && !DrawSemiTrans)
 	{
 		for (i=ymin;i<=ymax;i++)
 		{
@@ -8584,7 +8584,7 @@ void DrawSoftwareSprite(unsigned char * baseAddr,short w,short h,long tx,long ty
 
 #ifdef FASTSOLID
 
-		if (!bCheckMask && !DrawSemiTrans && !usSpriteBlack)
+		if (!bCheckMask && !DrawSemiTrans)
 		{
 			for (sprCY=0;sprCY<sprtH;sprCY++)
 			{
@@ -8652,7 +8652,7 @@ void DrawSoftwareSprite(unsigned char * baseAddr,short w,short h,long tx,long ty
 
 #ifdef FASTSOLID
 
-		if (!bCheckMask && !DrawSemiTrans && !usSpriteBlack)
+		if (!bCheckMask && !DrawSemiTrans)
 		{
 			for (sprCY=0;sprCY<sprtH;sprCY++)
 			{
@@ -8698,7 +8698,7 @@ void DrawSoftwareSprite(unsigned char * baseAddr,short w,short h,long tx,long ty
 
 #ifdef FASTSOLID
 
-		if (!bCheckMask && !DrawSemiTrans && !usSpriteBlack)
+		if (!bCheckMask && !DrawSemiTrans)
 		{
 			for (sprCY=0;sprCY<sprtH;sprCY++)
 			{
