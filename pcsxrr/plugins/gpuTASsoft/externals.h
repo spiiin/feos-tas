@@ -253,7 +253,6 @@ extern unsigned long  dwCfgFixes;
 extern unsigned long  dwActFixes;
 extern unsigned long  dwEmuFixes;
 extern int            iUseFixes;
-extern unsigned short usSpriteBlack;
 extern int            iUseDither;
 extern BOOL           bDoVSyncUpdate;
 extern long           drawX;

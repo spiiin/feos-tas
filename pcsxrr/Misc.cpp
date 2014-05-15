@@ -446,7 +446,7 @@ namespace
     int Size, ret = 0;
     unsigned char pMem[128*96*3];
 
-    f = gzopen(file, !embed ? "wb1" : "ab");
+    f = gzopen(file, !embed ? "wb0" : "ab");
     if (f)
     {
       gzwrite(f, (void*)PcsxHeader, sizeof(PcsxHeader));
@@ -519,7 +519,7 @@ namespace
       memset(&spufP, 0, sizeof(spufP));
       gzread(f, &Size, 4);
       gzread(f, &spufP, Size);
-//      SPU_freeze(0, &spufP);
+      SPU_freeze(0, &spufP);
 
       sioFreeze(f, 0);
       cdrFreeze(f, 0);
