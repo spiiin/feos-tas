@@ -31,6 +31,8 @@ char CdromId[10];
 char CdromLabel[33];
 PcsxConfig Config;
 FILE *emuLog;
+extern bool SkipLoadGPU;
+extern bool LoadSkipsPU;
 
 int Log = 0;
 
@@ -513,13 +515,15 @@ namespace
       // gpu
       memset(&gpufP, 0, sizeof(gpufP));
       gzread(f, &gpufP, sizeof(gpufP));
-      GPU_freeze(0, &gpufP);
+	  if ((Config.LoadSkips & 1) == 0)
+	      GPU_freeze(0, &gpufP);
 
       // spu
       memset(&spufP, 0, sizeof(spufP));
       gzread(f, &Size, 4);
       gzread(f, &spufP, Size);
-      SPU_freeze(0, &spufP);
+	  if ((Config.LoadSkips & 2) == 0)
+	      SPU_freeze(0, &spufP);
 
       sioFreeze(f, 0);
       cdrFreeze(f, 0);
