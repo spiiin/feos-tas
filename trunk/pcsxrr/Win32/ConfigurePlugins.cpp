@@ -70,6 +70,7 @@ int LoadConfig() {
 	QueryKeyV(sizeof(Conf->SpuIrq),  "SpuIrq",  &Conf->SpuIrq);
 	QueryKeyV(sizeof(Conf->RCntFix), "RCntFix", &Conf->RCntFix);
 	QueryKeyV(sizeof(Conf->VSyncWA), "VSyncWA", &Conf->VSyncWA);
+	QueryKeyV(sizeof(Conf->LoadSkips),"LoadSkips",&Conf->LoadSkips);
 
 	stupidSize = sizeof(HotkeysKeys);
 	if (RegQueryValueEx(myKey, "HotkeysKeys", 0, &type, (LPBYTE) &HotkeysKeys, &stupidSize) == ERROR_SUCCESS) {
@@ -129,6 +130,7 @@ void SaveConfig() {
 	SetKeyV("SpuIrq",  &Conf->SpuIrq,  sizeof(Conf->SpuIrq),  REG_DWORD);
 	SetKeyV("RCntFix", &Conf->RCntFix, sizeof(Conf->RCntFix), REG_DWORD);
 	SetKeyV("VSyncWA", &Conf->VSyncWA, sizeof(Conf->VSyncWA), REG_DWORD);
+	SetKeyV("LoadSkips",&Conf->LoadSkips,sizeof(Conf->LoadSkips),REG_DWORD);
 
 	for (i = 0; i <= EMUCMDMAX; i++) {
 		HotkeysKeys[i] = EmuCommandTable[i].key;

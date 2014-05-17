@@ -318,12 +318,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if (LoadConfig() == -1) {
 		Config.PsxAuto = 1;
 		Config.PauseAfterPlayback = 1;
-		strcpy(Config.Bios,       "scph1001.bin");
-		strcpy(Config.Gpu,        "gpuTASsoft.dll");
-		strcpy(Config.Spu,        "spuTAS.dll");
-		strcpy(Config.Cdr,        "cdrTASiso.dll");
-		strcpy(Config.Pad1,       "padSeguDPP.dll");
-		strcpy(Config.Pad2,       "padSeguDPP.dll");
+		Config.LoadSkips = 0;
+		strcpy(Config.Bios,   "scph1001.bin");
+		strcpy(Config.Gpu,  "gpuTASsoft.dll");
+		strcpy(Config.Spu,      "spuTAS.dll");
+		strcpy(Config.Cdr,   "cdrTASiso.dll");
+		strcpy(Config.Pad1, "padSeguDPP.dll");
+		strcpy(Config.Pad2, "padSeguDPP.dll");
 		SysMessage(_("PCSX-RR needs to be configured."));
 		ConfPlug=1;
 		ConfigurePlugins(gApp.hWnd);
@@ -682,6 +683,18 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 				case ID_EMULATOR_RESET:
 					NeedReset = 1;
+					return TRUE;
+
+				case ID_SKIP_GPU:
+					Config.LoadSkips ^= 1;
+					CheckMenuItem(gApp.hMenu,ID_SKIP_GPU,Config.LoadSkips&1?MF_CHECKED:MF_UNCHECKED);					
+					SaveConfig();
+					return TRUE;
+
+				case ID_SKIP_SPU:
+					Config.LoadSkips ^= 2;
+					CheckMenuItem(gApp.hMenu,ID_SKIP_SPU,Config.LoadSkips&2?MF_CHECKED:MF_UNCHECKED);					
+					SaveConfig();
 					return TRUE;
 
 				case ID_CONFIGURATION_GRAPHICS:
@@ -1587,6 +1600,7 @@ void CreateMainMenu() {
 	gApp.hMenu = CreateMenu();
 
 	ADDSUBMENU(0, _("&File"));
+
 	ADDMENUITEM(0, _("E&xit"), ID_FILE_EXIT);
 	ADDSEPARATOR(0);
 	ADDSUBMENUS(0, 2, _("&Lua Scripting"));
@@ -1604,10 +1618,12 @@ void CreateMainMenu() {
 	ADDMENUITEM(0, _("Run &CD"), ID_FILE_RUN_CD);
 
 	ADDSUBMENU(0, _("&Emulator"));
+
 	ADDMENUITEM(0, _("Re&set"), ID_EMULATOR_RESET);
 	ADDMENUITEM(0, _("&Run"), ID_EMULATOR_RUN);
 
 	ADDSUBMENU(0, _("&Configuration"));
+
 	ADDMENUITEM(0, _("&Options"), ID_CONFIGURATION_CPU);
 	ADDSEPARATOR(0);
 	ADDMENUITEM(0, _("&NetPlay"), ID_CONFIGURATION_NETPLAY);
@@ -1620,6 +1636,10 @@ void CreateMainMenu() {
 	ADDMENUITEM(0, _("&Plugins && Bios"), ID_CONFIGURATION);
 
 	ADDSUBMENU(0, _("&Tools"));
+
+	ADDSUBMENUS(0, 1, _("&Loadstate Hacks"));
+	ADDMENUITEM(1, _("SPU"), ID_SKIP_SPU);
+	ADDMENUITEM(1, _("GPU"), ID_SKIP_GPU);
 	ADDMENUITEM(0, _("Map &Hotkeys"), ID_CONFIGURATION_MAPHOTKEYS);
 	ADDSEPARATOR(0);
 	ADDMENUITEM(0, _("RAM &Watch"), ID_RAM_WATCH);
@@ -1637,6 +1657,8 @@ void CreateMainMenu() {
 
 	EnableMenuItem(gApp.hMenu,ID_FILE_STOP_MOVIE,MF_GRAYED);
 	EnableMenuItem(gApp.hMenu,ID_LUA_CLOSE_ALL,MF_GRAYED);
+	CheckMenuItem(gApp.hMenu,ID_SKIP_GPU,Config.LoadSkips&1?MF_CHECKED:MF_UNCHECKED);
+	CheckMenuItem(gApp.hMenu,ID_SKIP_SPU,Config.LoadSkips&2?MF_CHECKED:MF_UNCHECKED);
 }
 
 void CreateMainWindow(int nCmdShow) {

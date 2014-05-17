@@ -438,6 +438,8 @@
 #define RAMMENU_FILE_RECENT             40122
 #define ID_RAM_SEARCH                   40123
 #define ID_RAM_WATCH                    40124
+#define ID_SKIP_GPU                     40125
+#define ID_SKIP_SPU                     40126
 #define RW_MENU_FIRST_RECENT_FILE       40130
 #define RW_MENU_LAST_RECENT_FILE        40150
 #define IDC_STATIC1                     50001

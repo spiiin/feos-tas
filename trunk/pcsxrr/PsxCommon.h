@@ -131,6 +131,7 @@ typedef struct {
 	long UseNet;
 	long VSyncWA;
 	long PauseAfterPlayback;
+	char LoadSkips;
 } PcsxConfig;
 
 extern PcsxConfig Config;
