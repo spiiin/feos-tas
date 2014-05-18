@@ -726,8 +726,11 @@ static int pcsx_suspend(lua_State *L)
 	iPause=1;
 	frameAdvanceWaiting = TRUE;
 	lua_yield(L, 0);
-	for (int i=0; i< cycleToWait;i++)		
+	for (int i=0; i< cycleToWait;i++)
+	{
 		psxCpu->ExecuteBlock();
+		Sleep(1);
+	}
 	iPause=pauseAfter;
 	frameAdvanceWaiting = FALSE;
 	return 1;
