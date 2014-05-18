@@ -687,7 +687,7 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 				case ID_SKIP_GPU:
 					Config.LoadSkips ^= 1;
-					CheckMenuItem(gApp.hMenu,ID_SKIP_GPU,Config.LoadSkips&1?MF_CHECKED:MF_UNCHECKED);					
+//					CheckMenuItem(gApp.hMenu,ID_SKIP_GPU,Config.LoadSkips&1?MF_CHECKED:MF_UNCHECKED);					
 					SaveConfig();
 					return TRUE;
 
@@ -1637,9 +1637,9 @@ void CreateMainMenu() {
 
 	ADDSUBMENU(0, _("&Tools"));
 
-	ADDSUBMENUS(0, 1, _("&Loadstate Hacks"));
-	ADDMENUITEM(1, _("SPU"), ID_SKIP_SPU);
-	ADDMENUITEM(1, _("GPU"), ID_SKIP_GPU);
+//	ADDSUBMENUS(0, 1, _("&Loadstate Hacks"));
+	ADDMENUITEM(0, _("Skip SPU Loadstate"), ID_SKIP_SPU);
+//	ADDMENUITEM(1, _("GPU"), ID_SKIP_GPU);
 	ADDMENUITEM(0, _("Map &Hotkeys"), ID_CONFIGURATION_MAPHOTKEYS);
 	ADDSEPARATOR(0);
 	ADDMENUITEM(0, _("RAM &Watch"), ID_RAM_WATCH);
@@ -1657,7 +1657,7 @@ void CreateMainMenu() {
 
 	EnableMenuItem(gApp.hMenu,ID_FILE_STOP_MOVIE,MF_GRAYED);
 	EnableMenuItem(gApp.hMenu,ID_LUA_CLOSE_ALL,MF_GRAYED);
-	CheckMenuItem(gApp.hMenu,ID_SKIP_GPU,Config.LoadSkips&1?MF_CHECKED:MF_UNCHECKED);
+//	CheckMenuItem(gApp.hMenu,ID_SKIP_GPU,Config.LoadSkips&1?MF_CHECKED:MF_UNCHECKED);
 	CheckMenuItem(gApp.hMenu,ID_SKIP_SPU,Config.LoadSkips&2?MF_CHECKED:MF_UNCHECKED);
 }
 

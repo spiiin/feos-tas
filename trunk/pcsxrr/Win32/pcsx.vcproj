@@ -79,8 +79,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="false"
+				AdditionalOptions="/NOENTRY"
 				AdditionalDependencies="odbc32.lib odbccp32.lib comctl32.lib lua-5.1.4-x86.lib zlib-2008-x32.lib libpng-2008-x32.lib"
-				OutputFile="$(OutDir)\pcsx.exe"
+				OutputFile="$(OutDir)\pcsx-debug.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="./includes;./lua/lib;zlib;libpng"
