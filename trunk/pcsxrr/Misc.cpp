@@ -515,7 +515,7 @@ namespace
       // gpu
       memset(&gpufP, 0, sizeof(gpufP));
       gzread(f, &gpufP, sizeof(gpufP));
-	  if ((Config.LoadSkips & 1) == 0)
+//	  if ((Config.LoadSkips & 1) == 0)
 	      GPU_freeze(0, &gpufP);
 
       // spu

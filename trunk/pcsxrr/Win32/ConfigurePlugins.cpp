@@ -72,6 +72,12 @@ int LoadConfig() {
 	QueryKeyV(sizeof(Conf->VSyncWA), "VSyncWA", &Conf->VSyncWA);
 	QueryKeyV(sizeof(Conf->LoadSkips),"LoadSkips",&Conf->LoadSkips);
 
+	for (i = 0; i <= MAX_RECENT_SCRIPTS; i++) {
+		char str[256];
+		sprintf(str, "RecentScript %d", i+1);
+		QueryKeyV(256, str, Conf->RecentScripts[i]);
+	}
+
 	stupidSize = sizeof(HotkeysKeys);
 	if (RegQueryValueEx(myKey, "HotkeysKeys", 0, &type, (LPBYTE) &HotkeysKeys, &stupidSize) == ERROR_SUCCESS) {
 		for (i = 0; i <= EMUCMDMAX-1; i++) {
@@ -106,17 +112,17 @@ void SaveConfig() {
 
 	RegCreateKeyEx(HKEY_CURRENT_USER, cfgfile, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &myKey, &myDisp);
 
-	SetKeyV("Bios", Conf->Bios, strlen(Conf->Bios), REG_SZ);
+	SetKeyV("Bios",       Conf->Bios, strlen(Conf->Bios), REG_SZ);
 	SetKeyV("PluginGPU",  Conf->Gpu,  strlen(Conf->Gpu),  REG_SZ);
 	SetKeyV("PluginSPU",  Conf->Spu,  strlen(Conf->Spu),  REG_SZ);
 	SetKeyV("PluginCDR",  Conf->Cdr,  strlen(Conf->Cdr),  REG_SZ);
 	SetKeyV("PluginPAD1", Conf->Pad1, strlen(Conf->Pad1), REG_SZ);
 	SetKeyV("PluginPAD2", Conf->Pad2, strlen(Conf->Pad2), REG_SZ);
-	SetKeyV("Net",  Conf->Net,  strlen(Conf->Net),  REG_SZ);
+	SetKeyV("Net",        Conf->Net,  strlen(Conf->Net),  REG_SZ);
 	if (strcmp(Conf->Mcd1, "memcards\\movie001.tmp"))
-		SetKeyV("MCD1", Conf->Mcd1, strlen(Conf->Mcd1), REG_SZ);
+		SetKeyV("MCD1",   Conf->Mcd1, strlen(Conf->Mcd1), REG_SZ);
 	if (strcmp(Conf->Mcd2, "memcards\\movie002.tmp"))
-		SetKeyV("MCD2", Conf->Mcd2, strlen(Conf->Mcd2), REG_SZ);
+		SetKeyV("MCD2",   Conf->Mcd2, strlen(Conf->Mcd2), REG_SZ);
 	SetKeyV("Xa",      &Conf->Xa,      sizeof(Conf->Xa),      REG_DWORD);
 	SetKeyV("Sio",     &Conf->Sio,     sizeof(Conf->Sio),     REG_DWORD);
 	SetKeyV("Mdec",    &Conf->Mdec,    sizeof(Conf->Mdec),    REG_DWORD);
@@ -132,6 +138,12 @@ void SaveConfig() {
 	SetKeyV("VSyncWA", &Conf->VSyncWA, sizeof(Conf->VSyncWA), REG_DWORD);
 	SetKeyV("LoadSkips",&Conf->LoadSkips,sizeof(Conf->LoadSkips),REG_DWORD);
 
+	for (i = 0; i <= MAX_RECENT_SCRIPTS; i++) {
+		char str[256];
+		sprintf(str, "RecentScript %d", i+1);
+		SetKeyV(str, Conf->RecentScripts[i], strlen(Conf->RecentScripts[i]), REG_SZ);
+	}
+
 	for (i = 0; i <= EMUCMDMAX; i++) {
 		HotkeysKeys[i] = EmuCommandTable[i].key;
 	}
@@ -140,7 +152,7 @@ void SaveConfig() {
 	for (i = 0; i <= EMUCMDMAX; i++) {
 		HotkeysKeymods[i] = EmuCommandTable[i].keymod;
 	}
-	SetKeyV("HotkeysKeymods", &HotkeysKeymods,sizeof(HotkeysKeymods), REG_BINARY);
+	SetKeyV("HotkeysKeymods", &HotkeysKeymods, sizeof(HotkeysKeymods), REG_SZ);
 
 	RegCloseKey(myKey);
 }

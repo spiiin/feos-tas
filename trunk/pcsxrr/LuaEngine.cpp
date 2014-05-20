@@ -2102,30 +2102,25 @@ static int gui_parsecolor(lua_State *L)
 }
 
 static int gui_hashframe(lua_State *L)
-{	
+{
 	int x,y;
-
 	int width = iScreenWidth;
 	int height = iScreenHeight;
-
-	uint8 *screen;
-
-	screen=XBuf;
 	long hashValue = 0;
 	long counter = 1;
+	uint8 *screen;
+	screen = XBuf;
 
-	for(y=0; y<height; y++){
-		for(x=0; x<width; x++){
+	for (y=0; y<height; y++) {
+		for (x=0; x<width; x++) {
 			uint32 r, g, b;
 			r = screen[(y*LUA_SCREEN_WIDTH+x)*4+2];
 			g = screen[(y*LUA_SCREEN_WIDTH+x)*4+1];
 			b = screen[(y*LUA_SCREEN_WIDTH+x)*4];
-
 			int value = r+g+b;
 			counter += ((8161*value) % 4294967279)+ value*16776193;
 		}		
 	}
-
 	hashValue = abs(counter % 4294967291);	
 	lua_pushinteger(L, hashValue);
 	return 1;

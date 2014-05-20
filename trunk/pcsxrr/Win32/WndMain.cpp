@@ -576,8 +576,20 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	switch (msg) {
 		case WM_COMMAND:
+			if (LOWORD(wParam) >= ID_LUA_RECENT &&
+			    LOWORD(wParam) <= ID_LUA_RECENT_MAX &&
+			    LOWORD(wParam) - ID_LUA_RECENT < MAX_RECENT_SCRIPTS) {
+				char temp [1024];
+				strcpy(temp, Config.RecentScripts[LOWORD(wParam) - ID_LUA_RECENT]);
+				LuaConsoleHWnd = CreateDialog(
+					gApp.hInstance, MAKEINTRESOURCE(IDD_LUA), NULL, (DLGPROC)DlgLuaScriptDialog);
+				SendDlgItemMessage(LuaConsoleHWnd, IDC_EDIT_LUAPATH, WM_SETTEXT, 0, (LPARAM)temp);
+				PCSX_LoadLuaCode(temp);
+			}
+			
 			switch (LOWORD(wParam)) {
 				case ID_FILE_EXIT:
+					SaveConfig();
 					SysClose();
 					PostQuitMessage(0);
 					exit(0);
@@ -601,7 +613,9 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				case ID_LUA_OPEN:
 					if(!LuaConsoleHWnd)
 					{
-						LuaConsoleHWnd = CreateDialog(gApp.hInstance, MAKEINTRESOURCE(IDD_LUA), NULL, (DLGPROC) DlgLuaScriptDialog);
+						LuaConsoleHWnd = CreateDialog(
+							gApp.hInstance, MAKEINTRESOURCE(IDD_LUA), NULL, (DLGPROC) DlgLuaScriptDialog);
+						SetDlgItemText(LuaConsoleHWnd, IDC_EDIT_LUAPATH, Config.RecentScripts[0]);
 					}
 					else
 						SetForegroundWindow(LuaConsoleHWnd);
@@ -817,6 +831,7 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					WIN32_StopAviRecord();
 				if (Running)
 					ClosePlugins();
+				SaveConfig();
 				SysClose();
 				PostQuitMessage(0);
 				exit(0);
@@ -829,6 +844,7 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				WIN32_StopAviRecord();
 			if (Movie.mode != MOVIEMODE_INACTIVE)
 				MOV_StopMovie();
+			SaveConfig();
 			exit(0);
 			break;
 
@@ -1592,11 +1608,11 @@ void CreateMainMenu() {
 	MENUITEMINFO item;
 	HMENU submenu[256];
 	char buf[256];
+	char Str_Tmp[1024];
 
 	item.cbSize = sizeof(MENUITEMINFO);
 	item.dwTypeData = buf;
 	item.cch = 256;
-
 	gApp.hMenu = CreateMenu();
 
 	ADDSUBMENU(0, _("&File"));
@@ -1604,6 +1620,25 @@ void CreateMainMenu() {
 	ADDMENUITEM(0, _("E&xit"), ID_FILE_EXIT);
 	ADDSEPARATOR(0);
 	ADDSUBMENUS(0, 2, _("&Lua Scripting"));
+	for (unsigned int j=0; j<MAX_RECENT_SCRIPTS; j++) {
+		const char* pathPtr = Config.RecentScripts[j];
+		if (!*pathPtr) continue;
+		// only show some of the path
+		const char* pathPtrSearch;
+		int slashesLeft = 2;
+		for(pathPtrSearch = pathPtr + strlen(pathPtr) - 1; 
+			pathPtrSearch != pathPtr && slashesLeft >= 0;
+			pathPtrSearch--) {
+			char c = *pathPtrSearch;
+			if(c == '\\' || c == '/') slashesLeft--;
+		}
+		if (slashesLeft < 0) pathPtr = pathPtrSearch + 2;
+		strcpy(Str_Tmp, pathPtr);
+		ADDMENUITEM(2, _(Str_Tmp), ID_LUA_RECENT+j);
+	}
+	if (Config.RecentScripts[0][0] != 0) {
+		ADDSEPARATOR(2);
+	}
 	ADDMENUITEM(2, _("&Close All Script Windows"), ID_LUA_CLOSE_ALL);
 	ADDMENUITEM(2, _("&New Lua Script Window..."), ID_LUA_OPEN);
 	ADDSUBMENUS(0, 1, _("&Movie"));
