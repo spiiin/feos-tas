@@ -46,6 +46,24 @@ struct windowInfoStruct {
 	ControlLayoutState layoutState [numControlLayoutInfos];
 } windowInfo;
 
+void Update_Recent_Script(const char* Path) {
+	int i;
+	for (i = 0; i < MAX_RECENT_SCRIPTS; i++) {
+		if (!(strcmp(Config.RecentScripts[i], Path))) {
+			char temp [1024];
+			strcpy(temp, Config.RecentScripts[i]);
+			int j;
+			for (j = i; j > 0; j--)
+				strcpy(Config.RecentScripts[j], Config.RecentScripts[j-1]);
+			strcpy(Config.RecentScripts[0], temp);
+			return;
+		}
+	}
+	for(i = MAX_RECENT_SCRIPTS-1; i > 0; i--)
+		strcpy(Config.RecentScripts[i], Config.RecentScripts[i - 1]);
+	strcpy(Config.RecentScripts[0], Path);
+}
+
 void PrintToWindowConsole(int hDlgAsInt, const char* str)
 {
 	HWND hDlg = (HWND)hDlgAsInt;
@@ -240,6 +258,7 @@ INT_PTR CALLBACK DlgLuaScriptDialog(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 			{
 				char filename[MAX_PATH];
 				GetDlgItemText(hDlg, IDC_EDIT_LUAPATH, filename, MAX_PATH);
+				Update_Recent_Script(filename);
 				PCSX_LoadLuaCode(filename);
 			}	break;
 

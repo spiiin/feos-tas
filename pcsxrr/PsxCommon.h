@@ -97,6 +97,7 @@ typedef unsigned long long u64;
 
 #define _(msgid) msgid
 #define N_(msgid) msgid
+#define MAX_RECENT_SCRIPTS 15
 
 extern int Log;
 void __Log(char *fmt, ...);
@@ -132,6 +133,7 @@ typedef struct {
 	long VSyncWA;
 	long PauseAfterPlayback;
 	char LoadSkips;
+	char RecentScripts[MAX_RECENT_SCRIPTS][260];
 } PcsxConfig;
 
 extern PcsxConfig Config;

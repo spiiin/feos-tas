@@ -442,6 +442,8 @@
 #define ID_SKIP_SPU                     40126
 #define RW_MENU_FIRST_RECENT_FILE       40130
 #define RW_MENU_LAST_RECENT_FILE        40150
+#define ID_LUA_RECENT                   44100
+#define ID_LUA_RECENT_MAX               44120
 #define IDC_STATIC1                     50001
 #define IDC_STATIC2                     50002
 #define IDC_STATIC3                     50003
