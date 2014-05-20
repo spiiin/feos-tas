@@ -4,11 +4,14 @@
 #include "Win32.h"
 #endif
 
+#ifndef RC_INVOKED
+#include <windows.h>
+#endif
+
 #include "resource.h"
 #include "ram_search.h"
 #include "ramwatch.h"
 #include <assert.h>
-#include <windows.h>
 #include <commctrl.h>
 #include <commdlg.h>
 #include <shellapi.h>
