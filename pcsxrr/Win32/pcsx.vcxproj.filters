@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{d30686ad-4e33-4f2e-b7d5-33fb5501cc92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bios">
+      <UniqueIdentifier>{75e0f03c-e918-4554-b85f-3dbb611193ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CdRom">
+      <UniqueIdentifier>{1f0c1863-b63d-43de-bdd0-6638250668ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GPU-SPU-SIO">
+      <UniqueIdentifier>{df901f8d-d2ba-419c-9253-0ffa99a5d7a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debugger">
+      <UniqueIdentifier>{7f4f5a09-6024-4231-886d-555f8ed5dd90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GTE">
+      <UniqueIdentifier>{1fc467de-2da3-4190-99a5-0828bae15522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{4f5faa4f-61e1-4059-ba9e-7601a8c59c20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Plugins system">
+      <UniqueIdentifier>{7184d3e9-b2c1-43e4-82e1-6c3595b76d95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CPU">
+      <UniqueIdentifier>{37500975-b54f-4ab3-87f1-81f32aae8b37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hardware registers">
+      <UniqueIdentifier>{80b550ee-9017-4b49-8cfe-f36163a17a7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DMA">
+      <UniqueIdentifier>{3767f7b4-a541-4d14-811f-7fcea097148c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mdec">
+      <UniqueIdentifier>{ff37a233-aebb-4624-a437-b39d23300014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc">
+      <UniqueIdentifier>{5f203502-a8bb-4503-8fcf-4f386abd1756}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Counters">
+      <UniqueIdentifier>{363cfa05-9cd4-4ffc-951d-74b1b1ceb961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ix86">
+      <UniqueIdentifier>{81bebef6-83fa-45ea-a43c-ee0bbc6d33d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLE">
+      <UniqueIdentifier>{7b06b20d-7198-47ec-b03a-8b89ac50fbe5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Docs">
+      <UniqueIdentifier>{5c8e0178-b44a-4b8f-b2b2-f816ba7cbd95}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AboutDlg.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="luaconsole.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="maphkeys.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="memcheat.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="moviewin.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ram_search.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ramwatch.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="WndMain.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PsxBios.cpp">
+      <Filter>Bios</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CdRom.cpp">
+      <Filter>CdRom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Decode_XA.cpp">
+      <Filter>CdRom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sio.cpp">
+      <Filter>GPU-SPU-SIO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Spu.cpp">
+      <Filter>GPU-SPU-SIO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisR3000A.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Gte.cpp">
+      <Filter>GTE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PsxMem.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigurePlugins.cpp">
+      <Filter>Plugins system</Filter>
+    </ClCompile>
+    <ClCompile Include="plugin.cpp">
+      <Filter>Plugins system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\plugins.cpp">
+      <Filter>Plugins system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PsxInterpreter.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\R3000A.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PsxHw.cpp">
+      <Filter>Hardware registers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PsxDma.cpp">
+      <Filter>DMA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Mdec.cpp">
+      <Filter>Mdec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cheat.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LuaEngine.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Misc.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\movie.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PsxCounters.cpp">
+      <Filter>Counters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ix86\iR3000A.cpp">
+      <Filter>ix86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ix86\ix86.cpp">
+      <Filter>ix86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PsxHLE.cpp">
+      <Filter>HLE</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AboutDlg.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="maphkeys.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="moviewin.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ram_search.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ramwatch.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Win32.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PsxBios.h">
+      <Filter>Bios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CdRom.h">
+      <Filter>CdRom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Decode_XA.h">
+      <Filter>CdRom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sio.h">
+      <Filter>GPU-SPU-SIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Spu.h">
+      <Filter>GPU-SPU-SIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Debug.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gte.h">
+      <Filter>GTE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PsxMem.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="plugin.h">
+      <Filter>Plugins system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\plugins.h">
+      <Filter>Plugins system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\R3000A.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PsxHw.h">
+      <Filter>Hardware registers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PsxDma.h">
+      <Filter>DMA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Mdec.h">
+      <Filter>Mdec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cheat.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Coff.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LuaEngine.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Misc.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\movie.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\System.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PsxCounters.h">
+      <Filter>Counters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ix86\iGte.h">
+      <Filter>ix86</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ix86\ix86.h">
+      <Filter>ix86</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PsxHLE.h">
+      <Filter>HLE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PSEmu_Plugin_Defs.h" />
+    <ClInclude Include="..\PsxCommon.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Docs\ChangeLog.txt">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\Docs\CodingStyle.txt">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\Docs\License.txt">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\Docs\Readme.txt">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\Docs\ToDo.txt">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="Cdrom02.ico" />
+    <None Include="..\pcsxAbout.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pcsx.rc" />
+  </ItemGroup>
+</Project>

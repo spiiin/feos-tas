@@ -1993,9 +1993,9 @@ static int gui_drawbox(lua_State *L) {
 	outlinecolor = gui_optcolour(L,6,LUA_BUILD_PIXEL(255, LUA_PIXEL_R(fillcolor), LUA_PIXEL_G(fillcolor), LUA_PIXEL_B(fillcolor)));
 
 	if (x1 > x2) 
-		std::swap<int>(x1, x2);
+		swap(int, x1, x2);
 	if (y1 > y2) 
-		std::swap<int>(y1, y2);
+		swap(int, y1, y2);
 
 	gui_prepare();
 
@@ -2121,7 +2121,7 @@ static int gui_hashframe(lua_State *L)
 			counter += ((8161*value) % 4294967279)+ value*16776193;
 		}		
 	}
-	hashValue = abs(counter % 4294967291);	
+	hashValue = labs(counter % 4294967291);	
 	lua_pushinteger(L, hashValue);
 	return 1;
 }

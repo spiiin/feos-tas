@@ -295,7 +295,7 @@ static __inline void DeliverEvent(u32 ev, u32 spec) {
 
 
 void psxBios_abs() { // 0x0e
-	v0 = abs(a0);
+	v0 = labs(a0);
 	pc0 = ra;
 }
 
