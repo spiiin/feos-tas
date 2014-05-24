@@ -131,9 +131,11 @@ typedef struct {
 	long RCntFix;
 	long UseNet;
 	long VSyncWA;
-	long PauseAfterPlayback;
+	bool Pause;
 	char LoadSkips;
 	char RecentScripts[MAX_RECENT_SCRIPTS][260];
+	int ClientX;
+	int ClientY;
 } PcsxConfig;
 
 extern PcsxConfig Config;

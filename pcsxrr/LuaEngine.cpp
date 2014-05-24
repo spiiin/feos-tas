@@ -672,7 +672,7 @@ static int pcsx_getconfig(lua_State *L) {
 	lua_pushstring(L, itoa(Config.VSyncWA, tmpStr, 10));
 	lua_setfield(L, -2, "vsyncwa");
 
-	lua_pushstring(L, itoa(Config.PauseAfterPlayback, tmpStr, 10));
+	lua_pushstring(L, itoa(Config.Pause, tmpStr, 10));
 	lua_setfield(L, -2, "pauseafterplayback");
 
 	return 1;

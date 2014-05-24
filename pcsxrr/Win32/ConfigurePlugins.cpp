@@ -47,30 +47,32 @@ int LoadConfig() {
 	if (RegOpenKeyEx(HKEY_CURRENT_USER,cfgfile,0,KEY_ALL_ACCESS,&myKey)!=ERROR_SUCCESS) return -1;
 
 	err = 1;
-	QueryKeyV(256, "Bios", Conf->Bios);
+	QueryKeyV(256, "Bios",       Conf->Bios);
 	QueryKeyV(256, "PluginGPU",  Conf->Gpu);
 	QueryKeyV(256, "PluginSPU",  Conf->Spu);
 	QueryKeyV(256, "PluginCDR",  Conf->Cdr);
 	QueryKeyV(256, "PluginPAD1", Conf->Pad1);
 	QueryKeyV(256, "PluginPAD2", Conf->Pad2);
-	QueryKeyV(256, "MCD1", Conf->Mcd1);
-	QueryKeyV(256, "MCD2", Conf->Mcd2);
+	QueryKeyV(256, "MCD1",       Conf->Mcd1);
+	QueryKeyV(256, "MCD2",       Conf->Mcd2);
 	err = 0;
-	QueryKeyV(256, "Net",  Conf->Net);
-	QueryKeyV(sizeof(Conf->Xa),      "Xa",      &Conf->Xa);
-	QueryKeyV(sizeof(Conf->Sio),     "Sio",     &Conf->Sio);
-	QueryKeyV(sizeof(Conf->Mdec),    "Mdec",    &Conf->Mdec);
-	QueryKeyV(sizeof(Conf->PsxAuto), "PsxAuto", &Conf->PsxAuto);
-	QueryKeyV(sizeof(Conf->PsxType), "PsxType", &Conf->PsxType);
-	QueryKeyV(sizeof(Conf->QKeys),   "QKeys",   &Conf->QKeys);
-	QueryKeyV(sizeof(Conf->Cdda),    "Cdda",    &Conf->Cdda);
-	QueryKeyV(sizeof(Conf->Cpu),     "Cpu",     &Conf->Cpu);
-	QueryKeyV(sizeof(Conf->PauseAfterPlayback), "Pause", &Conf->PauseAfterPlayback);
-	QueryKeyV(sizeof(Conf->PsxOut),  "PsxOut",  &Conf->PsxOut);
-	QueryKeyV(sizeof(Conf->SpuIrq),  "SpuIrq",  &Conf->SpuIrq);
-	QueryKeyV(sizeof(Conf->RCntFix), "RCntFix", &Conf->RCntFix);
-	QueryKeyV(sizeof(Conf->VSyncWA), "VSyncWA", &Conf->VSyncWA);
-	QueryKeyV(sizeof(Conf->LoadSkips),"LoadSkips",&Conf->LoadSkips);
+	QueryKeyV(256, "Net",        Conf->Net);			 
+	QueryKeyV(sizeof(Conf->Xa),        "Xa",        &Conf->Xa);
+	QueryKeyV(sizeof(Conf->Sio),       "Sio",       &Conf->Sio);
+	QueryKeyV(sizeof(Conf->Mdec),      "Mdec",      &Conf->Mdec);
+	QueryKeyV(sizeof(Conf->PsxAuto),   "PsxAuto",   &Conf->PsxAuto);
+	QueryKeyV(sizeof(Conf->PsxType),   "PsxType",   &Conf->PsxType);
+	QueryKeyV(sizeof(Conf->QKeys),     "QKeys",     &Conf->QKeys);
+	QueryKeyV(sizeof(Conf->Cdda),      "Cdda",      &Conf->Cdda);
+	QueryKeyV(sizeof(Conf->Cpu),       "Cpu",       &Conf->Cpu);
+	QueryKeyV(sizeof(Conf->Pause),     "Pause",     &Conf->Pause);
+	QueryKeyV(sizeof(Conf->PsxOut),    "PsxOut",    &Conf->PsxOut);
+	QueryKeyV(sizeof(Conf->SpuIrq),    "SpuIrq",    &Conf->SpuIrq);
+	QueryKeyV(sizeof(Conf->RCntFix),   "RCntFix",   &Conf->RCntFix);
+	QueryKeyV(sizeof(Conf->VSyncWA),   "VSyncWA",   &Conf->VSyncWA);
+	QueryKeyV(sizeof(Conf->LoadSkips), "LoadSkips", &Conf->LoadSkips);
+	QueryKeyV(sizeof(Conf->ClientX),   "ClientX",   &Conf->ClientX);
+	QueryKeyV(sizeof(Conf->ClientY),   "ClientY",   &Conf->ClientY);
 
 	for (i = 0; i <= MAX_RECENT_SCRIPTS; i++) {
 		char str[256];
@@ -109,6 +111,7 @@ void SaveConfig() {
 	int i;
 	char HotkeysKeys[EMUCMDMAX+1];
 	char HotkeysKeymods[EMUCMDMAX+1];
+	SaveWindowPos();
 
 	RegCreateKeyEx(HKEY_CURRENT_USER, cfgfile, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &myKey, &myDisp);
 
@@ -123,20 +126,22 @@ void SaveConfig() {
 		SetKeyV("MCD1",   Conf->Mcd1, strlen(Conf->Mcd1), REG_SZ);
 	if (strcmp(Conf->Mcd2, "memcards\\movie002.tmp"))
 		SetKeyV("MCD2",   Conf->Mcd2, strlen(Conf->Mcd2), REG_SZ);
-	SetKeyV("Xa",      &Conf->Xa,      sizeof(Conf->Xa),      REG_DWORD);
-	SetKeyV("Sio",     &Conf->Sio,     sizeof(Conf->Sio),     REG_DWORD);
-	SetKeyV("Mdec",    &Conf->Mdec,    sizeof(Conf->Mdec),    REG_DWORD);
-	SetKeyV("PsxAuto", &Conf->PsxAuto, sizeof(Conf->PsxAuto), REG_DWORD);
-	SetKeyV("PsxType", &Conf->PsxType, sizeof(Conf->PsxType), REG_DWORD);
-	SetKeyV("QKeys",   &Conf->QKeys,   sizeof(Conf->QKeys),   REG_DWORD);
-	SetKeyV("Cdda",    &Conf->Cdda,    sizeof(Conf->Cdda),    REG_DWORD);
-	SetKeyV("Cpu",     &Conf->Cpu,     sizeof(Conf->Cpu),     REG_DWORD);
-	SetKeyV("Pause",   &Conf->PauseAfterPlayback, sizeof(Conf->PauseAfterPlayback), REG_DWORD);
-	SetKeyV("PsxOut",  &Conf->PsxOut,  sizeof(Conf->PsxOut),  REG_DWORD);
-	SetKeyV("SpuIrq",  &Conf->SpuIrq,  sizeof(Conf->SpuIrq),  REG_DWORD);
-	SetKeyV("RCntFix", &Conf->RCntFix, sizeof(Conf->RCntFix), REG_DWORD);
-	SetKeyV("VSyncWA", &Conf->VSyncWA, sizeof(Conf->VSyncWA), REG_DWORD);
-	SetKeyV("LoadSkips",&Conf->LoadSkips,sizeof(Conf->LoadSkips),REG_DWORD);
+	SetKeyV("Xa",        &Conf->Xa,        sizeof(Conf->Xa),        REG_DWORD);
+	SetKeyV("Sio",       &Conf->Sio,       sizeof(Conf->Sio),       REG_DWORD);
+	SetKeyV("Mdec",      &Conf->Mdec,      sizeof(Conf->Mdec),      REG_DWORD);
+	SetKeyV("PsxAuto",   &Conf->PsxAuto,   sizeof(Conf->PsxAuto),   REG_DWORD);
+	SetKeyV("PsxType",   &Conf->PsxType,   sizeof(Conf->PsxType),   REG_DWORD);
+	SetKeyV("QKeys",     &Conf->QKeys,     sizeof(Conf->QKeys),     REG_DWORD);
+	SetKeyV("Cdda",      &Conf->Cdda,      sizeof(Conf->Cdda),      REG_DWORD);
+	SetKeyV("Cpu",       &Conf->Cpu,       sizeof(Conf->Cpu),       REG_DWORD);
+	SetKeyV("Pause",     &Conf->Pause,     sizeof(Conf->Pause),     REG_DWORD);
+	SetKeyV("PsxOut",    &Conf->PsxOut,    sizeof(Conf->PsxOut),    REG_DWORD);
+	SetKeyV("SpuIrq",    &Conf->SpuIrq,    sizeof(Conf->SpuIrq),    REG_DWORD);
+	SetKeyV("RCntFix",   &Conf->RCntFix,   sizeof(Conf->RCntFix),   REG_DWORD);
+	SetKeyV("VSyncWA",   &Conf->VSyncWA,   sizeof(Conf->VSyncWA),   REG_DWORD);
+	SetKeyV("LoadSkips", &Conf->LoadSkips, sizeof(Conf->LoadSkips), REG_DWORD);
+	SetKeyV("ClientX",   &Conf->ClientX,   sizeof(Conf->ClientX),   REG_DWORD);
+	SetKeyV("ClientY",   &Conf->ClientY,   sizeof(Conf->ClientY),   REG_DWORD);
 
 	for (i = 0; i <= MAX_RECENT_SCRIPTS; i++) {
 		char str[256];

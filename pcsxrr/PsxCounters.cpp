@@ -168,7 +168,7 @@ void psxRcntUpdate() {
 	// handle movie end while in replay mode
 	if (Movie.mode == MOVIEMODE_PLAY) {
 		// pause at last movie frame
-		if (Movie.currentFrame==Movie.totalFrames && Config.PauseAfterPlayback)
+		if (Movie.currentFrame==Movie.totalFrames && Config.Pause)
 			iPause = 1;
 		// stop if we're beyond last frame
 		if (Movie.currentFrame>Movie.totalFrames) {

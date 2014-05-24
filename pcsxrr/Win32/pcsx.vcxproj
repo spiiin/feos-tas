@@ -102,7 +102,7 @@
     <Link>
       <AdditionalOptions>/NOENTRY %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;comctl32.lib;lua-5.1.4-x86.lib;zlib-2008-x32.lib;libpng-2008-x32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)pcsx-debug.exe</OutputFile>
+      <OutputFile>$(OutDir)pcsx.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>./includes;./lua/lib;zlib;libpng;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>

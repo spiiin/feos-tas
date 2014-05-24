@@ -58,6 +58,7 @@ int Running;
 char PcsxDir[256];
 
 extern bool OpenPlugins(HWND hWnd);
+extern void SaveWindowPos();
 
 int iSaveStateTo;
 int iLoadStateFrom;
@@ -304,11 +305,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	GetCurrentPath();
-
 	gApp.hInstance = GetModuleHandle(NULL);
-
 	Running=0;
-
 	GetCurrentDirectory(256, PcsxDir);
 
 	memset(&Config, 0, sizeof(PcsxConfig));
@@ -317,8 +315,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	sprintf(Config.BiosDir, "%sbios\\", szCurrentPath);
 	if (LoadConfig() == -1) {
 		Config.PsxAuto = 1;
-		Config.PauseAfterPlayback = 1;
+		Config.Pause = 1;
 		Config.LoadSkips = 0;
+		Config.ClientX = 100;
+		Config.ClientY = 100;
 		strcpy(Config.Bios,   "scph1001.bin");
 		strcpy(Config.Gpu,  "gpuTASsoft.dll");
 		strcpy(Config.Spu,      "spuTAS.dll");
@@ -1414,7 +1414,7 @@ BOOL CALLBACK ConfigureCpuDlgProc(HWND hW, UINT uMsg, WPARAM wParam, LPARAM lPar
 			Button_SetCheck(GetDlgItem(hW,IDC_CDDA),    Config.Cdda);
 			Button_SetCheck(GetDlgItem(hW,IDC_PSXAUTO), Config.PsxAuto);
 			Button_SetCheck(GetDlgItem(hW,IDC_CPU),     Config.Cpu);
-			Button_SetCheck(GetDlgItem(hW,IDC_PAUSE),   Config.PauseAfterPlayback);
+			Button_SetCheck(GetDlgItem(hW,IDC_PAUSE),   Config.Pause);
 			Button_SetCheck(GetDlgItem(hW,IDC_PSXOUT),  Config.PsxOut);
 			Button_SetCheck(GetDlgItem(hW,IDC_SPUIRQ),  Config.SpuIrq);
 			Button_SetCheck(GetDlgItem(hW,IDC_RCNTFIX), Config.RCntFix);
@@ -1430,15 +1430,14 @@ BOOL CALLBACK ConfigureCpuDlgProc(HWND hW, UINT uMsg, WPARAM wParam, LPARAM lPar
 					tmp = ComboBox_GetCurSel(GetDlgItem(hW,IDC_PSXTYPES));
 					if (tmp == 0) Config.PsxType = 0;
 					else Config.PsxType = 1;
-
+					tmp = Config.Cpu;
 					Config.Xa      = Button_GetCheck(GetDlgItem(hW,IDC_XA));
 					Config.Sio     = Button_GetCheck(GetDlgItem(hW,IDC_SIO));
 					Config.Mdec    = Button_GetCheck(GetDlgItem(hW,IDC_MDEC));
 					Config.QKeys   = Button_GetCheck(GetDlgItem(hW,IDC_QKEYS));
 					Config.Cdda    = Button_GetCheck(GetDlgItem(hW,IDC_CDDA));
 					Config.PsxAuto = Button_GetCheck(GetDlgItem(hW,IDC_PSXAUTO));
-					Config.PauseAfterPlayback = Button_GetCheck(GetDlgItem(hW,IDC_PAUSE));
-					tmp = Config.Cpu;
+					Config.Pause   = !!Button_GetCheck(GetDlgItem(hW,IDC_PAUSE));
 					Config.Cpu     = Button_GetCheck(GetDlgItem(hW,IDC_CPU));
 					if (tmp != Config.Cpu) {
 						psxCpu->Shutdown();
@@ -1715,26 +1714,13 @@ void CreateMainWindow(int nCmdShow) {
 	wc.cbWndExtra = 0;
 
 	RegisterClass(&wc);
-
-
-	hWnd = CreateWindow("PCSX Main",
-						PCSXRR_NAME_AND_VERSION,
-						WS_CAPTION | WS_POPUPWINDOW | WS_MINIMIZEBOX,
-						20,
-						20,
-						320,
-						240,
-						NULL,
-						NULL,
-						gApp.hInstance,
-						NULL);
-
+	hWnd = CreateWindow(
+		"PCSX Main", PCSXRR_NAME_AND_VERSION, WS_CAPTION | WS_POPUPWINDOW | WS_MINIMIZEBOX,
+		Config.ClientX, Config.ClientY, 320, 240, NULL, NULL, gApp.hInstance, NULL);
 	gApp.hWnd = hWnd;
 	ResetMenuSlots();
-
 	CreateMainMenu();
 	SetMenu(gApp.hWnd, gApp.hMenu);
-
 	if (Movie.mode != MOVIEMODE_INACTIVE) {
 		EnableMenuItem(gApp.hMenu,ID_FILE_RECORD_MOVIE,MF_GRAYED);
 		EnableMenuItem(gApp.hMenu,ID_FILE_REPLAY_MOVIE,MF_GRAYED);
@@ -1744,7 +1730,6 @@ void CreateMainWindow(int nCmdShow) {
 //		EnableMenuItem(gApp.hMenu,ID_END_CAPTURE,MF_ENABLED);
 //		EnableMenuItem(gApp.hMenu,ID_START_CAPTURE,MF_GRAYED);
 //	}
-
 	ShowWindow(hWnd, nCmdShow);
 }
 
