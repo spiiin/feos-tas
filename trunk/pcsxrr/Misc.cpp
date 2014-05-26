@@ -515,14 +515,13 @@ namespace
       // gpu
       memset(&gpufP, 0, sizeof(gpufP));
       gzread(f, &gpufP, sizeof(gpufP));
-//	  if ((Config.LoadSkips & 1) == 0)
-	      GPU_freeze(0, &gpufP);
+	  GPU_freeze(0, &gpufP);
 
       // spu
       memset(&spufP, 0, sizeof(spufP));
       gzread(f, &Size, 4);
       gzread(f, &spufP, Size);
-	  if ((Config.LoadSkips & 2) == 0)
+	  if (!Config.LoadSkips)
 	      SPU_freeze(0, &spufP);
 
       sioFreeze(f, 0);

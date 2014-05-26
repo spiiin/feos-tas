@@ -47,19 +47,19 @@ struct windowInfoStruct {
 } windowInfo;
 
 void Update_Recent_Script(const char* Path) {
-	int i;
-	for (i = 0; i < MAX_RECENT_SCRIPTS; i++) {
+	if (Path[0] == 0)
+		return;	
+	for (int i = 0; i < MAX_RECENT_SCRIPTS; i++) {
 		if (!(strcmp(Config.RecentScripts[i], Path))) {
-			char temp [1024];
+			char temp[260];
 			strcpy(temp, Config.RecentScripts[i]);
-			int j;
-			for (j = i; j > 0; j--)
+			for (int j = i; j > 0; j--)
 				strcpy(Config.RecentScripts[j], Config.RecentScripts[j-1]);
 			strcpy(Config.RecentScripts[0], temp);
 			return;
 		}
 	}
-	for(i = MAX_RECENT_SCRIPTS-1; i > 0; i--)
+	for(int i = MAX_RECENT_SCRIPTS-1; i > 0; i--)
 		strcpy(Config.RecentScripts[i], Config.RecentScripts[i - 1]);
 	strcpy(Config.RecentScripts[0], Path);
 }

@@ -40,7 +40,8 @@ void ReleasePlugins();
 // int  OpenPlugins();
 void ClosePlugins();
 void ResetPlugins();
-void SaveWindowPos();
+void StoreWindowPos();
+void RestoreWindowPos();
 
 START_EXTERN_C
 

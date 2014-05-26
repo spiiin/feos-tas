@@ -58,7 +58,8 @@ int Running;
 char PcsxDir[256];
 
 extern bool OpenPlugins(HWND hWnd);
-extern void SaveWindowPos();
+extern void StoreWindowPos();
+extern void RestoreWindowPos();
 
 int iSaveStateTo;
 int iLoadStateFrom;
@@ -578,11 +579,13 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		case WM_COMMAND:
 			if (LOWORD(wParam) >= ID_LUA_RECENT &&
 			    LOWORD(wParam) <= ID_LUA_RECENT_MAX &&
-			    LOWORD(wParam) - ID_LUA_RECENT < MAX_RECENT_SCRIPTS) {
-				char temp [1024];
+			    LOWORD(wParam)  - ID_LUA_RECENT < MAX_RECENT_SCRIPTS) {
+				char temp[260];
 				strcpy(temp, Config.RecentScripts[LOWORD(wParam) - ID_LUA_RECENT]);
-				LuaConsoleHWnd = CreateDialog(
-					gApp.hInstance, MAKEINTRESOURCE(IDD_LUA), NULL, (DLGPROC)DlgLuaScriptDialog);
+				if(!LuaConsoleHWnd)
+					LuaConsoleHWnd = CreateDialog(gApp.hInstance, MAKEINTRESOURCE(IDD_LUA), NULL, (DLGPROC)DlgLuaScriptDialog);
+				else
+					SetForegroundWindow(LuaConsoleHWnd);
 				SendDlgItemMessage(LuaConsoleHWnd, IDC_EDIT_LUAPATH, WM_SETTEXT, 0, (LPARAM)temp);
 				PCSX_LoadLuaCode(temp);
 			}
@@ -699,15 +702,9 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					NeedReset = 1;
 					return TRUE;
 
-				case ID_SKIP_GPU:
-					Config.LoadSkips ^= 1;
-//					CheckMenuItem(gApp.hMenu,ID_SKIP_GPU,Config.LoadSkips&1?MF_CHECKED:MF_UNCHECKED);					
-					SaveConfig();
-					return TRUE;
-
 				case ID_SKIP_SPU:
-					Config.LoadSkips ^= 2;
-					CheckMenuItem(gApp.hMenu,ID_SKIP_SPU,Config.LoadSkips&2?MF_CHECKED:MF_UNCHECKED);					
+					Config.LoadSkips ^= 1;
+					CheckMenuItem(gApp.hMenu,ID_SKIP_SPU,Config.LoadSkips?MF_CHECKED:MF_UNCHECKED);					
 					SaveConfig();
 					return TRUE;
 
@@ -1437,7 +1434,7 @@ BOOL CALLBACK ConfigureCpuDlgProc(HWND hW, UINT uMsg, WPARAM wParam, LPARAM lPar
 					Config.QKeys   = Button_GetCheck(GetDlgItem(hW,IDC_QKEYS));
 					Config.Cdda    = Button_GetCheck(GetDlgItem(hW,IDC_CDDA));
 					Config.PsxAuto = Button_GetCheck(GetDlgItem(hW,IDC_PSXAUTO));
-					Config.Pause   = !!Button_GetCheck(GetDlgItem(hW,IDC_PAUSE));
+					Config.Pause   = Button_GetCheck(GetDlgItem(hW,IDC_PAUSE));
 					Config.Cpu     = Button_GetCheck(GetDlgItem(hW,IDC_CPU));
 					if (tmp != Config.Cpu) {
 						psxCpu->Shutdown();
@@ -1607,7 +1604,7 @@ void CreateMainMenu() {
 	MENUITEMINFO item;
 	HMENU submenu[256];
 	char buf[256];
-	char Str_Tmp[1024];
+	char Str_Tmp[260];
 
 	item.cbSize = sizeof(MENUITEMINFO);
 	item.dwTypeData = buf;
@@ -1633,7 +1630,7 @@ void CreateMainMenu() {
 		}
 		if (slashesLeft < 0) pathPtr = pathPtrSearch + 2;
 		strcpy(Str_Tmp, pathPtr);
-		ADDMENUITEM(2, _(Str_Tmp), ID_LUA_RECENT+j);
+		InsertMenu(submenu[2], j, 0, ID_LUA_RECENT+j, _(Str_Tmp));
 	}
 	if (Config.RecentScripts[0][0] != 0) {
 		ADDSEPARATOR(2);
@@ -1671,9 +1668,7 @@ void CreateMainMenu() {
 
 	ADDSUBMENU(0, _("&Tools"));
 
-//	ADDSUBMENUS(0, 1, _("&Loadstate Hacks"));
 	ADDMENUITEM(0, _("Skip SPU Loadstate"), ID_SKIP_SPU);
-//	ADDMENUITEM(1, _("GPU"), ID_SKIP_GPU);
 	ADDMENUITEM(0, _("Map &Hotkeys"), ID_CONFIGURATION_MAPHOTKEYS);
 	ADDSEPARATOR(0);
 	ADDMENUITEM(0, _("RAM &Watch"), ID_RAM_WATCH);
@@ -1691,8 +1686,7 @@ void CreateMainMenu() {
 
 	EnableMenuItem(gApp.hMenu,ID_FILE_STOP_MOVIE,MF_GRAYED);
 	EnableMenuItem(gApp.hMenu,ID_LUA_CLOSE_ALL,MF_GRAYED);
-//	CheckMenuItem(gApp.hMenu,ID_SKIP_GPU,Config.LoadSkips&1?MF_CHECKED:MF_UNCHECKED);
-	CheckMenuItem(gApp.hMenu,ID_SKIP_SPU,Config.LoadSkips&2?MF_CHECKED:MF_UNCHECKED);
+	CheckMenuItem(gApp.hMenu,ID_SKIP_SPU,Config.LoadSkips?MF_CHECKED:MF_UNCHECKED);
 }
 
 void CreateMainWindow(int nCmdShow) {
@@ -1718,6 +1712,7 @@ void CreateMainWindow(int nCmdShow) {
 		"PCSX Main", PCSXRR_NAME_AND_VERSION, WS_CAPTION | WS_POPUPWINDOW | WS_MINIMIZEBOX,
 		Config.ClientX, Config.ClientY, 320, 240, NULL, NULL, gApp.hInstance, NULL);
 	gApp.hWnd = hWnd;
+	StoreWindowPos();
 	ResetMenuSlots();
 	CreateMainMenu();
 	SetMenu(gApp.hWnd, gApp.hMenu);
@@ -1731,6 +1726,7 @@ void CreateMainWindow(int nCmdShow) {
 //		EnableMenuItem(gApp.hMenu,ID_START_CAPTURE,MF_GRAYED);
 //	}
 	ShowWindow(hWnd, nCmdShow);
+	RestoreWindowPos();
 }
 
 WIN32_FIND_DATA lFindData;

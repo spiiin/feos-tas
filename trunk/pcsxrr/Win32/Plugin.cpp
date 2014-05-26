@@ -44,11 +44,20 @@ int ShowPic=0;
 char Text[255];
 int ret;
 
-void SaveWindowPos() {
-	RECT r;
+void StoreWindowPos() {
+	RECT r, rs;
 	GetWindowRect(gApp.hWnd, &r);
-	Config.ClientX = r.left;
-	Config.ClientY = r.top;
+	SystemParametersInfo(SPI_GETWORKAREA, 0, (PVOID)&rs, 0);
+	int ClientX = r.right   - r.left;
+	int ClientY = r.bottom  - r.top;
+	int ScreenX = rs.right  - ClientX;
+	int ScreenY = rs.bottom - ClientY;
+	Config.ClientX = (r.left < 0) ? 0 : (r.left > ScreenX) ? ScreenX : r.left;
+	Config.ClientY = (r.top  < 0) ? 0 : (r.top  > ScreenY) ? ScreenY : r.top;
+}
+
+void RestoreWindowPos() {
+	SetWindowPos(gApp.hWnd, NULL, Config.ClientX, Config.ClientY, NULL, NULL, SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
 }
 
 void gpuShowPic() {
@@ -696,7 +705,7 @@ int NetOpened = 0;
 
 bool OpenPlugins(HWND hWnd) {
 	int ret;
-	SaveWindowPos();
+	StoreWindowPos();
 	GPU_clearDynarec(clearDynarec);
 
 	ret = CDR_open();
@@ -759,14 +768,14 @@ bool OpenPlugins(HWND hWnd) {
 	SetCurrentDirectory(PcsxDir);
 //	ShowCursor(FALSE);
 	GPU_sendFpLuaGui(PCSX_LuaGui);
-	SetWindowPos(gApp.hWnd, NULL, Config.ClientX, Config.ClientY, NULL, NULL, SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+	RestoreWindowPos();
 	
 	return true;
 }
 
 void ClosePlugins() {
 	int ret;
-	SaveWindowPos();
+	StoreWindowPos();
 	UpdateMenuSlots();
 	ret = CDR_close();
 	if (ret < 0) { SysMessage (_("Error Closing CDR Plugin")); return; }
@@ -782,12 +791,12 @@ void ClosePlugins() {
 	if (Config.UseNet) {
 		NET_pause();
 	}
-	SetWindowPos(gApp.hWnd, NULL, Config.ClientX, Config.ClientY, NULL, NULL, SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+	RestoreWindowPos();
 }
 
 void ResetPlugins() {
 	int ret;
-	SaveWindowPos();
+	StoreWindowPos();
 	CDR_shutdown();
 	GPU_shutdown();
 	SPU_shutdown();
@@ -811,7 +820,7 @@ void ResetPlugins() {
 	}
 
 	NetOpened = 0;
-	SetWindowPos(gApp.hWnd, NULL, Config.ClientX, Config.ClientY, NULL, NULL, SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+	RestoreWindowPos();
 }
 
 void SetEmulationSpeed(int cmd) {

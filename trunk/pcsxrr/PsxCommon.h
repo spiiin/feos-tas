@@ -131,8 +131,8 @@ typedef struct {
 	long RCntFix;
 	long UseNet;
 	long VSyncWA;
-	bool Pause;
-	char LoadSkips;
+	long Pause;
+	long LoadSkips;
 	char RecentScripts[MAX_RECENT_SCRIPTS][260];
 	int ClientX;
 	int ClientY;
