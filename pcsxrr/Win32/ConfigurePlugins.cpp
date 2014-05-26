@@ -111,7 +111,7 @@ void SaveConfig() {
 	int i;
 	char HotkeysKeys[EMUCMDMAX+1];
 	char HotkeysKeymods[EMUCMDMAX+1];
-	SaveWindowPos();
+	StoreWindowPos();
 
 	RegCreateKeyEx(HKEY_CURRENT_USER, cfgfile, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &myKey, &myDisp);
 

@@ -91,6 +91,8 @@ void psxRcntInit() {
 	psxCounters[3].mode = 0x58; // The VSync counter mode
 	psxCounters[3].target = 1;
 	psxUpdateVSyncRate();
+	Movie.currentFrame = 0;
+	Movie.lagCounter = 0;
 
 	if (SPU_async != NULL) {
 		cnts = 5;
