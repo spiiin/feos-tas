@@ -74,6 +74,8 @@ typedef struct {
 	int Seeked;
 
 	char Unused[4083];
+
+	u32 LeftVol, RightVol;
 } cdrStruct;
 
 extern cdrStruct cdr;

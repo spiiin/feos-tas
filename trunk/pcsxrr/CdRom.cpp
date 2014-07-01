@@ -83,6 +83,8 @@ unsigned char Test23[] = { 0x43, 0x58, 0x44, 0x32, 0x39 ,0x34, 0x30, 0x51 };
 // PSXCLK = 1 sec in the ps
 // so (PSXCLK / 75) / BIAS = cdr read time (linuzappz)
 #define cdReadTime ((PSXCLK / 75) / BIAS)
+#define H_CDLeft	0x1f801db0
+#define H_CDRight	0x1f801db2
 
 #define btoi(b)		((b)/16*10 + (b)%16)		/* BCD to u_char */
 #define itob(i)		((i)/10*16 + (i)%10)		/* u_char to BCD */
@@ -602,7 +604,7 @@ void cdrReadInterrupt() {
 	fprintf(emuLog, " %x:%x:%x\n", cdr.Transfer[0], cdr.Transfer[1], cdr.Transfer[2]);
 #endif
 
-	if ((cdr.Muted == 1) && (cdr.Mode & 0x40) && (!Config.Xa) && (cdr.FirstSector != -1)) { // CD-XA
+	if ((!cdr.Muted) && (cdr.Mode & 0x40) && (!Config.Xa) && (cdr.FirstSector != -1)) { // CD-XA
 		if ((cdr.Transfer[4+2] & 0x4) &&
 			((cdr.Mode&0x8) ? (cdr.Transfer[4+1] == cdr.Channel) : 1) &&
 			(cdr.Transfer[4+0] == cdr.File)) {
@@ -686,6 +688,14 @@ void cdrWrite0(unsigned char rt) {
 		cdr.ParamC = 0;
 		cdr.ResultReady = 0;
 	}
+	
+	// Tekken: CDXA fade-out
+	else if( rt == 2 ) {
+		cdr.LeftVol = 0;
+	}
+	else if( rt == 3 ) {
+		cdr.RightVol = 0;
+	}
 }
 
 unsigned char cdrRead1(void) {
@@ -705,6 +715,12 @@ void cdrWrite1(unsigned char rt) {
 #ifdef CDR_LOG
 	CDR_LOG("CD1 write: %x (%s)\n", rt, CmdName[rt]);
 #endif
+	
+	// Tekken: CDXA fade-out
+	if( (cdr.Ctrl & 3) == 3 ) {
+		cdr.RightVol |= (rt << 8);
+	}
+
 //	psxHu8(0x1801) = rt;
     cdr.Cmd = rt;
 	cdr.OCUP = 0;
@@ -821,14 +837,14 @@ void cdrWrite1(unsigned char rt) {
         	break;
 
     	case CdlMute:
-        	cdr.Muted = 0;
+        	cdr.Muted = 1;
 			cdr.Ctrl|= 0x80;
     		cdr.Stat = NoIntr; 
     		AddIrqQueue(cdr.Cmd, 0x800);
         	break;
 
     	case CdlDemute:
-        	cdr.Muted = 1;
+        	cdr.Muted = 0;
 			cdr.Ctrl|= 0x80;
     		cdr.Stat = NoIntr; 
     		AddIrqQueue(cdr.Cmd, 0x800);
@@ -950,6 +966,15 @@ void cdrWrite2(unsigned char rt) {
 #ifdef CDR_LOG
 	CDR_LOG("CD2 write: %x\n", rt);
 #endif
+
+	// Tekken: CDXA fade-out
+	if( (cdr.Ctrl & 3) == 2 ) {
+		cdr.LeftVol |= (rt << 8);
+	}
+	else if( (cdr.Ctrl & 3) == 3 ) {
+		cdr.RightVol |= (rt << 0);
+	}
+
     if (cdr.Ctrl & 0x1) {
 		switch (rt) {
 			case 0x07:
@@ -984,6 +1009,27 @@ void cdrWrite3(unsigned char rt) {
 #ifdef CDR_LOG
 	CDR_LOG("CD3 write: %x\n", rt);
 #endif
+
+	// Tekken: CDXA fade-out
+	if( (cdr.Ctrl & 3) == 2 ) {
+		cdr.LeftVol |= (rt << 0);
+	}
+	else if( (cdr.Ctrl & 3) == 3 && rt == 0x20 ) {
+#ifdef CDR_LOG
+		CDR_LOG( "CD-XA Volume: %X %X\n", cdr.LeftVol, cdr.RightVol );
+#endif
+		if( !cdr.Muted ) {
+			/*
+			Eternal SPU: scale volume from [0-ffff] -> [0,8000]
+			- Destruction Derby Raw movies (ff00)
+			*/
+
+			// write CD-XA volumes
+			SPU_writeRegister( H_CDLeft, cdr.LeftVol / 2 );
+			SPU_writeRegister( H_CDRight, cdr.RightVol / 2 );
+		}
+	}
+
     if (rt == 0x07 && cdr.Ctrl & 0x1) {
 		cdr.Stat = 0;
 
