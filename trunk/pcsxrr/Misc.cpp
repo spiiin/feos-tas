@@ -521,8 +521,7 @@ namespace
       memset(&spufP, 0, sizeof(spufP));
       gzread(f, &Size, 4);
       gzread(f, &spufP, Size);
-	  if (!Config.LoadSkips)
-	      SPU_freeze(0, &spufP);
+      SPU_freeze(0, &spufP);
 
       sioFreeze(f, 0);
       cdrFreeze(f, 0);
