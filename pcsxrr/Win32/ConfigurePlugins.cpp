@@ -70,7 +70,6 @@ int LoadConfig() {
 	QueryKeyV(sizeof(Conf->SpuIrq),    "SpuIrq",    &Conf->SpuIrq);
 	QueryKeyV(sizeof(Conf->RCntFix),   "RCntFix",   &Conf->RCntFix);
 	QueryKeyV(sizeof(Conf->VSyncWA),   "VSyncWA",   &Conf->VSyncWA);
-	QueryKeyV(sizeof(Conf->LoadSkips), "LoadSkips", &Conf->LoadSkips);
 	QueryKeyV(sizeof(Conf->ClientX),   "ClientX",   &Conf->ClientX);
 	QueryKeyV(sizeof(Conf->ClientY),   "ClientY",   &Conf->ClientY);
 
@@ -139,7 +138,6 @@ void SaveConfig() {
 	SetKeyV("SpuIrq",    &Conf->SpuIrq,    sizeof(Conf->SpuIrq),    REG_DWORD);
 	SetKeyV("RCntFix",   &Conf->RCntFix,   sizeof(Conf->RCntFix),   REG_DWORD);
 	SetKeyV("VSyncWA",   &Conf->VSyncWA,   sizeof(Conf->VSyncWA),   REG_DWORD);
-	SetKeyV("LoadSkips", &Conf->LoadSkips, sizeof(Conf->LoadSkips), REG_DWORD);
 	SetKeyV("ClientX",   &Conf->ClientX,   sizeof(Conf->ClientX),   REG_DWORD);
 	SetKeyV("ClientY",   &Conf->ClientY,   sizeof(Conf->ClientY),   REG_DWORD);
 
