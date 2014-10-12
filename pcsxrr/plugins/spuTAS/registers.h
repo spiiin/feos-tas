@@ -151,3 +151,7 @@
 #define H_SPU_ADSRLevel22  0x0d68
 #define H_SPU_ADSRLevel23  0x0d78
 
+#define CTRL_CD_PLAY       0x01
+#define CTRL_CD_REVERB     0x02
+#define STAT_CD_PLAY       0x01
+#define STAT_CD_REVERB     0x02

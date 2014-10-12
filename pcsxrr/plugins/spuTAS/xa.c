@@ -47,6 +47,11 @@ unsigned long * XAEnd   = NULL;
 unsigned long   XARepeat  = 0;
 unsigned long   XALastVal = 0;
 
+unsigned long * CDDAFeed  = NULL;
+unsigned long * CDDAPlay  = NULL;
+unsigned long * CDDAStart = NULL;
+unsigned long * CDDAEnd   = NULL;
+
 int             iLeftXAVol  = 32767;
 int             iRightXAVol = 32767;
 
@@ -59,12 +64,18 @@ static int gauss_window[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 #define gvalr(x) gauss_window[4+((gauss_ptr+x)&3)]
 
 ////////////////////////////////////////////////////////////////////////
-// MIX XA
+// MIX XA & CDDA
 ////////////////////////////////////////////////////////////////////////
+
+static int lastxa_lc, lastxa_rc;
+static int lastcd_lc, lastcd_rc;
 
 INLINE void MixXA(void)
 {
 	int ns;
+	int lc,rc;
+	int decoded_cdda;
+	unsigned long cdda_l;
 
 	for (ns=0;ns<NSSIZE && XAPlay!=XAFeed;ns++)
 	{
@@ -81,6 +92,80 @@ INLINE void MixXA(void)
 		{
 			SSumL[ns]+=(((short)(XALastVal&0xffff))       * iLeftXAVol)/32767;
 			SSumR[ns]+=(((short)((XALastVal>>16)&0xffff)) * iRightXAVol)/32767;
+		}
+	}
+
+	decoded_cdda = decoded_ptr;
+	
+	for(ns=0;ns<NSSIZE && CDDAPlay!=CDDAFeed && (CDDAPlay!=CDDAEnd-1||CDDAFeed!=CDDAStart);ns++)
+	{
+		cdda_l=*CDDAPlay++;
+		if(CDDAPlay==CDDAEnd) CDDAPlay=CDDAStart;
+		
+		lc = (short)(cdda_l&0xffff);
+		rc = (short)((cdda_l>>16) & 0xffff);	
+		
+		// improve crackle - buffer under
+		// - not update fast enough
+		lastcd_lc = lc;
+		lastcd_rc = rc;	
+		
+		// Vib Ribbon - playback
+		spuMem[ (decoded_cdda + 0x000)/2 ] = (short) lc;
+		spuMem[ (decoded_cdda + 0x400)/2 ] = (short) rc;
+		
+		decoded_cdda += 2;
+		if( decoded_cdda >= 0x400 )
+			decoded_cdda = 0;	
+		
+		// Rayman - stage end fadeout
+		lc = CLAMP16( (lc * iLeftXAVol) / 0x8000 );
+		rc = CLAMP16( (rc * iRightXAVol) / 0x8000 );	
+		
+		// reverb write flag
+		if( spuCtrl & CTRL_CD_REVERB ) {
+			StoreREVERB_CD( lc, rc, ns );
+		}	
+		
+		// play flag
+		if( spuCtrl & CTRL_CD_PLAY ) {
+			SSumL[ns]+=lc;
+			SSumR[ns]+=rc;
+		}
+	}	
+	
+	if(CDDAPlay==CDDAFeed && XARepeat)
+	{
+		//XARepeat--;
+		for(;ns<NSSIZE;ns++)
+		{
+			// improve crackle - buffer under
+			// - not update fast enough
+			lc = lastcd_lc;
+			rc = lastcd_rc;	
+		
+			// Vib Ribbon - playback
+			spuMem[ (decoded_cdda + 0x000)/2 ] = (short) lc;
+			spuMem[ (decoded_cdda + 0x400)/2 ] = (short) rc;
+		
+			decoded_cdda += 2;
+			if( decoded_cdda >= 0x400 )
+				 decoded_cdda = 0;	
+		
+			// Rayman - stage end fadeout
+			lc = CLAMP16( (lc * iLeftXAVol) / 0x8000 );
+			rc = CLAMP16( (rc * iRightXAVol) / 0x8000 );	
+		
+			// reverb write flag
+			if( spuCtrl & CTRL_CD_REVERB ) {
+				StoreREVERB_CD( lc, rc, ns );
+			}
+		
+			// play flag
+			if( spuCtrl & CTRL_CD_PLAY ) {
+				 SSumL[ns]+=lc;
+				 SSumR[ns]+=rc;
+			}
 		}
 	}
 }
@@ -360,6 +445,35 @@ INLINE void FeedXA(xa_decode_t *xap)
 			}
 		}
 	}
+}
+
+
+////////////////////////////////////////////////////////////////////////
+// FEED CDDA
+////////////////////////////////////////////////////////////////////////
+
+unsigned int cdda_ptr;
+
+static INLINE void FeedCDDA(unsigned char *pcm, int nBytes)
+{
+ while(nBytes>0)
+  {
+   if(CDDAFeed==CDDAEnd) CDDAFeed=CDDAStart;
+   while(CDDAFeed==CDDAPlay-1||
+         (CDDAFeed==CDDAEnd-1&&CDDAPlay==CDDAStart))
+   {
+#ifdef _WINDOWS
+    if (!iUseTimer) Sleep(1);
+    else return;
+#else
+    if (!iUseTimer) usleep(1000);
+    else return;
+#endif
+   }
+   *CDDAFeed++=(*pcm | (*(pcm+1)<<8) | (*(pcm+2)<<16) | (*(pcm+3)<<24));
+   nBytes-=4;
+   pcm+=4;
+ }
 }
 
 #endif
