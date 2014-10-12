@@ -34,6 +34,7 @@
 //*************************************************************************//
 
 #include "stdafx.h"
+#include "registers.h"
 
 #define _IN_REVERB
 
@@ -150,6 +151,23 @@ INLINE void InitREVERB(void)
 ////////////////////////////////////////////////////////////////////////
 // STORE REVERB
 ////////////////////////////////////////////////////////////////////////
+
+static INLINE void StoreREVERB_CD(int left, int right,int ns)
+{
+	 if(iUseReverb==0) return;
+	 else
+	 if(iUseReverb==2) // -------------------------------- // Neil's reverb
+	 {
+		 const int iRxl=left;
+		 const int iRxr=right;
+	
+		 ns<<=1;
+	
+		 // -> we mix all active reverb channels into an extra buffer
+		 *(sRVBStart+ns)   += CLAMP16( *(sRVBStart+ns+0) + ( iRxl ) );
+		 *(sRVBStart+ns+1) += CLAMP16( *(sRVBStart+ns+1) + ( iRxr ) );
+	 }
+}
 
 INLINE void StoreREVERB(SPUCHAN * pChannel,int ns)
 {

@@ -164,6 +164,7 @@ int             bEndThread=0;                          // thread handlers
 int             bThreadEnded=0;
 int             bSpuInit=0;
 int             bSPUIsOpen=0;
+unsigned int    decoded_ptr = 0;
 
 #ifdef _WINDOWS
 HWND    hWMain=0;                                      // window handle
@@ -1018,6 +1019,15 @@ void CALLBACK SPUplayADPCMchannel(xa_decode_t *xap)
 	FeedXA(xap);                                          // call main XA feeder
 }
 
+// CDDA AUDIO
+void CALLBACK SPUplayCDDAchannel(short *pcm, int nbytes)
+{
+ if (!pcm)      return;
+ if (nbytes<=0) return;
+
+ FeedCDDA((unsigned char *)pcm, nbytes);
+}
+
 ////////////////////////////////////////////////////////////////////////
 // INIT/EXIT STUFF
 ////////////////////////////////////////////////////////////////////////
@@ -1128,6 +1138,12 @@ void SetupStreams(void)
 	XAPlay  = XAStart;
 	XAFeed  = XAStart;
 	XAEnd   = XAStart + 44100;
+
+	CDDAStart =                                           // alloc cdda buffer
+	  (unsigned long *)malloc(44100*4);
+	CDDAEnd   = CDDAStart + 44100;
+	CDDAPlay  = CDDAStart;
+	CDDAFeed  = CDDAStart;
 
 	for (i=0;i<MAXCHAN;i++)                               // loop sound channels
 	{

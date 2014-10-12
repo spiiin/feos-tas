@@ -149,6 +149,18 @@ void CALLBACK SPUwriteRegister(unsigned long reg, unsigned short val)
 		//-------------------------------------------------//
 	case H_SPUctrl:
 		spuCtrl=val;
+
+		// flags
+		if( spuCtrl & CTRL_CD_PLAY )
+			spuStat |= CTRL_CD_PLAY;
+		else
+			spuStat &= ~CTRL_CD_PLAY;
+		
+		if( spuCtrl & CTRL_CD_REVERB )
+			spuStat |= STAT_CD_REVERB;
+		else
+			spuStat &= ~STAT_CD_REVERB;
+
 		break;
 		//-------------------------------------------------//
 	case H_SPUstat:

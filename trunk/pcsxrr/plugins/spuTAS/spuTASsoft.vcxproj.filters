@@ -64,6 +64,9 @@
     <ClCompile Include="xa.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="externals.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="spuPeopsSound.def">

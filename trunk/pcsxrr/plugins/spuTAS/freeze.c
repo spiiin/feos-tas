@@ -176,6 +176,15 @@ long CALLBACK SPUfreeze(unsigned long ulFreezeMode,SPUFreeze_t * pF)
 
 	SetupTimer();                                         // start sound processing again
 
+	// fix movie lag
+	CDDAEnd   = CDDAStart + 44100;
+	CDDAPlay  = CDDAStart;
+	CDDAFeed  = CDDAStart;
+
+	XAPlay  = XAStart;
+	XAFeed  = XAStart;
+	XAEnd   = XAStart + 44100;
+
 	return 1;
 }
 

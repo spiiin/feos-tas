@@ -42,6 +42,9 @@
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
+// 15-bit value + 1-sign
+extern int CLAMP16(int x);
+
 ////////////////////////////////////////////////////////////////////////
 // spu defines
 ////////////////////////////////////////////////////////////////////////
@@ -318,6 +321,11 @@ extern unsigned long * XAEnd;
 
 extern unsigned long   XARepeat;
 extern unsigned long   XALastVal;
+
+extern unsigned long * CDDAFeed;
+extern unsigned long * CDDAPlay;
+extern unsigned long * CDDAStart;
+extern unsigned long * CDDAEnd;
 
 extern int           iLeftXAVol;
 extern int           iRightXAVol;
