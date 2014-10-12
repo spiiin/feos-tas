@@ -218,7 +218,6 @@ typedef long (CALLBACK* SPUfreeze)(unsigned long, SPUFreeze_t *);
 typedef void (CALLBACK* SPUasync)(unsigned long);
 typedef long (CALLBACK* SPUstartWav)(char*);
 typedef long (CALLBACK* SPUstopWav)(void);
-typedef void (CALLBACK* SPUplayCDDAchannel)(short *, int);
 
 //SPU POINTERS
 extern SPUconfigure        SPU_configure;
@@ -251,9 +250,8 @@ extern SPUregisterCallback SPU_registerCallback;
 extern SPUasync            SPU_async;
 extern SPUstartWav         SPU_startWav;
 extern SPUstopWav          SPU_stopWav;
-extern SPUplayCDDAchannel  SPU_playCDDAchannel;
-
 // PAD Functions
+
 typedef long (CALLBACK* PADconfigure)(void);
 typedef void (CALLBACK* PADabout)(void);
 typedef long (CALLBACK* PADinit)(long);
