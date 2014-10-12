@@ -261,6 +261,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\CdrIso.cpp" />
     <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="luaconsole.cpp" />
     <ClCompile Include="maphkeys.cpp" />
@@ -297,6 +298,7 @@
     <ClCompile Include="..\PsxHLE.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\CdrIso.h" />
     <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="maphkeys.h" />
     <ClInclude Include="moviewin.h" />

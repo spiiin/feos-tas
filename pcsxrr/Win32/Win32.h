@@ -64,6 +64,7 @@ BOOL CALLBACK ConfigureNetPlayDlgProc(HWND hW, UINT uMsg, WPARAM wParam, LPARAM 
 void ConfigurePlugins(HWND hWnd);
 
 int  Open_File_Proc(char *file);
+int  Open_Iso_Proc(char *file);
 void Open_Mcd_Proc(HWND hW, int MCDID);
 void CreateMainWindow(int nCmdShow);
 void RunGui();

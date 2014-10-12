@@ -50,6 +50,7 @@
 	if (HW_DMA_ICR & (1 << (16 + n))) { \
 		HW_DMA_ICR|= (1 << (24 + n)); \
 		psxHu32(0x1070) |= 8; \
+		psxRegs.interrupt|= 0x80000000; \
 	}
 
 

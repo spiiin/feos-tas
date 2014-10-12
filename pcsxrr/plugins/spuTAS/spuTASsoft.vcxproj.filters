@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{431ecf7e-7e76-4462-8b80-a60b1d91781d}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{b5ec23b0-6536-4085-b204-9269cb0e5f89}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{462ee1f6-475f-49e7-ba7b-18b64f7634d5}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="Documentation Files">
+      <UniqueIdentifier>{fb87094a-d252-4750-8793-be0dc6684968}</UniqueIdentifier>
+      <Extensions>txt</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="adsr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="alsa.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cfg.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dma.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dsound.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="freeze.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="oss.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="psemu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="record.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="registers.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="reverb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="spu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="spuPeopsSound.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xa.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="spuPeopsSound.def">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="bitmap1.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="bitmap2.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="bitmap3.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="bitmap4.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="bitmap5.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="changelog.txt">
+      <Filter>Documentation Files</Filter>
+    </None>
+    <None Include="Filemap.txt">
+      <Filter>Documentation Files</Filter>
+    </None>
+    <None Include="License.txt">
+      <Filter>Documentation Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="spuPeopsSound.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="adsr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="alsa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cfg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dma.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dsoundoss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="externals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gauss_i.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="psemuxa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="record.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="registers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="regs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="reverb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="spu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

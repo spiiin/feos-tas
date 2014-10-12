@@ -21,6 +21,9 @@
 #include <string.h>
 
 #include "PsxCommon.h"
+#include "CdrIso.h"
+
+char cdrfilename[MAXPATHLEN] = "";
 
 #ifdef _MSC_VER_
 #pragma warning(disable:4244)
@@ -96,6 +99,7 @@ CDRgetDriveLetter     CDR_getDriveLetter;
 CDRgetBufferSub       CDR_getBufferSub;
 CDRconfigure          CDR_configure;
 CDRabout              CDR_about;
+CDRsetfilename        CDR_setfilename;
 
 //SPU POINTERS
 SPUconfigure        SPU_configure;
@@ -128,6 +132,7 @@ SPUregisterCallback SPU_registerCallback;
 SPUasync            SPU_async;
 SPUstartWav         SPU_startWav;
 SPUstopWav          SPU_stopWav;
+SPUplayCDDAchannel  SPU_playCDDAchannel;
 
 //PAD POINTERS
 PADconfigure        PAD1_configure;
@@ -345,7 +350,7 @@ int LoadGPUplugin(char *GPUdll) {
 	return 0;
 }
 
-void *hCDRDriver;
+void *hCDRDriver = NULL;
 
 long CALLBACK CDR__play(unsigned char *sector) { return 0; }
 long CALLBACK CDR__stop(void) { return 0; }
@@ -371,6 +376,7 @@ unsigned char* CALLBACK CDR__getBufferSub(void) { return NULL; }
 long CALLBACK CDR__configure(void) { return 0; }
 long CALLBACK CDR__test(void) { return 0; }
 void CALLBACK CDR__about(void) {}
+long CALLBACK CDR__setfilename(char*filename) { return 0; }
 
 #define LoadCdrSym1(dest, name) \
 	LoadSym(CDR_##dest, CDR##dest, name, 1);
@@ -407,6 +413,7 @@ int LoadCDRplugin(char *CDRdll) {
 	LoadCdrSym0(configure, "CDRconfigure");
 	LoadCdrSym0(test, "CDRtest");
 	LoadCdrSym0(about, "CDRabout");
+	LoadCdrSym0(setfilename, "CDRsetfilename");
 
 	return 0;
 }
@@ -661,6 +668,7 @@ int LoadSPUplugin(char *SPUdll) {
 	LoadSpuSymN(async, "SPUasync");
 	LoadSpuSymN(startWav, "SPUstartWav");
 	LoadSpuSymN(stopWav, "SPUstopWav");
+	LoadSpuSymN(playCDDAchannel, "SPUplayCDDAchannel");
 
 	return 0;
 }
@@ -958,8 +966,15 @@ int LoadPlugins() {
 	int ret;
 	char Plugin[256];
 
-	sprintf(Plugin, "%s%s", Config.PluginsDir, Config.Cdr);
-	if (LoadCDRplugin(Plugin) == -1) return -1;
+	ReleasePlugins();
+
+	if (cdrfilename[0] != '\0') {
+		imageReaderInit();
+	} else {
+		sprintf(Plugin, "%s/%s", Config.PluginsDir, Config.Cdr);
+		if (LoadCDRplugin(Plugin) == -1) return -1;
+	}
+
 	sprintf(Plugin, "%s%s", Config.PluginsDir, Config.Gpu);
 	if (LoadGPUplugin(Plugin) == -1) return -1;
 	sprintf(Plugin, "%s%s", Config.PluginsDir, Config.Spu);
@@ -995,8 +1010,7 @@ int LoadPlugins() {
 }
 
 void ReleasePlugins() {
-	if (hCDRDriver  == NULL || hGPUDriver  == NULL || hSPUDriver == NULL ||
-		hPAD1Driver == NULL || hPAD2Driver == NULL) return;
+	extern FILE *cdHandle;
 
 	if (Config.UseNet) {
 		int ret = NET_close();
@@ -1004,18 +1018,20 @@ void ReleasePlugins() {
 		NetOpened = 0;
 	}
 
-	CDR_shutdown();
-	GPU_shutdown();
-	SPU_shutdown();
-	PAD1_shutdown();
-	PAD2_shutdown();
+	if (hCDRDriver != NULL || cdHandle != NULL) CDR_shutdown();
+	if (hGPUDriver != NULL) GPU_shutdown();
+	if (hSPUDriver != NULL) SPU_shutdown();
+	if (hPAD1Driver != NULL) PAD1_shutdown();
+	if (hPAD2Driver != NULL) PAD2_shutdown();
+
 	if (Config.UseNet && hNETDriver != NULL) NET_shutdown(); 
 
-	SysCloseLibrary(hCDRDriver); hCDRDriver = NULL;
-	SysCloseLibrary(hGPUDriver); hGPUDriver = NULL;
-	SysCloseLibrary(hSPUDriver); hSPUDriver = NULL;
-	SysCloseLibrary(hPAD1Driver); hPAD1Driver = NULL;
-	SysCloseLibrary(hPAD2Driver); hPAD2Driver = NULL;
+	if (hCDRDriver != NULL) SysCloseLibrary(hCDRDriver); hCDRDriver = NULL;
+	if (hGPUDriver != NULL) SysCloseLibrary(hGPUDriver); hGPUDriver = NULL;
+	if (hSPUDriver != NULL) SysCloseLibrary(hSPUDriver); hSPUDriver = NULL;
+	if (hPAD1Driver != NULL) SysCloseLibrary(hPAD1Driver); hPAD1Driver = NULL;
+	if (hPAD2Driver != NULL) SysCloseLibrary(hPAD2Driver); hPAD2Driver = NULL;
+
 	if (Config.UseNet && hNETDriver != NULL) {
 		SysCloseLibrary(hNETDriver); hNETDriver = NULL;
 	}

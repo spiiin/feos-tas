@@ -635,9 +635,10 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 				case ID_FILE_RUN_CD:
 					LoadCdBios = 0;
-
-					if(!OpenPlugins(hWnd)) return FALSE;
-					
+					if (!Open_Iso_Proc(File)) return TRUE;
+					strcpy(cdrfilename, File);
+					LoadPlugins();
+					if(!OpenPlugins(hWnd)) return FALSE;					
 					SetMenu(hWnd, NULL);
 					SysReset();
 					NeedReset = 0;
@@ -664,6 +665,7 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					return TRUE;
 
 				case ID_FILE_RUN_EXE:
+					cdrfilename[0] = '\0';
 					if (!Open_File_Proc(File)) return TRUE;
 					SetMenu(hWnd, NULL);
 					OpenPlugins(hWnd);
@@ -1552,6 +1554,49 @@ int Open_File_Proc(char *file) {
     ofn.nMaxFileTitle		= MAXFILENAME;
     ofn.lpstrTitle			= NULL;
     ofn.lpstrDefExt			= "EXE";
+    ofn.Flags				= OFN_HIDEREADONLY | OFN_NOCHANGEDIR;
+
+	if (GetOpenFileName ((LPOPENFILENAME)&ofn)) {
+		strcpy(file, szFileName);
+		return 1;
+	} else
+		return 0;
+}
+
+int Open_Iso_Proc(char *file) {
+	OPENFILENAME ofn;
+	char szFileName[MAXPATHLEN];
+	char szFileTitle[MAXPATHLEN];
+	char szFilter[256];
+	char *str;
+
+	memset(&szFileName,  0, sizeof(szFileName));
+	memset(&szFileTitle, 0, sizeof(szFileTitle));
+	memset(&szFilter,    0, sizeof(szFilter));
+
+    ofn.lStructSize			= sizeof(OPENFILENAME);
+    ofn.hwndOwner			= gApp.hWnd;
+
+	strcpy(szFilter, _("Psx Isos (*.iso;*.mdf;*.img;*.bin)"));
+	str = szFilter + strlen(szFilter) + 1; 
+	strcpy(str, "*.iso;*.mdf;*.img;*.bin");
+
+	str += strlen(str) + 1;
+	strcpy(str, _("All Files"));
+	str += strlen(str) + 1;
+	strcpy(str, "*.*");
+
+    ofn.lpstrFilter			= szFilter;
+	ofn.lpstrCustomFilter	= NULL;
+    ofn.nMaxCustFilter		= 0;
+    ofn.nFilterIndex		= 1;
+    ofn.lpstrFile			= szFileName;
+    ofn.nMaxFile			= MAXPATHLEN;
+    ofn.lpstrInitialDir		= NULL;
+    ofn.lpstrFileTitle		= szFileTitle;
+    ofn.nMaxFileTitle		= MAXPATHLEN;
+    ofn.lpstrTitle			= NULL;
+    ofn.lpstrDefExt			= "ISO";
     ofn.Flags				= OFN_HIDEREADONLY | OFN_NOCHANGEDIR;
 
 	if (GetOpenFileName ((LPOPENFILENAME)&ofn)) {

@@ -198,5 +198,6 @@ void psxBranchTest();
 void psxExecuteBios();
 void psxDelayTest(int reg, u32 bpc);
 void psxTestSWInts();
+void psxTestHWInts();
 
 #endif /* __R3000A_H__ */

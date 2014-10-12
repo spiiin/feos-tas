@@ -555,7 +555,10 @@ void cdrInterrupt() {
 			break;
 	}
 
-	if (cdr.Stat != NoIntr && cdr.Reg2 != 0x18) psxHu32(0x1070)|= SWAP32((u32)0x4);
+	if (cdr.Stat != NoIntr && cdr.Reg2 != 0x18) {
+		psxHu32ref(0x1070) |= SWAP32((u32)0x4);
+		psxRegs.interrupt |= 0x80000000;
+	}
 
 #ifdef CDR_LOG
 	CDR_LOG("Cdr Interrupt %x\n", Irq);
@@ -642,6 +645,7 @@ void cdrReadInterrupt() {
 		CDREAD_INT((cdr.Mode & 0x80) ? (cdReadTime / 2) : cdReadTime);
 	}
 	psxHu32ref(0x1070)|= SWAP32((u32)0x4);
+	psxRegs.interrupt |= 0x80000000;
 }
 
 /*
@@ -774,7 +778,8 @@ void cdrWrite1(unsigned char rt) {
 					}
                 }
 			}
-    		else if (!Config.Cdda) CDR_play(cdr.SetSector);
+    		else if (!Config.Cdda)
+				CDR_play(cdr.SetSector);
     		cdr.Play = 1;
 			cdr.Ctrl|= 0x80;
     		cdr.Stat = NoIntr; 
@@ -944,7 +949,10 @@ void cdrWrite1(unsigned char rt) {
 #endif
 			return;
     }
-	if (cdr.Stat != NoIntr) psxHu32ref(0x1070)|= SWAP32((u32)0x4);
+	if (cdr.Stat != NoIntr) {
+		psxHu32ref(0x1070) |= SWAP32((u32)0x4);
+		psxRegs.interrupt |= 0x80000000;
+	}
 }
 
 unsigned char cdrRead2(void) {

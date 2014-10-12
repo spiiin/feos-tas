@@ -403,11 +403,14 @@ void psxHwWrite16(u32 add, u16 value) {
 			if (Config.SpuIrq) psxHu16(0x1070) |= SWAPu16(0x200);
 			psxHu16(0x1070) &= SWAPu16((psxHu16(0x1074) & value));
 			return;
+
+		case 0x1f801074:
 #ifdef PSXHW_LOG
-		case 0x1f801074: PSXHW_LOG("IMASK 16bit write %x\n", value);
-			psxHu16(0x1074) = value;
-			return;
+			PSXHW_LOG("IMASK 16bit write %x\n", value);
 #endif
+			psxHu16(0x1074) = value;
+			psxRegs.interrupt |= 0x80000000;
+			return;
 
 		case 0x1f801100:
 #ifdef PSXHW_LOG
@@ -511,12 +514,14 @@ void psxHwWrite32(u32 add, u32 value) {
 			if (Config.SpuIrq) psxHu32ref(0x1070) |= SWAPu32(0x200);
 			psxHu32ref(0x1070) &= SWAPu32((psxHu32(0x1074) & value));
 			return;
-#ifdef PSXHW_LOG
+
 		case 0x1f801074:
+#ifdef PSXHW_LOG
 			PSXHW_LOG("IMASK 32bit write %lx\n", value);
-			psxHu32ref(0x1074) = SWAPu32(value);
-			return;
 #endif
+			psxHu32ref(0x1074) = SWAPu32(value);
+			psxRegs.interrupt|= 0x80000000;
+			return;
 
 #ifdef PSXHW_LOG
 		case 0x1f801080:
