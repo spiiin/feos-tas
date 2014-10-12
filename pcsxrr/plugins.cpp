@@ -128,7 +128,6 @@ SPUregisterCallback SPU_registerCallback;
 SPUasync            SPU_async;
 SPUstartWav         SPU_startWav;
 SPUstopWav          SPU_stopWav;
-SPUplayCDDAchannel  SPU_playCDDAchannel;
 
 //PAD POINTERS
 PADconfigure        PAD1_configure;
@@ -662,7 +661,6 @@ int LoadSPUplugin(char *SPUdll) {
 	LoadSpuSymN(async, "SPUasync");
 	LoadSpuSymN(startWav, "SPUstartWav");
 	LoadSpuSymN(stopWav, "SPUstopWav");
-	LoadSpuSymN(playCDDAchannel, "SPUplayCDDAchannel");
 
 	return 0;
 }
