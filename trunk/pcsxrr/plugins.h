@@ -141,6 +141,7 @@ typedef long (CALLBACK* CDRtest)(void);
 typedef void (CALLBACK* CDRabout)(void);
 typedef long (CALLBACK* CDRplay)(unsigned char *);
 typedef long (CALLBACK* CDRstop)(void);
+typedef long (CALLBACK* CDRsetfilename)(char *);
 struct CdrStat {
 	unsigned long Type;
 	unsigned long Status;
@@ -177,6 +178,7 @@ extern CDRgetDriveLetter     CDR_getDriveLetter;
 extern CDRgetBufferSub       CDR_getBufferSub;
 extern CDRconfigure          CDR_configure;
 extern CDRabout              CDR_about;
+extern CDRsetfilename        CDR_setfilename;
 
 // spu plugin
 typedef long (CALLBACK* SPUinit)(void);				
@@ -218,6 +220,7 @@ typedef long (CALLBACK* SPUfreeze)(unsigned long, SPUFreeze_t *);
 typedef void (CALLBACK* SPUasync)(unsigned long);
 typedef long (CALLBACK* SPUstartWav)(char*);
 typedef long (CALLBACK* SPUstopWav)(void);
+typedef void (CALLBACK* SPUplayCDDAchannel)(short *, int);
 
 //SPU POINTERS
 extern SPUconfigure        SPU_configure;
@@ -250,6 +253,7 @@ extern SPUregisterCallback SPU_registerCallback;
 extern SPUasync            SPU_async;
 extern SPUstartWav         SPU_startWav;
 extern SPUstopWav          SPU_stopWav;
+extern SPUplayCDDAchannel  SPU_playCDDAchannel;
 // PAD Functions
 
 typedef long (CALLBACK* PADconfigure)(void);
@@ -361,5 +365,6 @@ int LoadPAD2plugin(char *PAD2dll);
 int LoadNETplugin(char *NETdll);
 
 void CALLBACK clearDynarec(void);
+extern char cdrfilename[MAXPATHLEN];
 
 #endif /* __PLUGINS_H__ */

@@ -268,14 +268,23 @@ static FileDesc FDesc[32];
 static __inline void softCall(u32 pc) {
 	pc0 = pc;
 	ra = 0x80001000;
+	// PCSX-Reloaded:
+	// Fixes crashing problems with at least Final Fantasy 7 and Xenogears.
+	// This should be considered a temporary fix; after all, we do not
+	// know how much space below sp is in use.  It may be worth considering
+	// creating a new stack for interrupt handlers.
+	sp -= 256;
 	while (pc0 != 0x80001000) psxCpu->ExecuteBlock();
+	sp += 256;
 }
 
 static __inline void softCall2(u32 pc) {
 	u32 sra = ra;
 	pc0 = pc;
 	ra = 0x80001000;
+	sp -= 128;
 	while (pc0 != 0x80001000) psxCpu->ExecuteBlock();
+	sp += 128;
 	ra = sra;
 }
 

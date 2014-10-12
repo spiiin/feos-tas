@@ -136,6 +136,10 @@ void psxBranchTest() {
 				mdec1Interrupt();
 			}
 		}
+		if (psxRegs.interrupt & 0x80000000) {
+			psxRegs.interrupt&=~0x80000000;
+			psxTestHWInts();
+		}
 	}
 
 	if (psxHu32(0x1070) & psxHu32(0x1074)) {
@@ -177,6 +181,18 @@ void psxBranchTest() {
 		}
 	}
 //	if (psxRegs.cycle > 0xd29c6500) Log=1;
+}
+
+void psxTestHWInts() {
+	if (psxHu32(0x1070) & psxHu32(0x1074)) {
+		if ((psxRegs.CP0.n.Status & 0x401) == 0x401) {
+#ifdef PSXCPU_LOG
+			PSXCPU_LOG("Interrupt: %x %x\n", psxHu32(0x1070), psxHu32(0x1074));
+#endif
+//			SysPrintf("Interrupt (%x): %x %x\n", psxRegs.cycle, psxHu32(0x1070), psxHu32(0x1074));
+			psxException(0x400, 0);
+		}
+	}
 }
 
 void psxExecuteBios() {

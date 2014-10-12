@@ -51,6 +51,7 @@ static void psxRcntReset(unsigned long index) {
 
 //	if (index == 2) SysPrintf("rcnt2 %x\n", psxCounters[index].mode);
 	psxHu32ref(0x1070)|= SWAPu32(psxCounters[index].interrupt);
+	psxRegs.interrupt|= 0x80000000;
 	if (!(psxCounters[index].mode & 0x40)) { // Only 1 interrupt
 		psxCounters[index].Cycle = 0xffffffff;
 	} // else Continuos interrupt mode
@@ -286,6 +287,7 @@ void psxRcntUpdate() {
 			psxUpdateVSyncRateEnd();
 			psxRcntUpd(3);
 			psxHu32ref(0x1070)|= SWAPu32(1);
+			psxRegs.interrupt|= 0x80000000;
 		}
 	}
 

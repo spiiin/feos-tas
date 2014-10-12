@@ -20,6 +20,7 @@
 #define __PSXCOMMON_H__
 
 #include <inttypes.h>
+#include <assert.h>
 typedef int8_t int8;
 typedef int16_t int16;
 typedef int32_t int32; 
@@ -98,6 +99,10 @@ typedef unsigned long long u64;
 #define _(msgid) msgid
 #define N_(msgid) msgid
 #define MAX_RECENT_SCRIPTS 15
+
+#ifndef MAXPATHLEN
+#define MAXPATHLEN 256
+#endif
 
 extern int Log;
 void __Log(char *fmt, ...);
