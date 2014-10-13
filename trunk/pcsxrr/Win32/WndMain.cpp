@@ -352,7 +352,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-  if (loadLua) { PCSX_LoadLuaCode(loadLua); loadLua = 0; }
+	if (loadLua) { PCSX_LoadLuaCode(loadLua); loadLua = 0; }
 
 	RunGui();
 
@@ -636,7 +636,8 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				case ID_FILE_RUN_CD:
 					LoadCdBios = 0;
 					if (!Open_Iso_Proc(File)) return TRUE;
-					strcpy(cdrfilename, File);
+					SetIsoFile(File);
+					//strcpy(cdrfilename, File);
 					LoadPlugins();
 					if(!OpenPlugins(hWnd)) return FALSE;					
 					SetMenu(hWnd, NULL);
@@ -665,8 +666,8 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					return TRUE;
 
 				case ID_FILE_RUN_EXE:
-					cdrfilename[0] = '\0';
 					if (!Open_File_Proc(File)) return TRUE;
+					SetIsoFile(File);
 					SetMenu(hWnd, NULL);
 					OpenPlugins(hWnd);
 					SysReset();
