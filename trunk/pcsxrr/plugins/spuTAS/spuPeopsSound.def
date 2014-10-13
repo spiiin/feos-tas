@@ -43,4 +43,4 @@ EXPORTS
 	SPUasync			@34
 	SPUstartWav			@35
 	SPUstopWav			@36
-
+	SPUplayCDDAchannel  @37
