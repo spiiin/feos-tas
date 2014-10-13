@@ -37,8 +37,6 @@
 
 #define SUB_FRAMESIZE			96
 
-#define CDDA_FRAMETIME			(1000 * (sizeof(sndbuffer) / CD_FRAMESIZE_RAW) / 75)
-
 FILE *cdHandle = NULL;
 FILE *cddaHandle = NULL;
 FILE *subHandle = NULL;
@@ -136,26 +134,22 @@ static void playthread(void *param)
 static void *playthread(void *param)
 #endif
 {
-	long		d, t;
-
-	t = GetTickCount();
+	time_t		t;
+	long		d;
 
 	t = 0;
 
 	while (playing) {
-		d = t - (long)GetTickCount();
-		if (d <= 0) {
-			d = 1;
-		}
-		else if (d > CDDA_FRAMETIME) {
-			d = CDDA_FRAMETIME;
-		}
+		d = (long)t - GetTickCount();
+		if (d > 0) {
 #ifdef _WIN32
 			Sleep(d);
 #else
 			usleep(d);
 #endif
-		t += CDDA_FRAMETIME;
+		}
+
+		t = GetTickCount() + 1000 * (sizeof(sndbuffer) / CD_FRAMESIZE_RAW) / 75;
 
 		if ((d = fread(sndbuffer, 1, sizeof(sndbuffer), cddaHandle)) == 0) {
 			playing = 0;
@@ -165,8 +159,7 @@ static void *playthread(void *param)
 			break;
 		}
 
-		if (!cdr.Muted && playing)
-			SPU_playCDDAchannel((short *)sndbuffer, d);
+		SPU_playCDDAchannel((short *)sndbuffer, d);
 	}
 
 #ifdef _WIN32
