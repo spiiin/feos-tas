@@ -21,6 +21,14 @@
 #ifndef CDRISO_H
 #define CDRISO_H
 
-extern void imageReaderInit(void);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+void cdrIsoInit(void);
+int cdrIsoActive(void);
+
+#ifdef __cplusplus
+}
+#endif
 #endif

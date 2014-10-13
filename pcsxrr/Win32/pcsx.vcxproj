@@ -262,6 +262,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\CdrIso.cpp" />
+    <ClCompile Include="..\ppf.c" />
     <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="luaconsole.cpp" />
     <ClCompile Include="maphkeys.cpp" />
@@ -299,6 +300,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CdrIso.h" />
+    <ClInclude Include="..\ppf.h" />
     <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="maphkeys.h" />
     <ClInclude Include="moviewin.h" />
