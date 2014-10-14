@@ -103,7 +103,7 @@ extern s8 *psxH;
 #define psxHu32ref(mem) (*(u32*)&psxH[(mem) & 0xffff])
 
 extern u32 *psxMemWLUT;
-extern u32 *psxMemRLUT;
+extern "C" u32 *psxMemRLUT;
 
 #define PSXM(mem)       (psxMemRLUT[(mem) >> 16] == 0 ? NULL : (u32*)(psxMemRLUT[(mem) >> 16] + ((mem) & 0xffff)))
 #define PSXMs8(mem)     (*(s8 *)PSXM(mem))

@@ -157,7 +157,6 @@ struct SubQ {
 	unsigned char TrackRelativeAddress[3];
 	unsigned char Filler;
 	unsigned char AbsoluteAddress[3];
-	unsigned char CRC[2];
 	char res1[72];
 };
 typedef unsigned char* (CALLBACK* CDRgetBufferSub)(void);
@@ -356,11 +355,6 @@ extern NETrecvPadData        NET_recvPadData;
 extern NETsetInfo            NET_setInfo;
 extern NETkeypressed         NET_keypressed;
 
-void SetIsoFile(const char *filename);
-const char *GetIsoFile(void);
-boolean UsingIso(void);
-void SetCdOpenCaseTime(s64 time);
-
 END_EXTERN_C
 
 int LoadCDRplugin(char *CDRdll);
@@ -371,6 +365,6 @@ int LoadPAD2plugin(char *PAD2dll);
 int LoadNETplugin(char *NETdll);
 
 void CALLBACK clearDynarec(void);
-//extern char cdrfilename[MAXPATHLEN];
+extern char cdrfilename[MAXPATHLEN];
 
 #endif /* __PLUGINS_H__ */

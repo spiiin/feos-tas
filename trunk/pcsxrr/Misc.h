@@ -65,6 +65,5 @@ extern char *LabelAuthors;
 extern char *LabelGreets;
 
 char *ParseLang(char *id);
-u16 calcCrc(u8 *d, int len);
 
 #endif /* __MISC_H__ */

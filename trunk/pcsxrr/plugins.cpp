@@ -24,8 +24,6 @@
 #include "CdrIso.h"
 
 char cdrfilename[MAXPATHLEN] = "";
-static char IsoFile[MAXPATHLEN] = "";
-static s64 cdOpenCaseTime = 0;
 
 #ifdef _MSC_VER_
 #pragma warning(disable:4244)
@@ -393,11 +391,6 @@ long CALLBACK CDR__setfilename(char*filename) { return 0; }
 int LoadCDRplugin(char *CDRdll) {
 	void *drv;
 
-	if (CDRdll == NULL) {
-		cdrIsoInit();
-		return 0;
-	}
-	
 	hCDRDriver = SysLoadLibrary(CDRdll);
 	if (hCDRDriver == NULL) {
 		CDR_configure = NULL;
@@ -975,8 +968,8 @@ int LoadPlugins() {
 
 	ReleasePlugins();
 
-	if (UsingIso()) {
-		LoadCDRplugin(NULL);
+	if (cdrfilename[0] != '\0') {
+		imageReaderInit();
 	} else {
 		sprintf(Plugin, "%s/%s", Config.PluginsDir, Config.Cdr);
 		if (LoadCDRplugin(Plugin) == -1) return -1;
@@ -1025,7 +1018,7 @@ void ReleasePlugins() {
 		NetOpened = 0;
 	}
 
-	if (hCDRDriver != NULL || cdrIsoActive()) CDR_shutdown();
+	if (hCDRDriver != NULL || cdHandle != NULL) CDR_shutdown();
 	if (hGPUDriver != NULL) GPU_shutdown();
 	if (hSPUDriver != NULL) SPU_shutdown();
 	if (hPAD1Driver != NULL) PAD1_shutdown();
@@ -1042,24 +1035,4 @@ void ReleasePlugins() {
 	if (Config.UseNet && hNETDriver != NULL) {
 		SysCloseLibrary(hNETDriver); hNETDriver = NULL;
 	}
-}
-
-void SetIsoFile(const char *filename) {
-	if (filename == NULL) {
-		IsoFile[0] = '\0';
-		return;
-	}
-	strncpy(IsoFile, filename, MAXPATHLEN);
-}
-
-const char *GetIsoFile(void) {
-	return IsoFile;
-}
-
-boolean UsingIso(void) {
-	return (IsoFile[0] != '\0');
-}
-
-void SetCdOpenCaseTime(s64 time) {
-	cdOpenCaseTime = time;
 }
