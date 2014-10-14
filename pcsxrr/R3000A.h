@@ -130,25 +130,8 @@ typedef struct {
     u32 code;			/* The instruction */
 	u32 cycle;
 	u32 interrupt;
-	struct { u32 sCycle, cycle; } intCycle[32];
+	u32 intCycle[32];
 } psxRegisters;
-
-enum psxint {
-	PSXINT_SIO = 0,
-	PSXINT_CDR,
-	PSXINT_CDREAD,
-	PSXINT_GPUDMA,
-	PSXINT_MDECOUTDMA,
-	PSXINT_SPUDMA,
-	PSXINT_GPUBUSY,
-	PSXINT_MDECINDMA,
-	PSXINT_GPUOTCDMA,
-	PSXINT_CDRDMA,
-	PSXINT_CDREPPLAY,
-	PSXINT_CDRDBUF,
-	PSXINT_CDRLID,
-	PSXINT_CDRPLAY
-};
 
 extern psxRegisters psxRegs;
 

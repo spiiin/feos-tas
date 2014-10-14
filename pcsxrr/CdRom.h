@@ -1,45 +1,26 @@
-/***************************************************************************
- *   Copyright (C) 2007 Ryan Schultz, PCSX-df Team, PCSX team              *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Street, Fifth Floor, Boston, MA 02111-1307 USA.           *
- ***************************************************************************/
+/*  Pcsx - Pc Psx Emulator
+ *  Copyright (C) 1999-2003  Pcsx Team
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
 #ifndef __CDROM_H__
 #define __CDROM_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include "psxcommon.h"
-#include "decode_xa.h"
-#include "r3000a.h"
-#include "plugins.h"
-#include "psxmem.h"
-#include "psxhw.h"
-
-#define btoi(b)     ((b) / 16 * 10 + (b) % 16) /* BCD to u_char */
-#define itob(i)     ((i) / 10 * 16 + (i) % 10) /* u_char to BCD */
-
-#define MSF2SECT(m, s, f)		(((m) * 60 + (s) - 2) * 75 + (f))
-
-#define CD_FRAMESIZE_RAW		2352
-#define DATA_SIZE				(CD_FRAMESIZE_RAW - 12)
-
-#define SUB_FRAMESIZE			96
+#include "PsxCommon.h"
+#include "Decode_XA.h"
 
 typedef struct {
 	unsigned char OCUP;
@@ -51,12 +32,12 @@ typedef struct {
 
 	unsigned char StatP;
 
-	unsigned char Transfer[CD_FRAMESIZE_RAW];
+	unsigned char Transfer[2352];
 	unsigned char *pTransfer;
 
 	unsigned char Prev[4];
 	unsigned char Param[8];
-	unsigned char Result[16];
+	unsigned char Result[8];
 
 	unsigned char ParamC;
 	unsigned char ParamP;
@@ -65,17 +46,20 @@ typedef struct {
 	unsigned char ResultReady;
 	unsigned char Cmd;
 	unsigned char Readed;
-	u32 Reading;
+	unsigned long Reading;
 
 	unsigned char ResultTN[6];
+#ifdef __DREAMCAST__
+	unsigned char ResultTD[4] __attribute__ ((aligned (4)));
+#else
 	unsigned char ResultTD[4];
+#endif
 	unsigned char SetSector[4];
 	unsigned char SetSectorSeek[4];
-	unsigned char SetSectorPlay[4];
 	unsigned char Track;
-	boolean Play, Muted;
+	int Play;
 	int CurTrack;
-	int Mode, File, Channel;
+	int Mode, File, Channel, Muted;
 	int Reset;
 	int RErr;
 	int FirstSector;
@@ -85,27 +69,20 @@ typedef struct {
 	int Init;
 
 	unsigned char Irq;
-	u32 eCycle;
+	unsigned long eCycle;
 
-	boolean Seeked;
+	int Seeked;
 
-	u8 LidCheck;
-	u8 FastForward;
-	u8 FastBackward;
+	char Unused[4083];
 
 	u32 LeftVol, RightVol;
 } cdrStruct;
 
 extern cdrStruct cdr;
 
-void cdrDecodedBufferInterrupt();
-
 void cdrReset();
 void cdrInterrupt();
 void cdrReadInterrupt();
-void cdrRepplayInterrupt();
-void cdrLidSeekInterrupt();
-void cdrPlayInterrupt();
 unsigned char cdrRead0(void);
 unsigned char cdrRead1(void);
 unsigned char cdrRead2(void);
@@ -116,7 +93,4 @@ void cdrWrite2(unsigned char rt);
 void cdrWrite3(unsigned char rt);
 int cdrFreeze(gzFile f, int Mode);
 
-#ifdef __cplusplus
-}
-#endif
-#endif
+#endif /* __CDROM_H__ */
