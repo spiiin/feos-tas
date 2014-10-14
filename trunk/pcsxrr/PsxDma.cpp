@@ -21,6 +21,11 @@
 // Dma0/1 in Mdec.c
 // Dma3   in CdRom.c
 
+void spuInterrupt() {
+	HW_DMA4_CHCR &= SWAP32(~0x01000000);
+	DMA_INTERRUPT(4);
+}
+
 void psxDma4(u32 madr, u32 bcr, u32 chcr) { // SPU
 	u16 *ptr;
 	u32 size;
@@ -161,5 +166,17 @@ void psxDma6(u32 madr, u32 bcr, u32 chcr) {
 
 	HW_DMA6_CHCR &= ~0x01000000;
 	DMA_INTERRUPT(6);
+}
+
+void gpuotcInterrupt()
+{
+	HW_DMA6_CHCR &= SWAP32(~0x01000000);
+	DMA_INTERRUPT(6);
+}
+
+void mdec0Interrupt()
+{
+	HW_DMA0_CHCR &= SWAP32(~0x01000000);
+	DMA_INTERRUPT(0);
 }
 

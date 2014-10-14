@@ -44,6 +44,8 @@ int ShowPic=0;
 char Text[255];
 int ret;
 
+extern void LidInterrupt();
+
 void StoreWindowPos() {
 	RECT r, rs;
 	GetWindowRect(gApp.hWnd, &r);
@@ -639,6 +641,7 @@ void PADhandleKey(int key) {
 			cdOpenCase ^= -1;
 			if (cdOpenCase < 0) {
 				GPU_displayText(_("*PCSX*: CD Case Opened"));
+				LidInterrupt();
 			}
 			else {
 				GPU_displayText(_("*PCSX*: CD Case Closed"));
@@ -647,6 +650,7 @@ void PADhandleKey(int key) {
 				CheckCdrom();
 				if (LoadCdrom() == -1)
 					SysMessage(_("Could not load Cdrom"));
+				LidInterrupt();
 			}
 		}
 		return;

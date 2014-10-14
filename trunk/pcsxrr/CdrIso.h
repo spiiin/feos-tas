@@ -21,6 +21,7 @@
 #ifndef CDRISO_H
 #define CDRISO_H
 
-extern void imageReaderInit(void);
+void cdrIsoInit(void);
+int cdrIsoActive(void);
 
 #endif

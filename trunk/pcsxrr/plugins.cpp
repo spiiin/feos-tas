@@ -24,6 +24,7 @@
 #include "CdrIso.h"
 
 char cdrfilename[MAXPATHLEN] = "";
+static char IsoFile[MAXPATHLEN] = "";
 
 #ifdef _MSC_VER_
 #pragma warning(disable:4244)
@@ -81,6 +82,7 @@ GPUshowframecounter GPU_showframecounter;
 GPUstartAvi         GPU_startAvi;
 GPUstopAvi          GPU_stopAvi;
 GPUsendFpLuaGui     GPU_sendFpLuaGui;
+GPUidle             GPU_idle;
 
 //cd rom function pointers 
 CDRinit               CDR_init;
@@ -209,6 +211,16 @@ void CALLBACK GPU__displayText(char *pText) {
 	SysPrintf("%s\n", pText);
 }
 
+void CALLBACK GPUbusy( int ticks )
+{
+    //printf( "GPUbusy( %i )\n", ticks );
+    //fflush( 0 );
+    
+    psxRegs.interrupt |= (1 << PSXINT_GPUBUSY);
+    psxRegs.intCycle[PSXINT_GPUBUSY].cycle = ticks;
+    psxRegs.intCycle[PSXINT_GPUBUSY].sCycle = psxRegs.cycle;
+}
+
 long CALLBACK GPU__freeze(unsigned long ulGetFreezeData, GPUFreeze_t *pF) {
 	pF->ulFreezeVersion = 1;
 	if (ulGetFreezeData == 0) {
@@ -293,6 +305,7 @@ void CALLBACK GPU__showframecounter(void) {}
 void CALLBACK GPU__startAvi(char* filename) {}
 void CALLBACK GPU__stopAvi(void) {}
 void CALLBACK GPU__sendFpLuaGui(void (*fpPCSX_LuaGui)(void *,int,int,int,int)) {}
+void CALLBACK GPU__idle(void) {}
 
 #define LoadGpuSym1(dest, name) \
 	LoadSym(GPU_##dest, GPU##dest, name, 1);
@@ -346,6 +359,7 @@ int LoadGPUplugin(char *GPUdll) {
 	LoadGpuSym0(startAvi, "GPUstartAvi");
 	LoadGpuSym0(stopAvi, "GPUstopAvi");
 	LoadGpuSym0(sendFpLuaGui, "GPUsendFpLuaGui");
+    LoadGpuSym0(idle, "GPUidle");
 
 	return 0;
 }
@@ -390,6 +404,11 @@ long CALLBACK CDR__setfilename(char*filename) { return 0; }
 
 int LoadCDRplugin(char *CDRdll) {
 	void *drv;
+
+	if (CDRdll == NULL) {
+		cdrIsoInit();
+		return 0;
+	}
 
 	hCDRDriver = SysLoadLibrary(CDRdll);
 	if (hCDRDriver == NULL) {
@@ -968,8 +987,8 @@ int LoadPlugins() {
 
 	ReleasePlugins();
 
-	if (cdrfilename[0] != '\0') {
-		imageReaderInit();
+	if (UsingIso()) {
+		LoadCDRplugin(NULL);
 	} else {
 		sprintf(Plugin, "%s/%s", Config.PluginsDir, Config.Cdr);
 		if (LoadCDRplugin(Plugin) == -1) return -1;
@@ -1010,15 +1029,13 @@ int LoadPlugins() {
 }
 
 void ReleasePlugins() {
-	extern FILE *cdHandle;
-
 	if (Config.UseNet) {
 		int ret = NET_close();
 		if (ret < 0) Config.UseNet = 0;
 		NetOpened = 0;
 	}
 
-	if (hCDRDriver != NULL || cdHandle != NULL) CDR_shutdown();
+	if (hCDRDriver != NULL || cdrIsoActive()) CDR_shutdown();
 	if (hGPUDriver != NULL) GPU_shutdown();
 	if (hSPUDriver != NULL) SPU_shutdown();
 	if (hPAD1Driver != NULL) PAD1_shutdown();
@@ -1035,4 +1052,20 @@ void ReleasePlugins() {
 	if (Config.UseNet && hNETDriver != NULL) {
 		SysCloseLibrary(hNETDriver); hNETDriver = NULL;
 	}
+}
+
+void SetIsoFile(const char *filename) {
+	if (filename == NULL) {
+		IsoFile[0] = '\0';
+		return;
+	}
+	strncpy(IsoFile, filename, MAXPATHLEN);
+}
+
+const char *GetIsoFile(void) {
+	return IsoFile;
+}
+
+boolean UsingIso(void) {
+	return (IsoFile[0] != '\0');
 }

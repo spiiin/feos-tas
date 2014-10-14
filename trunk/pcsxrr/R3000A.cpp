@@ -106,34 +106,95 @@ void psxBranchTest() {
 		psxRcntUpdate();
 
 	if (psxRegs.interrupt) {
-		if ((psxRegs.interrupt & 0x80) && (!Config.Sio)) { // sio
-			if ((psxRegs.cycle - psxRegs.intCycle[7]) >= psxRegs.intCycle[7+1]) {
-				psxRegs.interrupt&=~0x80;
+		if ((psxRegs.interrupt & (1 << PSXINT_SIO)) && !Config.Sio) { // sio
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_SIO].sCycle) >= psxRegs.intCycle[PSXINT_SIO].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_SIO);
 				sioInterrupt();
 			}
 		}
-		if (psxRegs.interrupt & 0x04) { // cdr
-			if ((psxRegs.cycle - psxRegs.intCycle[2]) >= psxRegs.intCycle[2+1]) {
-				psxRegs.interrupt&=~0x04;
+		if (psxRegs.interrupt & (1 << PSXINT_CDR)) { // cdr
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_CDR].sCycle) >= psxRegs.intCycle[PSXINT_CDR].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_CDR);
 				cdrInterrupt();
 			}
 		}
-		if (psxRegs.interrupt & 0x040000) { // cdr read
-			if ((psxRegs.cycle - psxRegs.intCycle[2+16]) >= psxRegs.intCycle[2+16+1]) {
-				psxRegs.interrupt&=~0x040000;
+		if (psxRegs.interrupt & (1 << PSXINT_CDREAD)) { // cdr read
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_CDREAD].sCycle) >= psxRegs.intCycle[PSXINT_CDREAD].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_CDREAD);
 				cdrReadInterrupt();
 			}
 		}
-		if (psxRegs.interrupt & 0x01000000) { // gpu dma
-			if ((psxRegs.cycle - psxRegs.intCycle[3+24]) >= psxRegs.intCycle[3+24+1]) {
-				psxRegs.interrupt&=~0x01000000;
+		if (psxRegs.interrupt & (1 << PSXINT_GPUDMA)) { // gpu dma
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_GPUDMA].sCycle) >= psxRegs.intCycle[PSXINT_GPUDMA].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_GPUDMA);
 				gpuInterrupt();
 			}
 		}
-		if (psxRegs.interrupt & 0x02000000) { // mdec out dma
-			if ((psxRegs.cycle - psxRegs.intCycle[5+24]) >= psxRegs.intCycle[5+24+1]) {
-				psxRegs.interrupt&=~0x02000000;
+		if (psxRegs.interrupt & (1 << PSXINT_MDECOUTDMA)) { // mdec out dma
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_MDECOUTDMA].sCycle) >= psxRegs.intCycle[PSXINT_MDECOUTDMA].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_MDECOUTDMA);
 				mdec1Interrupt();
+			}
+		}
+		if (psxRegs.interrupt & (1 << PSXINT_SPUDMA)) { // spu dma
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_SPUDMA].sCycle) >= psxRegs.intCycle[PSXINT_SPUDMA].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_SPUDMA);
+				spuInterrupt();
+			}
+		}
+		if (psxRegs.interrupt & (1 << PSXINT_GPUBUSY)) { // gpu busy
+			  if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_GPUBUSY].sCycle) >= psxRegs.intCycle[PSXINT_GPUBUSY].cycle) {
+				  psxRegs.interrupt &= ~(1 << PSXINT_GPUBUSY);
+				  GPU_idle();
+			  }
+		}
+
+		if (psxRegs.interrupt & (1 << PSXINT_MDECINDMA)) { // mdec in
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_MDECINDMA].sCycle) >= psxRegs.intCycle[PSXINT_MDECINDMA].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_MDECINDMA);
+				mdec0Interrupt();
+			}
+		}
+
+		if (psxRegs.interrupt & (1 << PSXINT_GPUOTCDMA)) { // gpu otc
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_GPUOTCDMA].sCycle) >= psxRegs.intCycle[PSXINT_GPUOTCDMA].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_GPUOTCDMA);
+				gpuotcInterrupt();
+			}
+		}
+
+		if (psxRegs.interrupt & (1 << PSXINT_CDRDMA)) { // cdrom
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_CDRDMA].sCycle) >= psxRegs.intCycle[PSXINT_CDRDMA].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_CDRDMA);
+				cdrDmaInterrupt();
+			}
+		}
+
+		if (psxRegs.interrupt & (1 << PSXINT_CDREPPLAY)) { // cdr report play
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_CDREPPLAY].sCycle) >= psxRegs.intCycle[PSXINT_CDREPPLAY].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_CDREPPLAY);
+				cdrRepplayInterrupt();
+			}
+		}
+
+		if (psxRegs.interrupt & (1 << PSXINT_CDRDBUF)) { // cdr decoded buffer
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_CDRDBUF].sCycle) >= psxRegs.intCycle[PSXINT_CDRDBUF].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_CDRDBUF);
+				cdrDecodedBufferInterrupt();
+			}
+		}
+
+		if (psxRegs.interrupt & (1 << PSXINT_CDRLID)) { // cdr lid states
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_CDRLID].sCycle) >= psxRegs.intCycle[PSXINT_CDRLID].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_CDRLID);
+				cdrLidSeekInterrupt();
+			}
+		}
+
+		if (psxRegs.interrupt & (1 << PSXINT_CDRPLAY)) { // cdr play timing
+			if ((psxRegs.cycle - psxRegs.intCycle[PSXINT_CDRPLAY].sCycle) >= psxRegs.intCycle[PSXINT_CDRPLAY].cycle) {
+				psxRegs.interrupt &= ~(1 << PSXINT_CDRPLAY);
+				cdrPlayInterrupt();
 			}
 		}
 		if (psxRegs.interrupt & 0x80000000) {
