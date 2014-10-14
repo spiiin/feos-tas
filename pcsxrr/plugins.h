@@ -89,6 +89,7 @@ typedef void (CALLBACK* GPUshowframecounter)(void);
 typedef long (CALLBACK* GPUstartAvi)(char* filename);
 typedef long (CALLBACK* GPUstopAvi)(void);
 typedef long (CALLBACK* GPUsendFpLuaGui)(void (*fpPCSX_LuaGui)(void *,int,int,int,int));
+typedef void (CALLBACK* GPUidle)(void);
 
 //plugin stuff From Shadow
 // *** walking in the valley of your darking soul i realize that i was alone
@@ -126,6 +127,7 @@ extern GPUshowframecounter GPU_showframecounter;
 extern GPUstartAvi         GPU_startAvi;
 extern GPUstopAvi          GPU_stopAvi;
 extern GPUsendFpLuaGui     GPU_sendFpLuaGui;
+extern GPUidle             GPU_idle;
 
 //cd rom plugin ;)
 typedef long (CALLBACK* CDRinit)(void);
@@ -157,6 +159,7 @@ struct SubQ {
 	unsigned char TrackRelativeAddress[3];
 	unsigned char Filler;
 	unsigned char AbsoluteAddress[3];
+	unsigned char CRC[2];
 	char res1[72];
 };
 typedef unsigned char* (CALLBACK* CDRgetBufferSub)(void);
@@ -366,5 +369,8 @@ int LoadNETplugin(char *NETdll);
 
 void CALLBACK clearDynarec(void);
 extern char cdrfilename[MAXPATHLEN];
+void SetIsoFile(const char *filename);
+const char *GetIsoFile(void);
+boolean UsingIso(void);
 
 #endif /* __PLUGINS_H__ */

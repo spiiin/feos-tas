@@ -635,8 +635,8 @@ LRESULT WINAPI MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 				case ID_FILE_RUN_CD:
 					LoadCdBios = 0;
-					if (!Open_Iso_Proc(File)) return TRUE;
-					strcpy(cdrfilename, File);
+					if (!Open_Iso_Proc(File)) return TRUE;					
+					SetIsoFile(File);
 					LoadPlugins();
 					if(!OpenPlugins(hWnd)) return FALSE;					
 					SetMenu(hWnd, NULL);
