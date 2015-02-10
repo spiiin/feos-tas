@@ -109,11 +109,11 @@ extern long CALLBACK ISOinit(void);
 extern void CALLBACK SPUirq(void);
 extern SPUregisterCallback SPU_registerCallback;
 
-#define H_SPUirqAddr		0x1f801da4
-#define H_SPUaddr				0x1f801da6
-#define H_SPUctrl				0x1f801daa
-#define H_CDLeft				0x1f801db0
-#define H_CDRight				0x1f801db2
+#define H_SPUirqAddr	0x1f801da4
+#define H_SPUaddr		0x1f801da6
+#define H_SPUctrl		0x1f801daa
+#define H_CDLeft		0x1f801db0
+#define H_CDRight		0x1f801db2
 
 #define CDR_INT(eCycle) { \
 	psxRegs.interrupt |= (1 << PSXINT_CDR); \
