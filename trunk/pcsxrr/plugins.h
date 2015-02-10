@@ -137,7 +137,8 @@ typedef long (CALLBACK* CDRclose)(void);
 typedef long (CALLBACK* CDRgetTN)(unsigned char *);
 typedef long (CALLBACK* CDRgetTD)(unsigned char , unsigned char *);
 typedef long (CALLBACK* CDRreadTrack)(unsigned char *);
-typedef unsigned char * (CALLBACK* CDRgetBuffer)(void);
+typedef unsigned char* (CALLBACK* CDRgetBuffer)(void);
+typedef unsigned char* (CALLBACK* CDRgetBufferSub)(void);
 typedef long (CALLBACK* CDRconfigure)(void);
 typedef long (CALLBACK* CDRtest)(void);
 typedef void (CALLBACK* CDRabout)(void);
@@ -162,7 +163,7 @@ struct SubQ {
 	unsigned char CRC[2];
 	char res1[72];
 };
-typedef unsigned char* (CALLBACK* CDRgetBufferSub)(void);
+typedef long (CALLBACK* CDRreadCDDA)(unsigned char, unsigned char, unsigned char, unsigned char *);
 
 //cd rom function pointers 
 extern CDRinit               CDR_init;
@@ -182,6 +183,7 @@ extern CDRgetBufferSub       CDR_getBufferSub;
 extern CDRconfigure          CDR_configure;
 extern CDRabout              CDR_about;
 extern CDRsetfilename        CDR_setfilename;
+extern CDRreadCDDA           CDR_readCDDA;
 
 // spu plugin
 typedef long (CALLBACK* SPUinit)(void);				

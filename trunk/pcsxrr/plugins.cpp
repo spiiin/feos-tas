@@ -102,6 +102,7 @@ CDRgetBufferSub       CDR_getBufferSub;
 CDRconfigure          CDR_configure;
 CDRabout              CDR_about;
 CDRsetfilename        CDR_setfilename;
+CDRreadCDDA           CDR_readCDDA;
 
 //SPU POINTERS
 SPUconfigure        SPU_configure;
@@ -433,6 +434,7 @@ int LoadCDRplugin(char *CDRdll) {
 	LoadCdrSym0(test, "CDRtest");
 	LoadCdrSym0(about, "CDRabout");
 	LoadCdrSym0(setfilename, "CDRsetfilename");
+	LoadCdrSymN(readCDDA, "CDRreadCDDA");
 
 	return 0;
 }
@@ -492,10 +494,10 @@ void CALLBACK SPU__writeRegister(unsigned long add,unsigned short value) { // Ol
 	}
 
 	switch(r) {
-		case H_SPUaddr://SPU-memory address
-					spuAddr = (unsigned long) value<<3;
+		//case H_SPUaddr://SPU-memory address
+					//spuAddr = (unsigned long) value<<3;
 		//	spuAddr=value * 8;
-					return;
+					//return;
 		case H_SPUdata://DATA to SPU
 //      		spuMem[spuAddr/2] = value;
 //         		spuAddr+=2;
@@ -503,15 +505,15 @@ void CALLBACK SPU__writeRegister(unsigned long add,unsigned short value) { // Ol
 					SPU_putOne(spuAddr,value);
 					spuAddr+=2;
 					return;
-		case H_SPUctrl://SPU control 1
-					spuCtrl=value;
-					return;
+		//case H_SPUctrl://SPU control 1
+					//spuCtrl=value;
+					//return;
 		case H_SPUstat://SPU status
 					spuStat=value & 0xf800;
 					return;
-		case H_SPUirqAddr://SPU irq
-					spuIrq = value;
-					return;
+		//case H_SPUirqAddr://SPU irq
+					//spuIrq = value;
+					//return;
 		case H_SPUon1://start sound play channels 0-16
 					SPU_startChannels1(value);
 					return;
@@ -529,19 +531,19 @@ void CALLBACK SPU__writeRegister(unsigned long add,unsigned short value) { // Ol
 
 unsigned short CALLBACK SPU__readRegister(unsigned long add) {
 	switch(add&0xfff) {// Old Interface
-		case H_SPUctrl://spu control
-					return spuCtrl;
+		//case H_SPUctrl://spu control
+					//return spuCtrl;
 		case H_SPUstat://spu status
 					return spuStat;
-		case H_SPUaddr://SPU-memory address
-					return (unsigned short)(spuAddr>>3);
+		//case H_SPUaddr://SPU-memory address
+					//return (unsigned short)(spuAddr>>3);
 		case H_SPUdata://DATA to SPU
 					spuAddr+=2;
 //        		if(spuAddr>0x7ffff) spuAddr=0;
 //        		return spuMem[spuAddr/2];
 					return SPU_getOne(spuAddr);
-		case H_SPUirqAddr://spu irq
-					return spuIrq;
+		//case H_SPUirqAddr://spu irq
+					//return spuIrq;
 		//case H_SPUIsOn1:
 					//return IsSoundOn(0,16);
 		//case H_SPUIsOn2:
