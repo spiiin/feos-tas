@@ -1,0 +1,3 @@
+Если жабой бить палкой врага и в момент подъема врага на палке другим персонажем запинать этого врага до смерти, когда враг слетит с палки, жаба автоматически размахнется и ударит напарника "заряженным" ударом палки. Он сгорит и у него снимется все ХП.
+
+![http://i1139.photobucket.com/albums/n547/feos-theos/BattletoadsDoubleDragonFire.gif](http://i1139.photobucket.com/albums/n547/feos-theos/BattletoadsDoubleDragonFire.gif)
